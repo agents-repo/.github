@@ -21,7 +21,7 @@ Choose the repository that matches the kind of work you want to do, then follow 
 | [registry](https://github.com/agents-repo/registry) | Specs, schemas, packages | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBUTING.md) |
 | [webapp](https://github.com/agents-repo/webapp) | Registry UI | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/webapp/blob/main/.github/CONTRIBUTING.md) |
 | [registry-proxy](https://github.com/agents-repo/registry-proxy) | Cloudflare Worker proxy | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/registry-proxy/blob/main/.github/CONTRIBUTING.md) |
-| [.github](https://github.com/agents-repo/.github) | Organization-wide defaults | This repository — open an issue or pull request here |
+| [.github](https://github.com/agents-repo/.github) | Organization-wide defaults | This repository — open an issue before implementation here |
 | [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io) | Automated Pages deploy target for webapp (not a development repo) | See [webapp deployment docs](https://github.com/agents-repo/webapp/blob/main/docs/deployment.md) |
 
 ## Required Workflow
@@ -46,9 +46,10 @@ Every task in an active development repository MUST follow this lifecycle
 6. **PR-only `main`** — All integration to `main` MUST happen via merged pull
    request. Direct commits or pushes to `main` MUST NOT be used (humans and
    agents).
-7. **Agent handoff** — Agents stop after draft PR creation and implementation
-   work they were asked to perform; human developers mark ready for review
-   and maintainers merge.
+7. **Agent handoff** — Agents complete requested implementation work on the
+   task branch, then hand off. Human developers mark pull requests ready for
+   review after validation; maintainers merge. Agents MUST NOT mark pull
+   requests ready for review or merge to `main`.
 
 GitHub requires a pushed remote branch before opening a pull request. An empty
 branch push is acceptable when opening the draft PR before implementation
@@ -57,8 +58,12 @@ commits.
 ## Workflow exceptions
 
 1. **Security vulnerabilities** — Follow [SECURITY.md](SECURITY.md); do not
-   open public tracking issues. Use the private advisory flow. Branch and pull
-   request are still required before merge to `main`.
+   open public tracking issues. Use the private advisory flow. Branch and draft
+   pull request are still required before merge to `main`. In `## Related
+   Issues`, use `Closes #<issue-number>` when maintainers provide a linked
+   private or advisory tracking issue. Otherwise, reference the private
+   security advisory identifier (for example `GHSA-...`) in the PR body and
+   coordinate linkage with maintainers.
 2. **Maintainer emergency hotfix** — Work on a hotfix branch only with prior
    maintainer approval documented in an issue or advisory. Delivery to `main`
    is still via merged pull request (no direct push).
@@ -103,7 +108,9 @@ repository keeps Copilot and Cursor files aligned manually in the same change
 
 ## Changing organization-wide defaults
 
-To update community health files, templates, or other shared configuration for the organization, open an issue or pull request in [agents-repo/.github](https://github.com/agents-repo/.github).
+To update community health files, templates, or other shared configuration for
+the organization, open an issue before implementation in
+[agents-repo/.github](https://github.com/agents-repo/.github).
 
 For help choosing the right repository or channel, see [SUPPORT.md](SUPPORT.md).
 
