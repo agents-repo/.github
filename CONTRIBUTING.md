@@ -32,8 +32,23 @@ These norms apply across the organization unless a repository guide specifies ot
 3. Prefer the [`gh` CLI](https://cli.github.com/) for issue and pull request communication.
 4. Use conventional commit prefixes such as `feat`, `fix`, `docs`, `chore`, `refactor`, `perf`, `test`, `build`, `ci`, and `revert`.
 5. Keep pull requests focused and include validation evidence required by the target repository.
+6. AI agents MUST NOT merge pull requests into the default branch or push commits directly to it. Integration to the default branch is a human-only step after review.
 
 When this document conflicts with a repository's own `CONTRIBUTING.md`, the repository guide takes precedence.
+
+## Agent instruction files
+
+| Repository | GitHub Copilot | Cursor |
+| --- | --- | --- |
+| [registry](https://github.com/agents-repo/registry) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry.mdc` |
+| [webapp](https://github.com/agents-repo/webapp) | `.github/copilot-instructions.md` | `.cursor/rules/agents-webapp.mdc` |
+| [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry-proxy.mdc` |
+| [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` | `.cursor/rules/agents-org.mdc` |
+
+Registry, webapp, and registry-proxy regenerate Cursor rules with
+`npm run sync:cursor-rules` after editing `.github/copilot-instructions.md`. This
+repository keeps Copilot and Cursor files aligned manually in the same change
+(Pattern B — no npm sync tooling).
 
 ## Changing organization-wide defaults
 
