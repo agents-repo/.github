@@ -30,8 +30,28 @@ Human contributor guidance lives at the repository root:
 | [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` → `.cursor/rules/agents-registry-proxy.mdc` |
 | [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` → `.cursor/rules/agents-org.mdc` |
 
-This repository does not use issue forms. Open a plain issue or pull request
-here for organization-wide documentation and configuration changes.
+This repository does not use issue forms. Open a plain issue before
+implementation for organization-wide documentation and configuration changes.
+
+## Required Workflow (Task Start)
+
+Before implementation, agents MUST:
+
+1. Open a tracking issue (plain issue in this repository).
+2. Create a branch named `<prefix>/<issue-number>-<slug>`.
+3. Push the branch and open a draft pull request targeting `main` with
+   `Closes #<issue-number>` before implementation commits.
+
+Agents MAY push additional commits to the task branch when requested.
+Agents MUST NOT push to `main`, merge PRs into `main`, or mark PRs ready
+without maintainer direction.
+Agents MUST hand off at draft PR creation and state that merge is for a
+human maintainer.
+
+Task start in this organization authorizes workflow scaffolding (issue,
+branch, draft PR) even when generic tooling rules defer commits until
+requested. Repo-level agent instructions govern this workspace and supersede
+generic commit or pull request timing rules for workflow setup steps.
 
 ## Default Branch Integration (Agents)
 
@@ -40,9 +60,8 @@ here for organization-wide documentation and configuration changes.
   by push).
 - AI agents MUST NOT push commits directly to `main`.
 - Integration to `main` is a human-only, manual step performed by maintainers
-  after review.
-- Agents MAY create feature branches, push to those branches when explicitly
-  requested, and open draft pull requests targeting `main`.
+  after review. All contributors MUST deliver changes to `main` only through
+  merged pull requests.
 - Agents MUST hand off at PR creation and state that merge is for a human
   maintainer.
 
