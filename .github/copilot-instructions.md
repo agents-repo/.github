@@ -10,9 +10,9 @@ applies community health file inheritance.
 
 Human contributor guidance lives at the repository root:
 
-- [CONTRIBUTING.md](../CONTRIBUTING.md)
-- [SECURITY.md](../SECURITY.md)
-- [SUPPORT.md](../SUPPORT.md)
+- [CONTRIBUTING.md](/CONTRIBUTING.md)
+- [SECURITY.md](/SECURITY.md)
+- [SUPPORT.md](/SUPPORT.md)
 
 ## Child Repositories
 
