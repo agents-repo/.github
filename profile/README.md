@@ -15,7 +15,8 @@ The agents-repo organization maintains specifications, packages, and application
 
 Every task MUST follow the organization [Required Workflow](https://github.com/agents-repo/.github/blob/main/CONTRIBUTING.md#required-workflow):
 open a tracking issue, create a branch, push, and open a draft pull request
-before implementation. Changes reach `main` only through merged pull requests.
+(`gh pr create --draft`) before implementation. After validation, the
+developer manually marks the pull request ready for review.
 
 Each repository has its own contributing guide with setup, validation, and pull
 request expectations. Start with the organization-wide

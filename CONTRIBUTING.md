@@ -34,13 +34,21 @@ Every task in an active development repository MUST follow this lifecycle
 2. **Branch second** — Create a non-`main` branch named
    `<prefix>/<issue-number>-<slug>` from the latest `main`.
 3. **Push and draft PR third** — Push the branch, then open a **draft** pull
-   request targeting `main` before implementation commits. Include
+   request targeting `main` before implementation commits. Pull requests MUST
+   be created as drafts (`gh pr create --draft` or the GitHub UI draft
+   option). Do not open a non-draft pull request at creation time. Include
    `Closes #<issue-number>` in `## Related Issues`.
-4. **PR-only `main`** — All integration to `main` MUST happen via merged pull
+4. **Implement and validate** — Push implementation commits to the task branch
+   and run the target repository's validation commands.
+5. **Ready for review** — After validation passes, the developer manually
+   marks the pull request ready for review in GitHub. Agents and automation
+   MUST NOT mark pull requests ready for review.
+6. **PR-only `main`** — All integration to `main` MUST happen via merged pull
    request. Direct commits or pushes to `main` MUST NOT be used (humans and
    agents).
-5. **Agent handoff** — Agents stop at draft PR creation; human maintainers
-   review and merge.
+7. **Agent handoff** — Agents stop after draft PR creation and implementation
+   work they were asked to perform; human developers mark ready for review
+   and maintainers merge.
 
 GitHub requires a pushed remote branch before opening a pull request. An empty
 branch push is acceptable when opening the draft PR before implementation
