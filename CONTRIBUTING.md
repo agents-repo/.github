@@ -46,7 +46,7 @@ When this document conflicts with a repository's own `CONTRIBUTING.md`, the repo
 | [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` | `.cursor/rules/agents-org.mdc` |
 
 Registry, webapp, and registry-proxy regenerate Cursor rules with
-`npm run sync:cursor-rules` after editing `copilot-instructions.md`. This
+`npm run sync:cursor-rules` after editing `.github/copilot-instructions.md`. This
 repository keeps Copilot and Cursor files aligned manually in the same change
 (Pattern B — no npm sync tooling).
 
