@@ -26,8 +26,9 @@ Choose the repository that matches the kind of work you want to do, then follow 
 
 ## Required Workflow
 
-Every task in an active development repository MUST follow this lifecycle
-**before implementation**:
+Every task in an active development repository MUST follow this full lifecycle.
+
+### Task setup (before implementation)
 
 1. **Issue first** — Open a tracking issue (matching issue form when available)
    before any implementation work.
@@ -36,24 +37,30 @@ Every task in an active development repository MUST follow this lifecycle
 3. **Push and draft PR third** — Push the branch, then open a **draft** pull
    request targeting `main` before implementation commits. Pull requests MUST
    be created as drafts (`gh pr create --draft` or the GitHub UI draft
-   option). Do not open a non-draft pull request at creation time. Include
-   `Closes #<issue-number>` in `## Related Issues`.
-4. **Implement and validate** — Push implementation commits to the task branch
+   option). Do not open a non-draft pull request at creation time. In
+   `## Related Issues`, include `Closes #<issue-number>` for standard tasks,
+   or follow **Workflow exceptions** for security-advisory references.
+
+GitHub cannot open a pull request when the head and base branches are
+identical. Before `gh pr create --draft`, push at least one commit on the task
+branch that creates a diff (for example an empty scaffolding commit:
+`git commit --allow-empty -m "chore: scaffold draft PR for #<issue-number>"`).
+Implementation commits may follow on the same branch.
+
+### Delivery (after draft PR)
+
+1. **Implement and validate** — Push implementation commits to the task branch
    and run the target repository's validation commands.
-5. **Ready for review** — After validation passes, the developer manually
+2. **Ready for review** — After validation passes, the developer manually
    marks the pull request ready for review in GitHub. Agents and automation
    MUST NOT mark pull requests ready for review.
-6. **PR-only `main`** — All integration to `main` MUST happen via merged pull
+3. **PR-only `main`** — All integration to `main` MUST happen via merged pull
    request. Direct commits or pushes to `main` MUST NOT be used (humans and
    agents).
-7. **Agent handoff** — Agents complete requested implementation work on the
+4. **Agent handoff** — Agents complete requested implementation work on the
    task branch, then hand off. Human developers mark pull requests ready for
    review after validation; maintainers merge. Agents MUST NOT mark pull
    requests ready for review or merge to `main`.
-
-GitHub requires a pushed remote branch before opening a pull request. An empty
-branch push is acceptable when opening the draft PR before implementation
-commits.
 
 ## Workflow exceptions
 
@@ -81,11 +88,14 @@ otherwise.
    kebab-case.
 3. Prefer the [`gh` CLI](https://cli.github.com/) for issue and pull request
    communication.
-4. Use conventional commit prefixes such as `feat`, `fix`, `docs`, `chore`,
+4. Issue forms capture intent only; use the number GitHub assigns after
+   submission when naming branches and writing PR `## Related Issues`—do not
+   edit issue bodies to add the number.
+5. Use conventional commit prefixes such as `feat`, `fix`, `docs`, `chore`,
    `refactor`, `perf`, `test`, `build`, `ci`, and `revert`.
-5. Keep pull requests focused and include validation evidence required by the
+6. Keep pull requests focused and include validation evidence required by the
    target repository.
-6. All contributors MUST integrate changes to the default branch only through
+7. All contributors MUST integrate changes to the default branch only through
    merged pull requests. AI agents MUST NOT merge pull requests into the
    default branch or push commits directly to it. Integration to the default
    branch is a human-only step after review.
@@ -114,18 +124,18 @@ the organization, open an issue before implementation in
 
 For help choosing the right repository or channel, see [SUPPORT.md](SUPPORT.md).
 
-## Maintainer branch protection (recommended)
+## Maintainer enforcement
 
 Documentation alone cannot prevent direct pushes to `main`. Maintainers SHOULD
-enable GitHub branch protection on `main` for these active development
-repositories:
+enforce the PR-only policy on `main` with GitHub branch protection or
+repository rulesets for these active development repositories:
 
 - `agents-repo/.github`
 - `agents-repo/registry`
 - `agents-repo/webapp`
 - `agents-repo/registry-proxy`
 
-Recommended settings:
+Recommended settings (via branch protection or rulesets):
 
 1. **Require a pull request before merging** — all integration to `main` goes
    through review and merge.
@@ -137,5 +147,5 @@ Recommended settings:
 `agents-repo.github.io` is excluded; it is an automated deployment target for
 the webapp, not a development repository.
 
-Configuring branch protection is a maintainer action in GitHub repository
-settings and is not applied by changes in this repository.
+Configuring branch protection or rulesets is a maintainer action in GitHub
+repository settings and is not applied by changes in this repository.
