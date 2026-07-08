@@ -15,14 +15,14 @@ The agents-repo organization maintains specifications, packages, and application
 
 ## Contribute
 
-Every task MUST follow the organization [Required Workflow](https://github.com/agents-repo/.github/blob/main/CONTRIBUTING.md#required-workflow):
+Every task MUST follow the organization [Required Workflow](../CONTRIBUTING.md#required-workflow):
 open a tracking issue, create a branch, push, and open a draft pull request
 (`gh pr create --draft`) before implementation. After validation, the
 developer manually marks the pull request ready for review.
 
 Each repository has its own contributing guide with setup, validation, and pull
 request expectations. Start with the organization-wide
-[Contributing guide](https://github.com/agents-repo/.github/blob/main/CONTRIBUTING.md),
+[Contributing guide](../CONTRIBUTING.md),
 then follow the detailed guide for the repository you are changing:
 
 - [registry/.github/CONTRIBUTING.md](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBUTING.md)
