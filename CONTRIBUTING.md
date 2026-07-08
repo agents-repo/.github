@@ -43,8 +43,9 @@ Every task in an active development repository MUST follow this full lifecycle.
 
 GitHub cannot open a pull request when the head and base branches are
 identical. Before `gh pr create --draft`, push at least one commit on the task
-branch that creates a diff (for example an empty scaffolding commit:
+branch so its head differs from `main` (for example
 `git commit --allow-empty -m "chore: scaffold draft PR for #<issue-number>"`).
+An empty commit is sufficient when no file changes are needed yet.
 Implementation commits may follow on the same branch.
 
 ### Delivery (after draft PR)

@@ -6,12 +6,13 @@ Describe the change and why it is needed.
 
 ## Related Issues
 
-Closes #
+`Closes #<issue-number>`
 
 For standard tasks, use `Closes #<issue-number>`. For security vulnerabilities
 without a public tracking issue, reference the advisory identifier (for example
-`GHSA-...`) and coordinate linkage with maintainers per
-`CONTRIBUTING.md` **Workflow exceptions**.
+`GHSA-...`) and coordinate linkage with maintainers per the
+[Workflow exceptions](https://github.com/agents-repo/.github/blob/main/CONTRIBUTING.md#workflow-exceptions)
+section of the organization CONTRIBUTING guide.
 
 ## Validation
 
@@ -26,7 +27,9 @@ List commands run and key results.
 - [ ] This draft PR was opened before implementation commits (or it documents
   why not).
 - [ ] `## Related Issues` includes a tracking reference (`Closes #<issue-number>`
-  or a security-advisory identifier per `CONTRIBUTING.md`).
+  or a security-advisory identifier per the
+  [Workflow exceptions](https://github.com/agents-repo/.github/blob/main/CONTRIBUTING.md#workflow-exceptions)
+  section of the organization CONTRIBUTING guide).
 - [ ] Merge to `main` is for human maintainers only; agents and automation
   must not merge this PR or push directly to `main`.
 - [ ] A human developer marked this PR ready for review after validation (not

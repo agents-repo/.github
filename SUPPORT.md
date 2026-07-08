@@ -6,7 +6,7 @@ requests across the agents-repo organization.
 ## Required Workflow
 
 Every implementation task follows the organization
-[Required Workflow](CONTRIBUTING.md#required-workflow): open a tracking issue,
+[Required Workflow](https://github.com/agents-repo/.github/blob/main/CONTRIBUTING.md#required-workflow): open a tracking issue,
 create a branch, push, open a **draft** pull request (`gh pr create --draft`),
 implement and validate, then mark the pull request ready for review manually.
 Changes reach `main` only through merged pull requests.
