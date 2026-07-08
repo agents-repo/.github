@@ -70,8 +70,8 @@ Implementation commits may follow on the same branch.
    pull request are still required before merge to `main`. In `## Related
    Issues`, use `Closes #<issue-number>` when maintainers provide a linked
    private or advisory tracking issue. Otherwise, reference the private
-   security advisory identifier (for example `GHSA-...`) in the PR body and
-   coordinate linkage with maintainers.
+   security advisory identifier (for example `GHSA-...`) in `## Related Issues`
+   and coordinate linkage with maintainers.
 2. **Maintainer emergency hotfix** — Work on a hotfix branch only with prior
    maintainer approval documented in an issue or advisory. Delivery to `main`
    is still via merged pull request (no direct push).
