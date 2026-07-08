@@ -42,11 +42,11 @@ Commands: see [reference.md](reference.md).
 Write a triage table **before** editing files:
 
 | Path | Line | Author | Outcome | Rationale |
-|------|------|--------|---------|-----------|
+| --- | --- | --- | --- | --- |
 | ... | ... | ... | `needs_fix` | ... |
 
 | Outcome | Action |
-|---------|--------|
+| --- | --- |
 | `needs_fix` | Code or doc change required |
 | `fixed_remote` | Already on branch; resolve citing existing SHA |
 | `wont_fix` | Reply with rationale; no code change |
@@ -60,7 +60,7 @@ Validate Bugbot findings before marking `needs_fix`. Use `wont_fix` with rationa
 - Minimal scoped diffs; match surrounding conventions
 - Batch fixes per repository when one PR spans multiple files
 - Do **not** reply or resolve threads during this phase
-- If fixes touch normative docs (specs, CONTRIBUTING, templates), run that repo's change-propagation rules before commit
+- If fixes touch normative docs, run that repo's change-propagation rules before commit
 
 ## Phase 4 — Validate, commit, push
 
@@ -69,11 +69,11 @@ Run only when the user or task explicitly requests commit/push.
 ### Pre-commit-equivalent checks
 
 | Repo | Commands |
-|------|----------|
+| --- | --- |
 | `.github` | Markdown spot-check (no husky) |
 | `registry` | `npm run lint:all`; `npm run sync:cursor-rules -- --check` |
-| `webapp` | `npm run lint:all`; `npm run test:sync`; `npm run sync:cursor-rules -- --check` |
-| `registry-proxy` | `npm run lint:all`; `npm run test:sync`; `npm run sync:cursor-rules -- --check` |
+| `webapp` | `npm run lint:all`; `test:sync`; `sync:cursor-rules --check` |
+| `registry-proxy` | `npm run lint:all`; `test:sync`; `sync:cursor-rules --check` |
 
 When `copilot-instructions.md` changes, run `npm run sync:cursor-rules` (without `--check`) before commit.
 
@@ -110,7 +110,7 @@ Per repository: `fix → validate → commit → push → threads`.
 
 ## Checklist
 
-```
+```text
 - [ ] Fetch unresolved threads (GraphQL primary)
 - [ ] Triage table written
 - [ ] Fixes applied
@@ -123,11 +123,12 @@ Per repository: `fix → validate → commit → push → threads`.
 ## Handoff summary
 
 | PR | Repo | Commit | Threads resolved | Notes |
-|----|------|--------|------------------|-------|
+| --- | --- | --- | --- | --- |
 | #n | owner/repo | `abc1234` | 10/10 | all resolved |
 
 ## Maintenance
 
 Canonical copy: `agents-repo/.github` → `.cursor/skills/pr-comment-triage/`.
 
-After edits, copy `SKILL.md` and `reference.md` byte-identically to registry, webapp, and registry-proxy. Registry infra skills are preserved during package cursor sync (see registry `ide-targets.ts`).
+After edits, copy `SKILL.md` and `reference.md` byte-identically to child repos.
+Registry infra skills are preserved during package cursor sync (see `ide-targets.ts`).
