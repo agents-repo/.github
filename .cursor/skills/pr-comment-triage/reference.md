@@ -7,7 +7,8 @@ gh api graphql -f query='...' \
   -f owner=OWNER -f name=REPO -F number=PR \
   --jq '.data.repository.pullRequest.reviewThreads.nodes[]
     | select(.isResolved==false)
-    | {id, path, line, author: .comments.nodes[0].author.login}'
+    | {id, path, line, author: .comments.nodes[0].author.login,
+       body: .comments.nodes[0].body[0:200]}'
 ```
 
 Full query shape:
@@ -17,6 +18,7 @@ query($owner: String!, $name: String!, $number: Int!) {
   repository(owner: $owner, name: $name) {
     pullRequest(number: $number) {
       reviewThreads(first: 100) {
+        pageInfo { endCursor hasNextPage }
         nodes {
           id
           isResolved
@@ -43,7 +45,9 @@ gh api graphql -f query='...' \
     | select(.isResolved==false)] | length'
 ```
 
-If the count is `100`, paginate with `reviewThreads(first: 100, after: "CURSOR")`.
+If the count is `100` and `pageInfo.hasNextPage` is true, re-run with
+`reviewThreads(first: 100, after: "<endCursor>")` using `pageInfo.endCursor`
+from the prior response.
 
 ## REST inline comments (supplemental)
 

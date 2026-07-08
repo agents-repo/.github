@@ -72,10 +72,11 @@ Run only when the user or task explicitly requests commit/push.
 | --- | --- |
 | `.github` | Markdown spot-check (no husky) |
 | `registry` | `npm run lint:all`; `npm run sync:cursor-rules -- --check` |
-| `webapp` | `npm run lint:all`; `test:sync`; `sync:cursor-rules --check` |
-| `registry-proxy` | `npm run lint:all`; `test:sync`; `sync:cursor-rules --check` |
+| `webapp` | `npm run lint:all`; `npm run test:sync`; `npm run sync:cursor-rules -- --check` |
+| `registry-proxy` | `npm run lint:all`; `npm run test:sync`; `npm run sync:cursor-rules -- --check` |
 
-When `copilot-instructions.md` changes, run `npm run sync:cursor-rules` (without `--check`) before commit.
+When `.github/copilot-instructions.md` changes, run `npm run sync:cursor-rules`
+(without `--check`) before commit.
 
 Child repos with npm: run `corepack enable`, `npm ci`, `npm run env:check` when hooks are unavailable.
 
@@ -131,4 +132,5 @@ Per repository: `fix → validate → commit → push → threads`.
 Canonical copy: `agents-repo/.github` → `.cursor/skills/pr-comment-triage/`.
 
 After edits, copy `SKILL.md` and `reference.md` byte-identically to child repos.
-Registry infra skills are preserved during package cursor sync (see `ide-targets.ts`).
+In the **registry** repo only, infra skills are preserved during package cursor
+sync (see `scripts/lib/sync/ide-targets.ts` there).
