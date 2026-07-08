@@ -60,9 +60,3 @@ request:
 
 - `.github/copilot-instructions.md` (this file)
 - `.cursor/rules/agents-org.mdc`
-
-## Cursor skills
-
-| Skill | Path | When |
-| --- | --- | --- |
-| `pr-comment-triage` | `.cursor/skills/pr-comment-triage/SKILL.md` | Triage and resolve PR review comments |
