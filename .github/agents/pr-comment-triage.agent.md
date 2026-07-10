@@ -5,7 +5,29 @@ description: >-
   applies code fixes, commits and pushes when requested, then replies and
   resolves threads via gh. Use when triaging PR review comments, addressing
   Copilot or Bugbot inline feedback, or closing review threads after fixes land.
+version: 1.0.0
+license: MIT
+tools:
+  - github
+inputs:
+  - name: repository
+    type: string
+    description: GitHub repository as owner/name (for example agents-repo/registry).
+  - name: pull-request
+    type: number
+    description: Pull request number to triage.
+  - name: push-permission
+    type: boolean
+    description: Whether commit and push are explicitly allowed for this pass.
+outputs:
+  - name: triage-table
+    type: string
+    description: Markdown table of threads with path, line, author, outcome, and rationale.
+  - name: handoff-summary
+    type: string
+    description: Summary with PR URL, commit SHA, threads resolved count, and notes.
 ---
+
 # Overview
 
 Five-phase, project-agnostic workflow for addressing pull request review feedback
@@ -259,22 +281,3 @@ Per repository: `fix → validate → commit → push → threads`.
 | PR | Repo | Commit | Threads resolved | Notes |
 | --- | --- | --- | --- | --- |
 | #n | owner/repo | `abc1234` | 10/10 | all resolved |
-
-## Declared capabilities
-
-### Tools
-
-- github
-
-### Inputs
-
-- `repository` (string): GitHub repository as owner/name (for example agents-repo/registry).
-- `pull-request` (number): Pull request number to triage.
-- `push-permission` (boolean): Whether commit and push are explicitly allowed for this pass.
-
-### Outputs
-
-- `triage-table` (string): Markdown table of threads with path, line, author, outcome, and rationale.
-- `handoff-summary` (string): Summary with PR URL, commit SHA, threads resolved count, and notes.
-
-<!-- agents-repo package version: 1.0.0 -->
