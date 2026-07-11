@@ -34,17 +34,17 @@ Every task in an active development repository MUST follow this full lifecycle.
    before any implementation work.
 2. **Branch second** — Create a non-`main` branch named
    `<prefix>/<issue-number>-<slug>` from the latest `main`.
-3. **Push and draft PR third** — Push the branch, then open a **draft** pull
-   request targeting `main` before implementation commits. Pull requests MUST
-   be created as drafts (`gh pr create --draft` or the GitHub UI draft
-   option). Do not open a non-draft pull request at creation time. In
+3. **Push and draft PR third** — Push the branch (including an empty scaffold
+   commit if needed so head differs from `main`), then open a **draft** pull
+   request targeting `main` before substantive implementation commits. Pull
+   requests MUST be created as drafts (`gh pr create --draft` or the GitHub UI
+   draft option). Do not open a non-draft pull request at creation time. In
    `## Related Issues`, include `Closes #<issue-number>` for standard tasks,
    or follow **Workflow exceptions** for security-advisory references. GitHub
-   cannot open a pull request when the head and base branches are identical.
-   Before `gh pr create --draft`, push at least one commit on the task branch
-   so its head differs from `main` (for example
+   cannot open a pull request when the head and base branches are identical;
+   an empty commit is sufficient when no file changes are needed yet (for
+   example
    `git commit --allow-empty -m "chore: scaffold draft PR for #<issue-number>"`).
-   An empty commit is sufficient when no file changes are needed yet.
    Implementation commits may follow on the same branch.
 
 ### Delivery (after draft PR)
