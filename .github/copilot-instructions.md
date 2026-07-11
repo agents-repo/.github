@@ -23,8 +23,36 @@ Human contributor guidance lives at the repository root:
 | [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` → `.cursor/rules/agents-registry-proxy.mdc` |
 | [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` → `.cursor/rules/agents-org.mdc` |
 
-This repository does not use issue forms. Open a plain issue or pull request
-here for organization-wide documentation and configuration changes.
+This repository does not use issue forms. Open a plain issue before
+implementation for organization-wide documentation and configuration changes.
+
+## Required Workflow (Task Start)
+
+Before implementation, agents MUST:
+
+1. Open a tracking issue (plain issue in this repository).
+2. Create a branch named `<prefix>/<issue-number>-<slug>`.
+3. Push the branch and open a draft pull request targeting `main` before
+   implementation commits. Pull requests MUST be created as drafts
+   (`gh pr create --draft`). In `## Related Issues`, include
+   `Closes #<issue-number>` for standard tasks, or follow the security-advisory
+   format defined in the **Workflow exceptions** section of `CONTRIBUTING.md`
+   when applicable. GitHub
+   cannot open a PR when head and base are identical; push a scaffolding commit
+   on the task branch first if needed (see `CONTRIBUTING.md`).
+
+Agents MAY push additional commits to the task branch when requested.
+Agents MUST NOT push to `main`, merge PRs into `main`, or mark pull requests
+ready for review.
+After validation, the developer manually marks the pull request ready for
+review; agents MUST NOT perform that step.
+Agents MUST complete requested implementation work on the task branch, then
+hand off. Ready-for-review and merge are for a human maintainer.
+
+Task start in this organization authorizes workflow scaffolding (issue,
+branch, draft PR) even when generic tooling rules defer commits until
+requested. Repo-level agent instructions govern this workspace and supersede
+generic commit or pull request timing rules for workflow setup steps.
 
 ## Default Branch Integration (Agents)
 
@@ -33,11 +61,10 @@ here for organization-wide documentation and configuration changes.
   by push).
 - AI agents MUST NOT push commits directly to `main`.
 - Integration to `main` is a human-only, manual step performed by maintainers
-  after review.
-- Agents MAY create feature branches, push to those branches when explicitly
-  requested, and open draft pull requests targeting `main`.
-- Agents MUST hand off at PR creation and state that merge is for a human
-  maintainer.
+  after review. All contributors MUST deliver changes to `main` only through
+  merged pull requests.
+- Agents MUST complete requested implementation work on the task branch, then
+  hand off and state that merge is for a human maintainer.
 
 ## GitHub Communication Method (gh CLI Preferred)
 
@@ -47,7 +74,7 @@ For GitHub communication in this repository, agents and contributors SHOULD use
 - view issue context: `gh issue view <number> --repo agents-repo/.github`
 - create issue:
   `gh issue create --repo agents-repo/.github --title "..." --body-file <file>`
-- create draft PR:
+- create draft PR (MUST use `--draft`):
   `gh pr create --repo agents-repo/.github --draft --title "..." --body-file <file>`
 
 For long issue or PR bodies, prefer `--body-file` over inline quoted text.
