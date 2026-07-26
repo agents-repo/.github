@@ -161,9 +161,9 @@ repository rulesets for these active development repositories:
 - `agents-repo/registry-proxy`
 - `agents-repo/cli`
 
-Release automation on `cli` pushes version commits via a dedicated GitHub App
-listed on the repository ruleset bypass list; see
-[cli `docs/npm-publishing.md`](https://github.com/agents-repo/cli/blob/main/docs/npm-publishing.md#protected-main-and-release-automation).
+Release automation on `agents-repo/cli` pushes version commits via a dedicated
+GitHub App listed on the repository ruleset bypass list; see
+[protected `main` release setup for `agents-repo/cli`](https://github.com/agents-repo/cli/blob/main/docs/npm-publishing.md#protected-main-and-release-automation).
 
 Recommended settings (via branch protection or rulesets):
 
