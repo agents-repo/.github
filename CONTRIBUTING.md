@@ -62,6 +62,30 @@ Every task in an active development repository MUST follow this full lifecycle.
    review after validation; maintainers merge. Agents MUST NOT mark pull
    requests ready for review or merge to `main`.
 
+### Pre-ready agent handoff
+
+While the pull request remains a **draft**, agents MUST complete the following
+before handoff (humans still mark the PR ready for review):
+
+1. When using issue planning, follow the refined plan; do not expand scope
+   without user or issue clarification.
+2. Before editing, read **exemplar** code or documentation in the same area of
+   the target repository.
+3. Run the target repository's validation commands (see that repository's
+   `CONTRIBUTING` and agent instructions); record command output or a summary
+   in the draft pull request and agent handoff.
+4. Perform a **self-review**: correctness, edge cases, error/empty/loading
+   behavior, accessibility for UI changes, and alignment with specs and docs.
+5. Update the **draft** pull request description with validation evidence,
+   risks, and explicit out-of-scope items.
+6. Agents and automation **MUST NOT** mark pull requests ready for review.
+7. After a human marks the pull request ready, GitHub Copilot or other
+   reviewers may comment. Use the `github-pr-review-triage` workflow where
+   available for follow-up—**not** as a substitute for these pre-ready steps.
+
+Repository-specific validation commands and optional IDE tooling are documented
+in each repository's contributor and agent instruction files.
+
 ## Workflow exceptions
 
 1. **Security vulnerabilities** — Follow [SECURITY.md](SECURITY.md); do not

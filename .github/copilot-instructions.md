@@ -49,6 +49,13 @@ review; agents MUST NOT perform that step.
 Agents MUST complete requested implementation work on the task branch, then
 hand off. Ready-for-review and merge are for a human maintainer.
 
+## Pre-ready agent handoff
+
+Before handoff on a task branch, agents MUST follow
+[CONTRIBUTING.md — Pre-ready agent handoff](/CONTRIBUTING.md#pre-ready-agent-handoff)
+(IDE-neutral). Record validation evidence in the draft pull request. Agents
+MUST NOT mark pull requests ready for review.
+
 Task start in this organization authorizes workflow scaffolding (issue,
 branch, draft PR) even when generic tooling rules defer commits until
 requested. Repo-level agent instructions govern this workspace and supersede
