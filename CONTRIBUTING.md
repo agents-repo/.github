@@ -21,6 +21,7 @@ Choose the repository that matches the kind of work you want to do, then follow 
 | [registry](https://github.com/agents-repo/registry) | Specs, schemas, packages | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBUTING.md) |
 | [webapp](https://github.com/agents-repo/webapp) | Registry UI | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/webapp/blob/main/.github/CONTRIBUTING.md) |
 | [registry-proxy](https://github.com/agents-repo/registry-proxy) | Cloudflare Worker proxy | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/registry-proxy/blob/main/.github/CONTRIBUTING.md) |
+| [cli](https://github.com/agents-repo/cli) | Official `npx agents-repo` CLI | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/cli/blob/main/.github/CONTRIBUTING.md) |
 | [.github](https://github.com/agents-repo/.github) | Organization-wide defaults | This repository — open an issue before implementation here |
 | [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io) | Automated Pages deploy target for webapp (not a development repo) | See [webapp deployment docs](https://github.com/agents-repo/webapp/blob/main/docs/deployment.md) |
 
@@ -158,6 +159,11 @@ repository rulesets for these active development repositories:
 - `agents-repo/registry`
 - `agents-repo/webapp`
 - `agents-repo/registry-proxy`
+- `agents-repo/cli`
+
+Release automation on `cli` pushes version commits via a dedicated GitHub App
+listed on the repository ruleset bypass list; see
+[cli `docs/npm-publishing.md`](https://github.com/agents-repo/cli/blob/main/docs/npm-publishing.md#protected-main-and-release-automation).
 
 Recommended settings (via branch protection or rulesets):
 
