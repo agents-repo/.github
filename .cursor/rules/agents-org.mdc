@@ -1,9 +1,9 @@
 ---
-description: Organization .github repository guidelines (mirrors .github/copilot-instructions.md)
+description: Organization .github repository guidelines (mirrors copilot-instructions.md)
 alwaysApply: true
 ---
 
-<!-- Mirrors .github/copilot-instructions.md — keep both files aligned in the same change -->
+<!-- Generated: .github/copilot-instructions.md. Run npm run sync:ide-instructions -->
 
 # Organization .github Repository — Agent Guidelines
 
@@ -17,9 +17,9 @@ applies community health file inheritance.
 
 Human contributor guidance lives at the repository root:
 
-- [CONTRIBUTING.md](/CONTRIBUTING.md)
-- [SECURITY.md](/SECURITY.md)
-- [SUPPORT.md](/SUPPORT.md)
+- [CONTRIBUTING.md](../../.github/CONTRIBUTING.md)
+- [SECURITY.md](../../.github/SECURITY.md)
+- [SUPPORT.md](../../.github/SUPPORT.md)
 
 ## Child Repositories
 
@@ -59,7 +59,7 @@ hand off. Ready-for-review and merge are for a human maintainer.
 ## Pre-ready agent handoff
 
 Before handoff on a task branch, agents MUST follow
-[CONTRIBUTING.md — Pre-ready agent handoff](/CONTRIBUTING.md#pre-ready-agent-handoff)
+[CONTRIBUTING.md — Pre-ready agent handoff](../../.github/CONTRIBUTING.md#pre-ready-agent-handoff)
 (IDE-neutral). Record validation evidence in the draft pull request. Agents
 MUST NOT mark pull requests ready for review.
 
@@ -95,9 +95,12 @@ For long issue or PR bodies, prefer `--body-file` over inline quoted text.
 
 ## IDE Instructions in This Repository
 
-This repo uses **manual** Copilot and Cursor instruction files (no sync
-scripts). When changing agent guidance, update **both** in the same pull
-request:
+Edit `.github/copilot-instructions.md` (this file) as the canonical source, then
+regenerate mirrors:
 
-- `.github/copilot-instructions.md` (this file)
-- `.cursor/rules/agents-org.mdc`
+```bash
+npm run sync:ide-instructions
+```
+
+Mirrors: `.cursor/rules/agents-org.mdc`, `CLAUDE.md`, `AGENTS.md`. Do not edit
+generated mirror files directly.

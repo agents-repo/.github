@@ -1,3 +1,5 @@
+<!-- Generated: .github/copilot-instructions.md. Run npm run sync:ide-instructions -->
+
 # Organization .github Repository — Agent Guidelines
 
 ## Project Purpose
@@ -10,9 +12,9 @@ applies community health file inheritance.
 
 Human contributor guidance lives at the repository root:
 
-- [CONTRIBUTING.md](/CONTRIBUTING.md)
-- [SECURITY.md](/SECURITY.md)
-- [SUPPORT.md](/SUPPORT.md)
+- [CONTRIBUTING.md](.github/CONTRIBUTING.md)
+- [SECURITY.md](.github/SECURITY.md)
+- [SUPPORT.md](.github/SUPPORT.md)
 
 ## Child Repositories
 
@@ -52,7 +54,7 @@ hand off. Ready-for-review and merge are for a human maintainer.
 ## Pre-ready agent handoff
 
 Before handoff on a task branch, agents MUST follow
-[CONTRIBUTING.md — Pre-ready agent handoff](/CONTRIBUTING.md#pre-ready-agent-handoff)
+[CONTRIBUTING.md — Pre-ready agent handoff](.github/CONTRIBUTING.md#pre-ready-agent-handoff)
 (IDE-neutral). Record validation evidence in the draft pull request. Agents
 MUST NOT mark pull requests ready for review.
 
