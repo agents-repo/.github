@@ -1,8 +1,11 @@
 # agents-repo
 
-Open-source registry and tooling for GitHub Copilot agents and multi-agent flows.
+Open-source registry and tooling for agents and multi-agent flows across
+supported **install targets** (AI coding tools).
 
-The agents-repo organization maintains specifications, packages, and applications for discovering, validating, and distributing Copilot agents and flows.
+The agents-repo organization maintains specifications, packages, and
+applications for discovering, validating, and distributing agents and flows
+for GitHub Copilot, Cursor, Claude Code, and OpenAI Codex.
 
 ## Get started
 
