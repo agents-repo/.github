@@ -104,10 +104,11 @@ in each repository's contributor and agent instruction files.
 
 ## Marketing and install-target vocabulary
 
-Platform repos SHOULD follow [docs/marketing-vocabulary.md](docs/marketing-vocabulary.md)
+Platform repos SHOULD follow the organization
+[marketing and install-target vocabulary](https://github.com/agents-repo/.github/blob/main/docs/marketing-vocabulary.md)
 for tool-agnostic product voice, install target display names, and SEO/npm
-keyword guidance. Normative install target IDs remain in
-[registry/specs/install-targets.md](https://github.com/agents-repo/registry/blob/main/specs/install-targets.md).
+keyword guidance. Normative install target IDs remain in the
+[install-targets spec](https://github.com/agents-repo/registry/blob/main/specs/install-targets.md).
 
 ## Shared norms
 
