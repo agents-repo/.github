@@ -11,8 +11,7 @@ Repository-level files override organization defaults. See GitHub's documentatio
 - [Security](SECURITY.md)
 - [Support](SUPPORT.md)
 - [Organization profile](profile/README.md)
-- Marketing vocabulary:
-  [docs/marketing-vocabulary.md](https://github.com/agents-repo/.github/blob/main/docs/marketing-vocabulary.md)
+- Marketing vocabulary: [docs/marketing-vocabulary.md](docs/marketing-vocabulary.md)
 - GitHub Copilot project instructions: [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
 - Cursor project rules: [`.cursor/rules/agents-org.mdc`](.cursor/rules/agents-org.mdc)
 
