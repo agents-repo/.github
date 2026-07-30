@@ -1,0 +1,10 @@
+{
+  "name": "agents-repo-org-github",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:ide-instructions": "node scripts/sync-ide-instructions.mjs",
+    "agents:install": "npx agents-repo@1.13.0 install",
+    "agents:update": "npx agents-repo@1.13.0 update"
+  }
+}

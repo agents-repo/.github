@@ -137,17 +137,50 @@ When this document conflicts with a repository's own `CONTRIBUTING.md`, the repo
 
 ## Agent instruction files
 
-| Repository | GitHub Copilot | Cursor |
-| --- | --- | --- |
-| [registry](https://github.com/agents-repo/registry) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry.mdc` |
-| [webapp](https://github.com/agents-repo/webapp) | `.github/copilot-instructions.md` | `.cursor/rules/agents-webapp.mdc` |
-| [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry-proxy.mdc` |
-| [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` | `.cursor/rules/agents-org.mdc` |
+| Repository | GitHub Copilot | Cursor | Claude Code | OpenAI Codex |
+| --- | --- | --- | --- | --- |
+| [registry](https://github.com/agents-repo/registry) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry.mdc` | `CLAUDE.md` | `AGENTS.md` |
+| [webapp](https://github.com/agents-repo/webapp) | `.github/copilot-instructions.md` | `.cursor/rules/agents-webapp.mdc` | `CLAUDE.md` | `AGENTS.md` |
+| [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry-proxy.mdc` | `CLAUDE.md` | `AGENTS.md` |
+| [cli](https://github.com/agents-repo/cli) | `.github/copilot-instructions.md` | `.cursor/rules/agents-cli.mdc` | `CLAUDE.md` | `AGENTS.md` |
+| [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` | `.cursor/rules/agents-org.mdc` | `CLAUDE.md` | `AGENTS.md` |
 
-Registry, webapp, and registry-proxy regenerate Cursor rules with
-`npm run sync:cursor-rules` after editing `.github/copilot-instructions.md`. This
-repository keeps Copilot and Cursor files aligned manually in the same change
-(Pattern B — no npm sync tooling).
+Edit `.github/copilot-instructions.md` as the canonical project-guidelines source.
+Regenerate IDE mirrors after changes:
+
+```bash
+npm run sync:ide-instructions
+```
+
+Do not edit `.cursor/rules/`, `CLAUDE.md`, or `AGENTS.md` directly when they are
+generated mirrors.
+
+This repository uses automated sync for Cursor, Claude Code, and OpenAI Codex
+mirrors — replacing the former manual Pattern B (edit Copilot and Cursor files
+in the same change).
+
+### Registry workflow packages (CLI)
+
+Install and refresh catalog packages with the [agents-repo CLI](https://github.com/agents-repo/cli).
+`agents.json` points at `https://registry-proxy.maiconfz.workers.dev` (organization
+catalog proxy).
+
+Bootstrap only when `agents.json` is missing:
+
+```bash
+npx agents-repo@1.13.0 init --targets github-copilot claude-code cursor openai-codex
+```
+
+Use the pinned npm scripts (same CLI version as CI):
+
+```bash
+npm run agents:install   # bulk sync from agents.json
+npm run agents:update    # refresh within semver ranges
+```
+
+Commit `agents.json`, `agents-lock.json`, and extracted paths (`.github/agents/`,
+`.cursor/skills/`, `.claude/agents/`, `.agents/skills/`). Do not hand-edit
+extracted package files.
 
 ## Changing organization-wide defaults
 
