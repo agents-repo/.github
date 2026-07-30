@@ -161,12 +161,21 @@ in the same change).
 
 ### Registry workflow packages (CLI)
 
-Install and refresh catalog packages with the [agents-repo CLI](https://github.com/agents-repo/cli):
+Install and refresh catalog packages with the [agents-repo CLI](https://github.com/agents-repo/cli).
+`agents.json` points at `https://registry-proxy.maiconfz.workers.dev` (organization
+catalog proxy).
+
+Bootstrap only when `agents.json` is missing:
 
 ```bash
-npx agents-repo init --targets github-copilot claude-code cursor openai-codex
-npx agents-repo install    # bulk sync from agents.json
-npx agents-repo update       # refresh within semver ranges
+npx agents-repo@1.13.0 init --targets github-copilot claude-code cursor openai-codex
+```
+
+Use the pinned npm scripts (same CLI version as CI):
+
+```bash
+npm run agents:install   # bulk sync from agents.json
+npm run agents:update    # refresh within semver ranges
 ```
 
 Commit `agents.json`, `agents-lock.json`, and extracted paths (`.github/agents/`,
