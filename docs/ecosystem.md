@@ -4,7 +4,8 @@ The **agents-repo** organization is an open registry and tooling stack for
 agents and multi-agent flows across supported **install targets** (GitHub
 Copilot, Cursor, Claude Code, and OpenAI Codex). Specifications and package
 source live in the **registry** repository. **Webapp** and **CLI** consumers
-read catalog files through **registry-proxy** by default. Organization-wide
+read catalog files through **registry-proxy** by default (webapp and CLI can
+point at GitHub or other bases via env and project config). Organization-wide
 policies and this diagram live in the **[`.github`](https://github.com/agents-repo/.github)**
 repository.
 
@@ -42,8 +43,8 @@ flowchart TB
 
   EndUser --> Site
   EndUser -->|npx agents-repo| Npm
-  Site --> Proxy
-  Npm --> Proxy
+  Site -->|catalog fetch| Proxy
+  Npm -->|catalog fetch| Proxy
   Proxy --> Cloudflare
   Cloudflare -->|GitHub Raw or Contents API| Registry
 
@@ -68,6 +69,9 @@ Default catalog fetch URL (webapp production and org `agents.json`):
 
 `https://registry-proxy.maiconfz.workers.dev?ref=v2.x`
 
+Override with webapp `VITE_*` registry settings, CLI `agents.json` / env (for
+example `AGENTS_REPO_REGISTRY_URL`), or a direct GitHub source URL in development.
+
 ## Publish a package
 
 New or updated packages are contributed to **registry** via pull request.
@@ -85,8 +89,8 @@ sequenceDiagram
   C->>GH: Open package submission issue
   C->>GH: Branch package slash issue-name
   C->>GH: Open draft PR Closes issue
-  C->>R: Author agents flows metadata
-  C->>R: package build validate-artifacts
+  Note over C: Local author package build validate-artifacts
+  C->>GH: Push branch commits
   C->>GH: Mark PR ready for review
   GH->>R: Squash merge feat package or fix package
   R->>SR: Release workflow on main

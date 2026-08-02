@@ -20,15 +20,18 @@ for GitHub Copilot, Cursor, Claude Code, and OpenAI Codex.
 ## How the ecosystem fits together
 
 Contributors publish packages to **registry** via GitHub pull request. **Webapp**
-and **CLI** read the catalog through **registry-proxy** (default). The public
-site is built from **webapp** and deployed to GitHub Pages.
+and **CLI** use **registry-proxy** for catalog fetches by default (overridable
+via env and config in local development). The public site is built from
+**webapp** and deployed to GitHub Pages.
 
 ```mermaid
 flowchart LR
   Contributor --> Registry[registry GitHub]
   Registry --> Proxy[registry-proxy]
-  Proxy --> Webapp[webapp agents-repo.org]
-  Proxy --> CLI[cli npx agents-repo]
+  User[Users] --> Site[webapp agents-repo.org]
+  Site -->|catalog fetch| Proxy
+  User -->|npx agents-repo| CLI[cli]
+  CLI -->|catalog fetch| Proxy
   CLI --> Project[Your project install targets]
 ```
 
