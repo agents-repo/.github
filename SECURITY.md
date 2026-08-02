@@ -13,6 +13,7 @@ Report vulnerabilities privately using GitHub Private Vulnerability Reporting on
 | `registry` | https://github.com/agents-repo/registry/security/advisories/new |
 | `webapp` | https://github.com/agents-repo/webapp/security/advisories/new |
 | `registry-proxy` | https://github.com/agents-repo/registry-proxy/security/advisories/new |
+| `cli` | https://github.com/agents-repo/cli/security/advisories/new |
 | `.github` | https://github.com/agents-repo/.github/security/advisories/new |
 
 ## What to include
