@@ -43,8 +43,9 @@ flowchart TB
 
   EndUser --> Site
   EndUser -->|npx agents-repo| Npm
+  EndUser --> CliRun[CLI in user environment]
+  CliRun -->|catalog fetch| Proxy
   Site -->|catalog fetch| Proxy
-  Npm -->|catalog fetch| Proxy
   Proxy --> Cloudflare
   Cloudflare -->|GitHub Raw or Contents API| Registry
 
