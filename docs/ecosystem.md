@@ -114,8 +114,8 @@ entries.
 
 ```mermaid
 sequenceDiagram
-  participant U as User or CLI
-  participant W as webapp or CLI
+  participant U as End user
+  participant W as Webapp or CLI
   participant P as registry-proxy
   participant Reg as registry at ref
 
