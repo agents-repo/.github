@@ -12,9 +12,27 @@ for GitHub Copilot, Cursor, Claude Code, and OpenAI Codex.
 - [registry](https://github.com/agents-repo/registry) — specifications, schemas, packages, and validation tooling
 - [webapp](https://github.com/agents-repo/webapp) — browse, search, and download agents and flows from the registry
 - [registry-proxy](https://github.com/agents-repo/registry-proxy) — cached, rate-limit-safe access to registry files
+- [cli](https://github.com/agents-repo/cli) — install and manage packages with `npx agents-repo`
 - [agents-repo.org](https://agents-repo.org/) — public site (develop in
   [webapp](https://github.com/agents-repo/webapp); published automatically to
   [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io))
+
+## How the ecosystem fits together
+
+Contributors publish packages to **registry** via GitHub pull request. **Webapp**
+and **CLI** read the catalog through **registry-proxy** (default). The public
+site is built from **webapp** and deployed to GitHub Pages.
+
+```mermaid
+flowchart LR
+  Contributor --> Registry[registry GitHub]
+  Registry --> Proxy[registry-proxy]
+  Proxy --> Webapp[webapp agents-repo.org]
+  Proxy --> CLI[cli npx agents-repo]
+  CLI --> Project[Your project install targets]
+```
+
+Full diagrams and step-by-step flows: [Ecosystem overview](../docs/ecosystem.md).
 
 ## Contribute
 
@@ -31,6 +49,7 @@ then follow the detailed guide for the repository you are changing:
 - [registry/.github/CONTRIBUTING.md](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBUTING.md)
 - [webapp/.github/CONTRIBUTING.md](https://github.com/agents-repo/webapp/blob/main/.github/CONTRIBUTING.md)
 - [registry-proxy/.github/CONTRIBUTING.md](https://github.com/agents-repo/registry-proxy/blob/main/.github/CONTRIBUTING.md)
+- [cli/.github/CONTRIBUTING.md](https://github.com/agents-repo/cli/blob/main/.github/CONTRIBUTING.md)
 
 `agents-repo.github.io` is the webapp's automated Pages deploy target, not a
 development repository. See [webapp deployment docs](https://github.com/agents-repo/webapp/blob/main/docs/deployment.md).

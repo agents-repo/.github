@@ -29,6 +29,7 @@ when available:
 - [registry issues](https://github.com/agents-repo/registry/issues/new/choose)
 - [webapp issues](https://github.com/agents-repo/webapp/issues/new/choose)
 - [registry-proxy issues](https://github.com/agents-repo/registry-proxy/issues/new/choose)
+- [cli issues](https://github.com/agents-repo/cli/issues/new/choose)
 
 Include reproduction steps, expected behavior, and actual behavior.
 

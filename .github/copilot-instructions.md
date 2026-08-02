@@ -21,6 +21,7 @@ Human contributor guidance lives at the repository root:
 | [registry](https://github.com/agents-repo/registry) | `.github/copilot-instructions.md` → `.cursor/rules/agents-registry.mdc` |
 | [webapp](https://github.com/agents-repo/webapp) | `.github/copilot-instructions.md` → `.cursor/rules/agents-webapp.mdc` |
 | [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` → `.cursor/rules/agents-registry-proxy.mdc` |
+| [cli](https://github.com/agents-repo/cli) | `.github/copilot-instructions.md` → `.cursor/rules/agents-cli.mdc` |
 | [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` → `.cursor/rules/agents-org.mdc` |
 
 This repository does not use issue forms. Open a plain issue before
