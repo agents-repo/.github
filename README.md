@@ -12,6 +12,7 @@ Repository-level files override organization defaults. See GitHub's documentatio
 - [Support](SUPPORT.md)
 - [Organization profile](profile/README.md)
 - Ecosystem overview: [docs/ecosystem.md](docs/ecosystem.md)
+- Local multi-repo Git workspace: [docs/local-git-workspace.md](docs/local-git-workspace.md)
 - Marketing vocabulary: [docs/marketing-vocabulary.md](docs/marketing-vocabulary.md)
 - GitHub Copilot project instructions: [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
 - Cursor project rules: [`.cursor/rules/agents-org.mdc`](.cursor/rules/agents-org.mdc)

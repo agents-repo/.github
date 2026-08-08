@@ -25,6 +25,13 @@ Choose the repository that matches the kind of work you want to do, then follow 
 | [.github](https://github.com/agents-repo/.github) | Organization-wide defaults | This repository — open an issue before implementation here |
 | [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io) | Automated Pages deploy target for webapp (not a development repo) | See [webapp deployment docs](https://github.com/agents-repo/webapp/blob/main/docs/deployment.md) |
 
+## Local multi-repo workspace
+
+If you keep organization repositories as sibling directories under one parent
+folder, use the shell scripts documented in
+[docs/local-git-workspace.md](docs/local-git-workspace.md) (`scripts/git-*.sh`)
+to fetch, prune stale locals, and refresh the default branch across clones.
+
 ## Required Workflow
 
 Every task in an active development repository MUST follow this full lifecycle.
