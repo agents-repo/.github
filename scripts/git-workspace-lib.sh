@@ -105,6 +105,7 @@ resolve_default_branch() {
 
 repo_fetch_prune() {
   git fetch --prune "$GIT_WS_REMOTE"
+  return $?
 }
 
 fast_forward_local_branch() {

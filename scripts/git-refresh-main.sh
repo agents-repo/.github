@@ -13,7 +13,8 @@ main() {
       ;;
     *)
       if [[ -n "${1:-}" ]]; then
-        log_err "unknown argument: $1"
+        local unknown_arg="$1"
+        log_err "unknown argument: ${unknown_arg}"
         return 1
       fi
       ;;
