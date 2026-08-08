@@ -62,18 +62,26 @@ function downloadAndExtract() {
 
   execFileSync('curl', ['-fsSL', '-o', archivePath, url], { stdio: 'inherit' });
 
-  if (asset.endsWith('.tar.gz')) {
-    execFileSync('tar', ['-xzf', archivePath, '-C', versionDir], { stdio: 'inherit' });
-  } else if (asset.endsWith('.zip')) {
-    execFileSync('unzip', ['-o', archivePath, '-d', versionDir], { stdio: 'inherit' });
-  } else {
-    throw new Error(`Unknown archive type: ${asset}`);
-  }
+  const stagingDir = fs.mkdtempSync(path.join(CACHE_ROOT, '.staging-'));
+  try {
+    if (asset.endsWith('.tar.gz')) {
+      execFileSync('tar', ['-xzf', archivePath, '-C', stagingDir], { stdio: 'inherit' });
+    } else if (asset.endsWith('.zip')) {
+      execFileSync('unzip', ['-o', archivePath, '-d', stagingDir], { stdio: 'inherit' });
+    } else {
+      throw new Error(`Unknown archive type: ${asset}`);
+    }
 
-  fs.unlinkSync(archivePath);
+    fs.unlinkSync(archivePath);
 
-  if (!fs.existsSync(binaryPath)) {
-    throw new Error(`actionlint binary not found after extract: ${binaryPath}`);
+    const extractedBinary = path.join(stagingDir, binaryName);
+    if (!fs.existsSync(extractedBinary)) {
+      throw new Error(`actionlint binary not found after extract: ${extractedBinary}`);
+    }
+
+    fs.renameSync(extractedBinary, binaryPath);
+  } finally {
+    fs.rmSync(stagingDir, { recursive: true, force: true });
   }
 
   if (process.platform !== 'win32') {
