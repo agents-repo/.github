@@ -16,6 +16,9 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Run workflow lint
+        run: npm run lint:all
+
       - name: Check IDE instruction mirrors
         run: npm run sync:ide-instructions -- --check
 
