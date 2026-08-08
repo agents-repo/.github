@@ -10,19 +10,27 @@ repo_sync_all() {
     return 1
   fi
   repo_sync_tracked_locals
+  return 0
 }
 
 main() {
   case "${1:-}" in
     -h | --help)
       print_workspace_help "$0"
-      exit 0
+      return 0
+      ;;
+    *)
+      if [[ -n "${1:-}" ]]; then
+        log_err "unknown argument: $1"
+        return 1
+      fi
       ;;
   esac
 
   require_git
   run_for_each_repo repo_sync_all
-  exit $?
+  return $?
 }
 
 main "$@"
+exit $?

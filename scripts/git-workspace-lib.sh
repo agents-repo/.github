@@ -15,18 +15,43 @@ set -o pipefail 2>/dev/null || true
 
 log_info() {
   printf '==> %s\n' "$*"
+  return 0
 }
 
 log_warn() {
   printf 'warning: %s\n' "$*" >&2
+  return 0
 }
 
 log_err() {
   printf 'error: %s\n' "$*" >&2
+  return 0
 }
 
 mark_failed() {
   GIT_WS_FAILED=1
+  return 0
+}
+
+validate_workspace_config() {
+  local resolved
+
+  if [[ ! "$GIT_WS_REMOTE" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    log_err "invalid GIT_WS_REMOTE (use only letters, digits, ., _, -): ${GIT_WS_REMOTE}"
+    exit 1
+  fi
+
+  if [[ ! -d "$WORKSPACE_ROOT" ]]; then
+    log_err "WORKSPACE_ROOT is not a directory: ${WORKSPACE_ROOT}"
+    exit 1
+  fi
+
+  resolved="$(realpath -m "$WORKSPACE_ROOT" 2>/dev/null || printf '%s' "$WORKSPACE_ROOT")"
+  if [[ "$resolved" == "/" ]] || [[ "$resolved" == "${HOME}" ]]; then
+    log_warn "WORKSPACE_ROOT is broad (${resolved}); confirm this is intentional"
+  fi
+
+  return 0
 }
 
 require_git() {
@@ -34,11 +59,16 @@ require_git() {
     log_err "git not found on PATH"
     exit 1
   fi
+  validate_workspace_config
+  return 0
 }
 
 is_git_repo() {
   local dir="$1"
-  git -C "$dir" rev-parse --is-inside-work-tree >/dev/null 2>&1
+  if git -C "$dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    return 0
+  fi
+  return 1
 }
 
 # Prints absolute paths to direct-child git clones under WORKSPACE_ROOT (sorted).
@@ -51,10 +81,13 @@ discover_git_repos() {
   done < <(
     LC_ALL=C find "$WORKSPACE_ROOT" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z
   )
+  return 0
 }
 
 repo_header() {
-  log_info "[$(basename "$1")] $1"
+  local repo_path="$1"
+  log_info "[$(basename "$repo_path")] $repo_path"
+  return 0
 }
 
 resolve_default_branch() {
@@ -67,6 +100,7 @@ resolve_default_branch() {
     default="main"
   fi
   printf '%s' "$default"
+  return 0
 }
 
 repo_fetch_prune() {
@@ -104,15 +138,23 @@ repo_sync_tracked_locals() {
     remote_name="${upstream#${GIT_WS_REMOTE}/}"
     fast_forward_local_branch "$local_branch" "$remote_name" || true
   done < <(git for-each-ref --format='%(refname:short)' refs/heads/)
+  return 0
 }
 
 repo_prune_gone_locals() {
-  local current_branch branch_name
+  local current_branch branch_name upstream remote_ref
 
   current_branch="$(git branch --show-current 2>/dev/null || true)"
 
   while IFS= read -r branch_name; do
     [[ -z "$branch_name" ]] && continue
+    upstream="$(git for-each-ref --format='%(upstream:short)' "refs/heads/${branch_name}" 2>/dev/null)"
+    [[ -n "$upstream" ]] || continue
+    [[ "$upstream" == "${GIT_WS_REMOTE}/"* ]] || continue
+    remote_ref="refs/remotes/${upstream}"
+    if git show-ref --verify --quiet "$remote_ref"; then
+      continue
+    fi
     if [[ "$branch_name" == "$current_branch" ]]; then
       log_warn "skipping delete of current branch '${branch_name}' (gone upstream)"
       continue
@@ -120,7 +162,8 @@ repo_prune_gone_locals() {
     if ! git branch -d "$branch_name"; then
       log_warn "could not delete branch '${branch_name}' (likely not fully merged)"
     fi
-  done < <(git branch -vv | grep ': gone]' | sed -E 's/^[* ]+//' | awk '{print $1}')
+  done < <(git for-each-ref --format='%(refname:short)' refs/heads/)
+  return 0
 }
 
 repo_fetch_all_remote_branches() {
@@ -148,6 +191,7 @@ repo_fetch_all_remote_branches() {
       fi
     fi
   done < <(git for-each-ref --format='%(refname:short)' "refs/remotes/${GIT_WS_REMOTE}")
+  return 0
 }
 
 repo_checkout_and_update_default() {
@@ -209,8 +253,9 @@ run_for_each_repo() {
 }
 
 print_workspace_help() {
+  local script_name="$1"
   cat <<EOF
-Usage: $(basename "$1") [options]
+Usage: $(basename "$script_name") [options]
 
 Options:
   -h, --help    Show this help
@@ -220,4 +265,5 @@ Environment:
                    (default: parent of the .github clone containing these scripts)
   GIT_WS_REMOTE    Remote name (default: origin)
 EOF
+  return 0
 }

@@ -71,10 +71,12 @@ Shared logic lives in [`git-workspace-lib.sh`](../scripts/git-workspace-lib.sh).
 
 ### Pruning “gone” upstreams
 
-After `git fetch --prune`, locals that **used to** track a remote branch show
-`[gone]` in `git branch -vv`. The prune script runs `git branch -d` only (no
-force delete). If Git refuses (typically not fully merged), a warning is printed
-and the branch is kept.
+After `git fetch --prune`, locals that **used to** track a remote branch on
+`GIT_WS_REMOTE` but no longer have a matching `refs/remotes/<remote>/<branch>`
+ref are treated as gone (detected via upstream config, not `git branch -vv`
+text). The prune script runs `git branch -d` only (no force delete). If Git
+refuses (typically not fully merged), a warning is printed and the branch is
+kept.
 
 Locals that **never** had an upstream are not deleted.
 

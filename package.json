@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "lint:workflows": "node scripts/lint-workflows.mjs",
-    "lint:all": "npm run lint:workflows",
+    "lint:shell": "shellcheck scripts/git-*.sh",
+    "lint:all": "npm run lint:workflows && npm run lint:shell",
     "sync:ide-instructions": "node scripts/sync-ide-instructions.mjs",
     "agents:install": "npx agents-repo@1.13.0 install",
     "agents:update": "npx agents-repo@1.13.0 update"
