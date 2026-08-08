@@ -13,6 +13,7 @@ for GitHub Copilot, Cursor, Claude Code, and OpenAI Codex.
 - [webapp](https://github.com/agents-repo/webapp) — browse, search, and download agents and flows from the registry
 - [registry-proxy](https://github.com/agents-repo/registry-proxy) — cached, rate-limit-safe access to registry files
 - [cli](https://github.com/agents-repo/cli) — install and manage packages with `npx agents-repo`
+- [Repositories on agents-repo.org](https://agents-repo.org/repositories) — stable site pages for every org repository
 - [agents-repo.org](https://agents-repo.org/) — public site (develop in
   [webapp](https://github.com/agents-repo/webapp); published automatically to
   [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io))
