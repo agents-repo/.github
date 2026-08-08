@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+/* eslint-disable security/detect-non-literal-fs-filename -- cache paths from pinned ACTIONLINT_VERSION and platform */
+/* eslint-disable sonarjs/no-os-command-from-path -- actionlint from PATH when version matches pin, else explicit release URL */
+/* eslint-disable sonarjs/super-linear-regex -- version token parsed from actionlint -version stdout */
+/* eslint-disable sonarjs/file-permissions -- chmod required for bootstrapped actionlint binary */
+/* eslint-disable sonarjs/cognitive-complexity -- platform-specific release asset selection */
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
