@@ -135,6 +135,64 @@ otherwise.
 
 When this document conflicts with a repository's own `CONTRIBUTING.md`, the repository guide takes precedence.
 
+## GitHub Actions workflow linting
+
+Repositories that contain `.github/workflows/` **MUST** validate workflow files with
+[actionlint](https://github.com/rhysd/actionlint). YAML parse checks (for example
+`js-yaml` in `scripts/lint-yaml.js`) do **not** catch invalid GitHub Actions
+expression contexts (such as `secrets` in a step `if`), which GitHub rejects at
+parse time.
+
+### Norm
+
+1. Provide `npm run lint:workflows` that runs actionlint on all files under
+   `.github/workflows/`.
+2. Include `lint:workflows` in `npm run lint:all` so PR baseline CI (which runs
+   `lint:all` where configured) enforces workflow semantics.
+3. Pin the actionlint **release version** in `scripts/lint-workflows.mjs` (single
+   constant). Use the **same version** across organization repositories unless a
+   security bump is coordinated. Current pin: **1.7.12**.
+4. Document local expectations in that repository’s contributor docs (install from
+   [releases](https://github.com/rhysd/actionlint/releases), Homebrew, or rely on
+   the repository bootstrap script).
+
+Repositories **MAY** keep `scripts/lint-yaml.js` (or equivalent) for
+`.github/actions/` and `.github/ISSUE_TEMPLATE/`; actionlint does not replace that
+in v1.
+
+Repositories **MUST NOT** use `secrets` or other restricted contexts in job or step
+`if` expressions; validate presence via `env` and shell instead.
+
+### Recommended implementation pattern
+
+- Add `scripts/lint-workflows.mjs` that runs the pinned binary from
+  `.cache/actionlint/` (gitignored), downloading from GitHub releases with a
+  cross-process lock when missing, and falling back to `PATH` only when bootstrap
+  fails but a matching `actionlint` is installed.
+- Add `"lint:workflows": "node scripts/lint-workflows.mjs"` and chain into
+  `lint:all`.
+- Optional `.actionlint.yaml` for documented ignore rules when actionlint reports
+  false positives.
+
+### Local setup
+
+Before pushing changes under `.github/workflows/`, run:
+
+```bash
+npm run lint:workflows
+```
+
+(or `npm run lint:all` where that includes workflow lint).
+
+### Adoption tracking
+
+Per-repository enforcement:
+
+- [agents-repo/webapp#128](https://github.com/agents-repo/webapp/issues/128)
+- [agents-repo/registry#103](https://github.com/agents-repo/registry/issues/103)
+- [agents-repo/registry-proxy#38](https://github.com/agents-repo/registry-proxy/issues/38)
+- [agents-repo/cli#53](https://github.com/agents-repo/cli/issues/53)
+
 ## Agent instruction files
 
 | Repository | GitHub Copilot | Cursor | Claude Code | OpenAI Codex |
