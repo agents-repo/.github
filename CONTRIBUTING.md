@@ -165,9 +165,10 @@ Repositories **MUST NOT** use `secrets` or other restricted contexts in job or s
 
 ### Recommended implementation pattern
 
-- Add `scripts/lint-workflows.mjs` that runs `actionlint` from `PATH` when the
-  version matches the pin, otherwise downloads the pinned binary from GitHub
-  releases into `.cache/actionlint/` (gitignored).
+- Add `scripts/lint-workflows.mjs` that runs the pinned binary from
+  `.cache/actionlint/` (gitignored), downloading from GitHub releases with a
+  cross-process lock when missing, and falling back to `PATH` only when bootstrap
+  fails but a matching `actionlint` is installed.
 - Add `"lint:workflows": "node scripts/lint-workflows.mjs"` and chain into
   `lint:all`.
 - Optional `.actionlint.yaml` for documented ignore rules when actionlint reports
