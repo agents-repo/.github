@@ -211,7 +211,8 @@ Per-repository enforcement:
 | [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` | `.cursor/rules/agents-org.mdc` | `CLAUDE.md` | `AGENTS.md` |
 
 In each child repository (including `cli`), run `npm run sync:ide-instructions`
-in that repo after editing its `.github/copilot-instructions.md`.
+in that repo after editing its `.github/copilot-instructions.md`. Older
+documentation may refer to the retired `sync:cursor-rules` npm script name.
 
 Edit `.github/copilot-instructions.md` as the canonical project-guidelines source.
 Regenerate IDE mirrors after changes:
