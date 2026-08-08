@@ -46,7 +46,7 @@ validate_workspace_config() {
     exit 1
   fi
 
-  resolved="$(realpath -m "$WORKSPACE_ROOT" 2>/dev/null || printf '%s' "$WORKSPACE_ROOT")"
+  resolved="$(cd "$WORKSPACE_ROOT" && pwd -P)"
   if [[ "$resolved" == "/" ]] || [[ "$resolved" == "${HOME}" ]]; then
     log_warn "WORKSPACE_ROOT is broad (${resolved}); confirm this is intentional"
   fi
@@ -199,9 +199,15 @@ repo_checkout_and_update_default() {
   local default
 
   default="$(resolve_default_branch)"
-  if ! git checkout "$default"; then
-    log_err "could not checkout '${default}'"
-    return 1
+  if ! git checkout "$default" 2>/dev/null; then
+    if ! git show-ref --verify --quiet "refs/remotes/${GIT_WS_REMOTE}/${default}"; then
+      log_err "could not checkout '${default}' (missing locally and on ${GIT_WS_REMOTE})"
+      return 1
+    fi
+    if ! git checkout -b "$default" "${GIT_WS_REMOTE}/${default}"; then
+      log_err "could not create local '${default}' from ${GIT_WS_REMOTE}/${default}"
+      return 1
+    fi
   fi
   if ! git merge --ff-only "${GIT_WS_REMOTE}/${default}"; then
     log_err "could not fast-forward '${default}' to ${GIT_WS_REMOTE}/${default}"
