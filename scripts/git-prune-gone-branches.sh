@@ -5,6 +5,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=git-workspace-lib.sh
 source "${SCRIPT_DIR}/git-workspace-lib.sh"
 
+# Invoked indirectly via run_for_each_repo callback name.
+# shellcheck disable=SC2317
 repo_prune_all() {
   if ! repo_fetch_prune; then
     return 1

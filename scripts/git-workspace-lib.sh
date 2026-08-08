@@ -135,7 +135,7 @@ repo_sync_tracked_locals() {
     [[ -z "$local_branch" ]] && continue
     upstream="$(git rev-parse --abbrev-ref "${local_branch}@{upstream}" 2>/dev/null)" || continue
     [[ "$upstream" == "${GIT_WS_REMOTE}/"* ]] || continue
-    remote_name="${upstream#${GIT_WS_REMOTE}/}"
+    remote_name="${upstream#"${GIT_WS_REMOTE}"/}"
     fast_forward_local_branch "$local_branch" "$remote_name" || true
   done < <(git for-each-ref --format='%(refname:short)' refs/heads/)
   return 0
@@ -173,7 +173,7 @@ repo_fetch_all_remote_branches() {
     [[ -z "$ref_short" ]] && continue
     [[ "$ref_short" == "${GIT_WS_REMOTE}/HEAD" ]] && continue
     [[ "$ref_short" == "${GIT_WS_REMOTE}" ]] && continue
-    name="${ref_short#${GIT_WS_REMOTE}/}"
+    name="${ref_short#"${GIT_WS_REMOTE}"/}"
     [[ -z "$name" ]] && continue
 
     if git show-ref --verify --quiet "refs/heads/${name}"; then
