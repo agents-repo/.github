@@ -210,6 +210,9 @@ Per-repository enforcement:
 | [cli](https://github.com/agents-repo/cli) | `.github/copilot-instructions.md` | `.cursor/rules/agents-cli.mdc` | `CLAUDE.md` | `AGENTS.md` |
 | [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` | `.cursor/rules/agents-org.mdc` | `CLAUDE.md` | `AGENTS.md` |
 
+In each child repository (including `cli`), run `npm run sync:ide-instructions`
+in that repo after editing its `.github/copilot-instructions.md`.
+
 Edit `.github/copilot-instructions.md` as the canonical project-guidelines source.
 Regenerate IDE mirrors after changes:
 
