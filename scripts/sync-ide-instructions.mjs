@@ -73,6 +73,12 @@ function rewriteMarkdownTarget(url, targetDir) {
   return `${rewritten}${titleSuffix}`;
 }
 
+const MARKDOWN_LINK_LEADING_PATH = /^(\S+)/;
+
+function leadingMarkdownPath(value) {
+  return MARKDOWN_LINK_LEADING_PATH.exec(value)?.[1] ?? value;
+}
+
 function rewriteRelativeLinks(body, targetDir) {
   // Copilot instructions use simple inline markdown links only.
   let result = '';
@@ -106,9 +112,8 @@ function rewriteRelativeLinks(body, targetDir) {
     if (rewrittenUrl === url) {
       result += match;
     } else {
-      const pathPattern = /^(\S+)/;
-      const pathPart = pathPattern.exec(url)?.[1] ?? url;
-      const rewrittenPath = pathPattern.exec(rewrittenUrl)?.[1] ?? rewrittenUrl;
+      const pathPart = leadingMarkdownPath(url);
+      const rewrittenPath = leadingMarkdownPath(rewrittenUrl);
       const rewrittenText = text === url || text === pathPart ? rewrittenPath : text;
       result += `[${rewrittenText}](${rewrittenUrl})`;
     }
