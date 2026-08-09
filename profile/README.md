@@ -1,5 +1,13 @@
 # agents-repo
 
+<!-- markdownlint-disable MD013 -->
+![License](https://img.shields.io/github/license/agents-repo/.github) ![Build](https://github.com/agents-repo/.github/actions/workflows/pr-baseline.yml/badge.svg) [![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=agents-repo_.github&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=agents-repo_.github) ![Stars](https://img.shields.io/github/stars/agents-repo/.github?style=flat)
+
+![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa) ![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-FE5196?style=flat&logo=conventionalcommits&logoColor=white) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg) ![Top language](https://img.shields.io/github/languages/top/agents-repo/.github) ![Site](https://img.shields.io/badge/site-agents--repo.org-blue?style=flat)
+<!-- markdownlint-enable MD013 -->
+
+---
+
 Open-source registry and tooling for agents and multi-agent flows across
 supported **install targets** (AI coding tools).
 
