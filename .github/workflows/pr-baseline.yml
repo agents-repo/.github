@@ -15,6 +15,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Install shellcheck
         run: sudo apt-get update && sudo apt-get install -y shellcheck
@@ -28,7 +32,7 @@ jobs:
       - name: Verify registry package installs from lock
         run: |
           rm -rf .github/agents .cursor/skills .claude/agents .agents/skills
-          npx agents-repo@latest ci
+          npm run agents:ci
           drift_paths=(
             agents.json
             agents-lock.json

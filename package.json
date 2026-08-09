@@ -2,12 +2,17 @@
   "name": "agents-repo-org-github",
   "private": true,
   "type": "module",
+  "packageManager": "npm@12.0.1",
   "scripts": {
     "lint:workflows": "node scripts/lint-workflows.mjs",
     "lint:shell": "shellcheck --severity=warning -x scripts/git-workspace-lib.sh scripts/git-fetch-all-branches.sh scripts/git-prune-gone-branches.sh scripts/git-refresh-main.sh scripts/git-sync-locals.sh",
     "lint:all": "npm run lint:workflows && npm run lint:shell",
     "sync:ide-instructions": "node scripts/sync-ide-instructions.mjs",
-    "agents:install": "npx agents-repo@1.13.0 install",
-    "agents:update": "npx agents-repo@1.13.0 update"
+    "agents:install": "agents-repo install",
+    "agents:update": "agents-repo update",
+    "agents:ci": "agents-repo ci"
+  },
+  "devDependencies": {
+    "agents-repo": "1.19.0"
   }
 }
