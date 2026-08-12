@@ -24,7 +24,7 @@ main() {
 
   require_git
   run_for_each_repo repo_fetch_prune || status=$?
-  workspace_prune_gone_with_confirm || true
+  workspace_prune_gone_with_confirm || status=$?
   run_for_each_repo repo_refresh_after_prune || status=$?
   return "$status"
 }

@@ -199,8 +199,7 @@ workspace_collect_gone_branches() {
 
 # Returns 0 when the user confirms batch deletion; 1 to skip.
 confirm_force_delete_gone_branches() {
-  local -n candidates_ref=$1
-  local count="${#candidates_ref[@]}"
+  local count=$#
   local line repo_base branch_name reply
 
   if [[ "$count" -eq 0 ]]; then
@@ -208,7 +207,7 @@ confirm_force_delete_gone_branches() {
   fi
 
   printf '\nThe following local branches have gone upstreams and will be force-deleted:\n\n'
-  for line in "${candidates_ref[@]}"; do
+  for line in "$@"; do
     repo_base="${line#*|}"
     repo_base="${repo_base%%|*}"
     branch_name="${line##*|}"
@@ -236,10 +235,9 @@ confirm_force_delete_gone_branches() {
 }
 
 workspace_force_prune_gone_locals() {
-  local -n candidates_ref=$1
   local line repo_path repo_base branch_name
 
-  for line in "${candidates_ref[@]}"; do
+  for line in "$@"; do
     repo_path="${line%%|*}"
     repo_base="${line#*|}"
     repo_base="${repo_base%%|*}"
@@ -270,8 +268,8 @@ workspace_prune_gone_with_confirm() {
     return 0
   fi
 
-  if confirm_force_delete_gone_branches candidates; then
-    workspace_force_prune_gone_locals candidates
+  if confirm_force_delete_gone_branches "${candidates[@]}"; then
+    workspace_force_prune_gone_locals "${candidates[@]}"
     return $?
   fi
 
