@@ -6,6 +6,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/git-workspace-lib.sh"
 
 main() {
+  local status=0
+
   case "${1:-}" in
     -h | --help)
       print_workspace_help "$0"
@@ -21,8 +23,10 @@ main() {
   esac
 
   require_git
-  run_for_each_repo repo_refresh
-  return $?
+  run_for_each_repo repo_fetch_prune || status=$?
+  workspace_prune_gone_with_confirm || status=$?
+  run_for_each_repo repo_refresh_after_prune || status=$?
+  return "$status"
 }
 
 main "$@"

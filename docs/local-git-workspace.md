@@ -54,7 +54,7 @@ Remote name defaults to `origin` (`GIT_WS_REMOTE` to override).
 | --- | --- |
 | [`git-sync-locals.sh`](../scripts/git-sync-locals.sh) | `fetch --prune`, then fast-forward **existing** local branches that track `origin/*` |
 | [`git-fetch-all-branches.sh`](../scripts/git-fetch-all-branches.sh) | `fetch --prune`, then create or update a local branch for **every** `origin` branch |
-| [`git-prune-gone-branches.sh`](../scripts/git-prune-gone-branches.sh) | `fetch --prune`, then delete locals whose upstream shows `[gone]` |
+| [`git-prune-gone-branches.sh`](../scripts/git-prune-gone-branches.sh) | `fetch --prune`, then force-delete locals whose upstream is gone (batch confirmation) |
 | [`git-refresh-main.sh`](../scripts/git-refresh-main.sh) | Prune gone → sync tracked locals → checkout default branch → `merge --ff-only` with remote |
 
 Shared logic lives in [`git-workspace-lib.sh`](../scripts/git-workspace-lib.sh).
@@ -74,14 +74,18 @@ Shared logic lives in [`git-workspace-lib.sh`](../scripts/git-workspace-lib.sh).
 After `git fetch --prune`, locals that **used to** track a remote branch on
 `GIT_WS_REMOTE` but no longer have a matching `refs/remotes/<remote>/<branch>`
 ref are treated as gone (detected via upstream config, not `git branch -vv`
-text). The prune script runs `git branch -d` only (no force delete). If Git
-refuses (typically not fully merged), a warning is printed and the branch is
-kept.
+text). Before any deletion, the script lists every gone branch across the
+workspace and asks once for confirmation. Confirmed branches are force-deleted
+with `git branch -D`. Declining the prompt skips all deletions; when run via
+`git-refresh-main.sh`, sync and default-branch checkout still proceed.
 
 Locals that **never** had an upstream are not deleted.
 
 The **currently checked-out** branch is never deleted even if its upstream is gone;
 `git-refresh-main.sh` then tries to checkout the default branch.
+
+When stdin is not a TTY (for example in CI or piped input), deletion is skipped
+automatically with a warning; run the script interactively to confirm removal.
 
 ### Sync and diverged branches
 
