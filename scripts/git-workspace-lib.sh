@@ -330,6 +330,7 @@ repo_checkout_and_update_default() {
 repo_refresh_after_prune() {
   repo_sync_tracked_locals
   repo_checkout_and_update_default
+  return 0
 }
 
 run_for_each_repo() {
