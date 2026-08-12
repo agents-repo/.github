@@ -103,9 +103,11 @@ in each repository's contributor and agent instruction files.
    private or advisory tracking issue. Otherwise, reference the private
    security advisory identifier (for example `GHSA-...`) in `## Related Issues`
    and coordinate linkage with maintainers.
-2. **Maintainer emergency hotfix** — Work on a hotfix branch only with prior
-   maintainer approval documented in an issue or advisory. Delivery to `main`
-   is still via merged pull request (no direct push).
+2. **Maintainer emergency hotfix** — Work on a `fix/<issue-number>-<slug>`
+   branch (for example `fix/42-hotfix-cache-regression`) only with prior
+   maintainer approval documented in an issue or advisory. Do not use a
+   separate `hotfix/` prefix. Delivery to `main` is still via merged pull
+   request (no direct push).
 3. **Organization `.github` repository** — Plain issues are acceptable (no issue
    forms). Issue, branch, and draft pull request are still required.
 4. **Registry package submissions** — Contributors to **agents-repo/registry**
@@ -135,7 +137,7 @@ otherwise.
 1. Follow the Required Workflow above for every implementation task.
 2. Create branches from the latest default branch using
    `<prefix>/<issue-number>-<slug>`, where `<slug>` is short lowercase
-   kebab-case.
+   kebab-case. See **Branch prefix reference** below.
 3. Prefer the [`gh` CLI](https://cli.github.com/) for issue and pull request
    communication.
 4. Issue forms capture intent only; use the number GitHub assigns after
@@ -151,6 +153,32 @@ otherwise.
    branch is a human-only step after review.
 
 When this document conflicts with a repository's own `CONTRIBUTING.md`, the repository guide takes precedence.
+
+### Branch prefix reference
+
+| Work type | Issue form (when available) | Branch prefix | Example |
+| --- | --- | --- | --- |
+| Bug or inconsistency | `bug-inconsistency.yml` | `fix/` | `fix/42-proxy-cache-mismatch` |
+| Spec change | `spec-change.yml` | `spec/` | `spec/7-add-contract-schema` |
+| Feature proposal | `feature-proposal.yml` | `feat/` | `feat/8-install-package` |
+| Task or chore | `task-chore.yml` | `chore/` | `chore/31-sync-workflow-docs` |
+| Documentation-only (non-spec) | `task-chore.yml` | `docs/` | `docs/88-update-pr-guidance` |
+| Registry package (exception) | package forms or none | `package/` | `package/my-package` or `package/56-my-package` |
+
+Notes:
+
+1. Repository `CONTRIBUTING.md` takes precedence for repo-specific rules.
+2. `spec-change.yml` and `spec/` are **not used in registry-proxy** (no
+   normative `specs/` tree).
+3. This organization `.github` repository uses plain issues; branch prefixes
+   still apply.
+4. Branch prefix categorizes work; **commit** (or squash-merge) prefix determines
+   automated release bumps—not the branch name.
+5. Issue title prefixes (`spec:`, `chore:`, etc.) are for GitHub only. Use
+   `feat:`, `fix:`, `docs:`, or `chore:` on squash-merge unless registry
+   package PR title rules apply (`feat(package):` / `fix(package):`).
+6. Emergency hotfix: use `fix/<issue-number>-<slug>` with maintainer approval (no
+   separate `hotfix/` prefix). See **Workflow exceptions** above.
 
 ## GitHub Actions workflow linting
 
