@@ -91,11 +91,10 @@ sequenceDiagram
 
   C->>GH: Fork agents-repo/registry
   C->>F: Clone fork add upstream remote
-  opt Optional tracking issue
+  alt Tracking issue opened
     C->>GH: Open package submission issue on upstream
     C->>F: Branch package slash issue-number hyphen slug on fork
-  end
-  opt No tracking issue
+  else No tracking issue
     C->>F: Branch package slash slug on fork
   end
   C->>GH: Open draft PR fork branch to upstream main
