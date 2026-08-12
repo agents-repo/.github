@@ -217,6 +217,12 @@ Repositories **MUST NOT** use `secrets` or other restricted contexts in job or s
   `.cache/actionlint/` (gitignored), downloading from GitHub releases with a
   cross-process lock when missing, and falling back to `PATH` only when bootstrap
   fails but a matching `actionlint` is installed.
+- In GitHub Actions, restore `.cache/actionlint/` with `actions/cache` keyed on
+  runner OS/arch and the vendored checksums plus `scripts/lint-workflows.mjs`.
+- When `gh` and `GITHUB_TOKEN`/`GH_TOKEN` are available (GitHub-hosted runners),
+  download the release archive with `gh release download` first. Fall back to
+  curl against the public GitHub Releases URL. Public CDN 503s are common; the
+  GitHub API path used by `gh` is the reliable CI source.
 - Commit `scripts/actionlint_<pinned-version>_checksums.txt` from the matching
   GitHub release. The bootstrap script uses that file for SHA-256 verification
   and only downloads checksums when the vendored file is missing. Do not commit
@@ -250,6 +256,10 @@ unless a security bump is coordinated:
 3. Remove `scripts/actionlint_<old-version>_checksums.txt`.
 4. Update the **Current pin** line in this section.
 5. Run `npm run lint:workflows`.
+
+CI cache keys that hash `scripts/actionlint_*_checksums.txt` and
+`scripts/lint-workflows.mjs` invalidate automatically on this bump. Do not
+hardcode the actionlint version in `actions/cache` keys.
 
 The checksums file is source, not a cache artifact. Keep it committed so
 bootstrap checksum verification does not depend on GitHub being reachable for
