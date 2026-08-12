@@ -142,28 +142,139 @@ repo_sync_tracked_locals() {
   return 0
 }
 
-repo_prune_gone_locals() {
-  local current_branch branch_name upstream remote_ref
+repo_is_gone_local_branch() {
+  local branch_name="$1"
+  local upstream remote_ref
+
+  upstream="$(git for-each-ref --format='%(upstream:short)' "refs/heads/${branch_name}" 2>/dev/null)"
+  [[ -n "$upstream" ]] || return 1
+  [[ "$upstream" == "${GIT_WS_REMOTE}/"* ]] || return 1
+  remote_ref="refs/remotes/${upstream}"
+  if git show-ref --verify --quiet "$remote_ref"; then
+    return 1
+  fi
+  return 0
+}
+
+# Prints gone local branch names in the current repo (one per line), excluding current branch.
+repo_list_gone_local_branches() {
+  local current_branch branch_name
 
   current_branch="$(git branch --show-current 2>/dev/null || true)"
 
   while IFS= read -r branch_name; do
     [[ -z "$branch_name" ]] && continue
-    upstream="$(git for-each-ref --format='%(upstream:short)' "refs/heads/${branch_name}" 2>/dev/null)"
-    [[ -n "$upstream" ]] || continue
-    [[ "$upstream" == "${GIT_WS_REMOTE}/"* ]] || continue
-    remote_ref="refs/remotes/${upstream}"
-    if git show-ref --verify --quiet "$remote_ref"; then
+    if ! repo_is_gone_local_branch "$branch_name"; then
       continue
     fi
     if [[ "$branch_name" == "$current_branch" ]]; then
       log_warn "skipping delete of current branch '${branch_name}' (gone upstream)"
       continue
     fi
-    if ! git branch -d "$branch_name"; then
-      log_warn "could not delete branch '${branch_name}' (likely not fully merged)"
-    fi
+    printf '%s\n' "$branch_name"
   done < <(git for-each-ref --format='%(refname:short)' refs/heads/)
+  return 0
+}
+
+# Prints repo_path|repo_basename|branch_name for each deletable gone branch workspace-wide.
+workspace_collect_gone_branches() {
+  local repo repo_base branch_name
+  local repos=()
+
+  mapfile -t repos < <(discover_git_repos)
+
+  for repo in "${repos[@]}"; do
+    [[ -z "$repo" ]] && continue
+    repo_base="$(basename "$repo")"
+    while IFS= read -r branch_name; do
+      [[ -z "$branch_name" ]] && continue
+      printf '%s|%s|%s\n' "$repo" "$repo_base" "$branch_name"
+    done < <(
+      cd "$repo" || exit 1
+      repo_list_gone_local_branches
+    )
+  done
+  return 0
+}
+
+# Returns 0 when the user confirms batch deletion; 1 to skip.
+confirm_force_delete_gone_branches() {
+  local -n candidates_ref=$1
+  local count="${#candidates_ref[@]}"
+  local line repo_base branch_name reply
+
+  if [[ "$count" -eq 0 ]]; then
+    return 1
+  fi
+
+  printf '\nThe following local branches have gone upstreams and will be force-deleted:\n\n'
+  for line in "${candidates_ref[@]}"; do
+    repo_base="${line#*|}"
+    repo_base="${repo_base%%|*}"
+    branch_name="${line##*|}"
+    printf '  [%s] %s\n' "$repo_base" "$branch_name"
+  done
+  printf '\n'
+
+  if [[ ! -t 0 ]]; then
+    log_warn "stdin is not a TTY; skipping force-delete of ${count} branch(es)"
+    log_warn "run interactively to confirm deletion"
+    return 1
+  fi
+
+  printf 'Delete %d branch(es)? [y/N] ' "$count"
+  read -r reply
+  case "${reply,,}" in
+    y | yes)
+      return 0
+      ;;
+    *)
+      log_info "skipped deleting ${count} branch(es)"
+      return 1
+      ;;
+  esac
+}
+
+workspace_force_prune_gone_locals() {
+  local -n candidates_ref=$1
+  local line repo_path repo_base branch_name
+
+  for line in "${candidates_ref[@]}"; do
+    repo_path="${line%%|*}"
+    repo_base="${line#*|}"
+    repo_base="${repo_base%%|*}"
+    branch_name="${line##*|}"
+
+    if (
+      cd "$repo_path" || exit 1
+      if ! git branch -D "$branch_name"; then
+        log_warn "could not force-delete branch '${branch_name}' in ${repo_base}"
+        exit 1
+      fi
+    ); then
+      log_info "deleted [${repo_base}] ${branch_name}"
+    else
+      mark_failed
+    fi
+  done
+
+  return "$GIT_WS_FAILED"
+}
+
+workspace_prune_gone_with_confirm() {
+  local candidates=()
+
+  mapfile -t candidates < <(workspace_collect_gone_branches)
+
+  if [[ "${#candidates[@]}" -eq 0 ]]; then
+    return 0
+  fi
+
+  if confirm_force_delete_gone_branches candidates; then
+    workspace_force_prune_gone_locals candidates
+    return $?
+  fi
+
   return 0
 }
 
@@ -216,11 +327,7 @@ repo_checkout_and_update_default() {
   return 0
 }
 
-repo_refresh() {
-  if ! repo_fetch_prune; then
-    return 1
-  fi
-  repo_prune_gone_locals
+repo_refresh_after_prune() {
   repo_sync_tracked_locals
   repo_checkout_and_update_default
 }
