@@ -54,6 +54,7 @@ developer manually marks the pull request ready for review.
 Each repository has its own contributing guide with setup, validation, and pull
 request expectations. Start with the organization-wide
 [Contributing guide](../CONTRIBUTING.md),
+including the [branch prefix reference](../CONTRIBUTING.md#branch-prefix-reference),
 then follow the detailed guide for the repository you are changing:
 
 - [registry/.github/CONTRIBUTING.md](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBUTING.md)

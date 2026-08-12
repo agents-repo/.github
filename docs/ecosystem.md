@@ -172,6 +172,7 @@ spec. Marketing names: [marketing-vocabulary.md](marketing-vocabulary.md).
 ## Related links
 
 - Organization [Required Workflow](../CONTRIBUTING.md#required-workflow)
+- Organization [branch prefix reference](../CONTRIBUTING.md#branch-prefix-reference)
 - [Registry package submission](https://github.com/agents-repo/registry/issues/new/choose)
 - [Webapp development](https://github.com/agents-repo/webapp/blob/main/docs/development.md)
 - [CLI architecture](https://github.com/agents-repo/cli/blob/main/docs/ARCHITECTURE.md)

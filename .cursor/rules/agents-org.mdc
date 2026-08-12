@@ -57,6 +57,24 @@ review; agents MUST NOT perform that step.
 Agents MUST complete requested implementation work on the task branch, then
 hand off. Ready-for-review and merge are for a human maintainer.
 
+## Branch naming
+
+Branch names MUST follow `<prefix>/<issue-number>-<slug>`, where `<slug>` is
+short lowercase kebab-case. See [CONTRIBUTING.md — Branch prefix reference](../../CONTRIBUTING.md#branch-prefix-reference)
+for the canonical mapping table and footnotes.
+
+Use the prefix that matches the work category:
+
+- bug or inconsistency: `fix/`
+- spec change: `spec/` (not used in registry-proxy)
+- feature proposal: `feat/`
+- task or chore: `chore/`
+- documentation-only work (non-spec): `docs/`
+- registry package submission (registry only): `package/`
+
+Branch prefix categorizes work; conventional **commit** (or squash-merge) prefix
+determines automated release bumps.
+
 ## Pre-ready agent handoff
 
 Before handoff on a task branch, agents MUST follow

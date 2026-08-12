@@ -103,9 +103,11 @@ in each repository's contributor and agent instruction files.
    private or advisory tracking issue. Otherwise, reference the private
    security advisory identifier (for example `GHSA-...`) in `## Related Issues`
    and coordinate linkage with maintainers.
-2. **Maintainer emergency hotfix** — Work on a hotfix branch only with prior
-   maintainer approval documented in an issue or advisory. Delivery to `main`
-   is still via merged pull request (no direct push).
+2. **Maintainer emergency hotfix** — Work on a `fix/<issue-number>-<slug>`
+   branch (for example `fix/42-hotfix-cache-regression`) only with prior
+   maintainer approval documented in an issue or advisory. Do not use a
+   separate `hotfix/` prefix. Delivery to `main` is still via merged pull
+   request (no direct push).
 3. **Organization `.github` repository** — Plain issues are acceptable (no issue
    forms). Issue, branch, and draft pull request are still required.
 4. **Registry package submissions** — Contributors to **agents-repo/registry**
@@ -135,7 +137,7 @@ otherwise.
 1. Follow the Required Workflow above for every implementation task.
 2. Create branches from the latest default branch using
    `<prefix>/<issue-number>-<slug>`, where `<slug>` is short lowercase
-   kebab-case.
+   kebab-case. See **Branch prefix reference** below.
 3. Prefer the [`gh` CLI](https://cli.github.com/) for issue and pull request
    communication.
 4. Issue forms capture intent only; use the number GitHub assigns after
@@ -152,6 +154,32 @@ otherwise.
 
 When this document conflicts with a repository's own `CONTRIBUTING.md`, the repository guide takes precedence.
 
+### Branch prefix reference
+
+| Work type | Issue form (when available) | Branch prefix | Example |
+| --- | --- | --- | --- |
+| Bug or inconsistency | `bug-inconsistency.yml` | `fix/` | `fix/42-proxy-cache-mismatch` |
+| Spec change | `spec-change.yml` | `spec/` | `spec/7-add-contract-schema` |
+| Feature proposal | `feature-proposal.yml` | `feat/` | `feat/8-install-package` |
+| Task or chore | `task-chore.yml` | `chore/` | `chore/31-sync-workflow-docs` |
+| Documentation-only (non-spec) | `task-chore.yml` | `docs/` | `docs/88-update-pr-guidance` |
+| Registry package (exception) | package forms or none | `package/` | `package/my-package` or `package/56-my-package` |
+
+Notes:
+
+1. Repository `CONTRIBUTING.md` takes precedence for repo-specific rules.
+2. `spec-change.yml` and `spec/` are **not used in registry-proxy** (no
+   normative `specs/` tree).
+3. This organization `.github` repository uses plain issues; branch prefixes
+   still apply.
+4. Branch prefix categorizes work; **commit** (or squash-merge) prefix determines
+   automated release bumps—not the branch name.
+5. Issue title prefixes (`spec:`, `chore:`, etc.) are for GitHub only. Use
+   `feat:`, `fix:`, `docs:`, or `chore:` on squash-merge unless registry
+   package PR title rules apply (`feat(package):` / `fix(package):`).
+6. Emergency hotfix: use `fix/<issue-number>-<slug>` with maintainer approval (no
+   separate `hotfix/` prefix). See **Workflow exceptions** above.
+
 ## GitHub Actions workflow linting
 
 Repositories that contain `.github/workflows/` **MUST** validate workflow files with
@@ -167,8 +195,11 @@ parse time.
 2. Include `lint:workflows` in `npm run lint:all` so PR baseline CI (which runs
    `lint:all` where configured) enforces workflow semantics.
 3. Pin the actionlint **release version** in `scripts/lint-workflows.mjs` (single
-   constant). Use the **same version** across organization repositories unless a
-   security bump is coordinated. Current pin: **1.7.12**.
+   constant). Vendor the matching
+   `scripts/actionlint_<version>_checksums.txt` from the GitHub release (same
+   basename as upstream). Use the **same version** and checksums file across
+   organization repositories unless a security bump is coordinated. Current pin:
+   **1.7.12**.
 4. Document local expectations in that repository’s contributor docs (install from
    [releases](https://github.com/rhysd/actionlint/releases), Homebrew, or rely on
    the repository bootstrap script).
@@ -186,6 +217,16 @@ Repositories **MUST NOT** use `secrets` or other restricted contexts in job or s
   `.cache/actionlint/` (gitignored), downloading from GitHub releases with a
   cross-process lock when missing, and falling back to `PATH` only when bootstrap
   fails but a matching `actionlint` is installed.
+- In GitHub Actions, restore `.cache/actionlint/` with `actions/cache` keyed on
+  runner OS/arch and the vendored checksums plus `scripts/lint-workflows.mjs`.
+- When `gh` and `GITHUB_TOKEN`/`GH_TOKEN` are available (GitHub-hosted runners),
+  download the release archive with `gh release download` first. Fall back to
+  curl against the public GitHub Releases URL. Public CDN 503s are common; the
+  GitHub API path used by `gh` is the reliable CI source.
+- Commit `scripts/actionlint_<pinned-version>_checksums.txt` from the matching
+  GitHub release. The bootstrap script uses that file for SHA-256 verification
+  and only downloads checksums when the vendored file is missing. Do not commit
+  `.cache/actionlint/`.
 - Add `"lint:workflows": "node scripts/lint-workflows.mjs"` and chain into
   `lint:all`.
 - Optional `.actionlint.yaml` for documented ignore rules when actionlint reports
@@ -200,6 +241,29 @@ npm run lint:workflows
 ```
 
 (or `npm run lint:all` where that includes workflow lint).
+
+### Actionlint version bumps
+
+When raising the pinned actionlint version, do this in **every** organization
+repository that vendors `scripts/lint-workflows.mjs` (currently `.github`,
+`webapp`, `registry`, `registry-proxy`, and `cli`), using the same version
+unless a security bump is coordinated:
+
+1. Update `ACTIONLINT_VERSION` in `scripts/lint-workflows.mjs`.
+2. Download `actionlint_<new-version>_checksums.txt` from the matching
+   [actionlint GitHub release](https://github.com/rhysd/actionlint/releases)
+   and commit it as `scripts/actionlint_<new-version>_checksums.txt`.
+3. Remove `scripts/actionlint_<old-version>_checksums.txt`.
+4. Update the **Current pin** line in this section.
+5. Run `npm run lint:workflows`.
+
+CI cache keys that hash `scripts/actionlint_*_checksums.txt` and
+`scripts/lint-workflows.mjs` invalidate automatically on this bump. Do not
+hardcode the actionlint version in `actions/cache` keys.
+
+The checksums file is source, not a cache artifact. Keep it committed so
+bootstrap checksum verification does not depend on GitHub being reachable for
+that file.
 
 ### Adoption tracking
 
