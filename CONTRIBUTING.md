@@ -108,6 +108,16 @@ in each repository's contributor and agent instruction files.
    is still via merged pull request (no direct push).
 3. **Organization `.github` repository** — Plain issues are acceptable (no issue
    forms). Issue, branch, and draft pull request are still required.
+4. **Registry package submissions** — Contributors to **agents-repo/registry**
+   MAY omit a tracking issue for package submissions and corrections; an issue
+   remains recommended. External contributors SHOULD fork the registry and open
+   a pull request from the fork to upstream `main`. When a tracking issue
+   exists, branch `package/<issue-number>-<slug>` and include
+   `Closes #<issue-number>` in `## Related Issues`. Without an issue, branch
+   `package/<slug>` and describe the package in `## Related Issues`. This
+   exception does **not** relax issue-first requirements for webapp, cli,
+   registry-proxy, or non-package registry work (specs, tooling, platform
+   changes).
 
 ## Marketing and install-target vocabulary
 

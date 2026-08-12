@@ -75,23 +75,31 @@ example `AGENTS_REPO_REGISTRY_URL`), or a direct GitHub source URL in developmen
 
 ## Publish a package
 
-New or updated packages are contributed to **registry** via pull request.
-Runtime logic stays out of the registry; contributors add source under
+New or updated packages are contributed to **registry** via pull request from a
+contributor fork (or upstream branch for maintainers). Runtime logic stays out of
+the registry; contributors add source under
 `packages/<namespace>/<package-id>/`, build ZIP artifacts, and update catalog
 metadata.
 
 ```mermaid
 sequenceDiagram
   participant C as Contributor
+  participant F as Contributor fork
   participant GH as GitHub
-  participant R as registry repo
+  participant R as registry upstream
   participant SR as semantic-release
 
-  C->>GH: Open package submission issue
-  C->>GH: Branch package slash issue-name
-  C->>GH: Open draft PR Closes issue
+  C->>GH: Fork agents-repo/registry
+  C->>F: Clone fork add upstream remote
+  alt Tracking issue opened
+    C->>GH: Open package submission issue on upstream
+    C->>F: Branch package slash issue-number hyphen slug on fork
+  else No tracking issue
+    C->>F: Branch package slash slug on fork
+  end
+  C->>GH: Open draft PR fork branch to upstream main
   Note over C: Local author package build validate-artifacts
-  C->>GH: Push branch commits
+  C->>F: Push branch commits
   C->>GH: Mark PR ready for review
   GH->>R: Squash merge feat package or fix package
   R->>SR: Release workflow on main
