@@ -195,8 +195,11 @@ parse time.
 2. Include `lint:workflows` in `npm run lint:all` so PR baseline CI (which runs
    `lint:all` where configured) enforces workflow semantics.
 3. Pin the actionlint **release version** in `scripts/lint-workflows.mjs` (single
-   constant). Use the **same version** across organization repositories unless a
-   security bump is coordinated. Current pin: **1.7.12**.
+   constant). Vendor the matching
+   `scripts/actionlint_<version>_checksums.txt` from the GitHub release (same
+   basename as upstream). Use the **same version** and checksums file across
+   organization repositories unless a security bump is coordinated. Current pin:
+   **1.7.12**.
 4. Document local expectations in that repository’s contributor docs (install from
    [releases](https://github.com/rhysd/actionlint/releases), Homebrew, or rely on
    the repository bootstrap script).
@@ -214,6 +217,10 @@ Repositories **MUST NOT** use `secrets` or other restricted contexts in job or s
   `.cache/actionlint/` (gitignored), downloading from GitHub releases with a
   cross-process lock when missing, and falling back to `PATH` only when bootstrap
   fails but a matching `actionlint` is installed.
+- Commit `scripts/actionlint_<pinned-version>_checksums.txt` from the matching
+  GitHub release. The bootstrap script uses that file for SHA-256 verification
+  and only downloads checksums when the vendored file is missing. Do not commit
+  `.cache/actionlint/`.
 - Add `"lint:workflows": "node scripts/lint-workflows.mjs"` and chain into
   `lint:all`.
 - Optional `.actionlint.yaml` for documented ignore rules when actionlint reports
@@ -228,6 +235,25 @@ npm run lint:workflows
 ```
 
 (or `npm run lint:all` where that includes workflow lint).
+
+### Actionlint version bumps
+
+When raising the pinned actionlint version, do this in **every** organization
+repository that vendors `scripts/lint-workflows.mjs` (currently `.github`,
+`webapp`, `registry`, `registry-proxy`, and `cli`), using the same version
+unless a security bump is coordinated:
+
+1. Update `ACTIONLINT_VERSION` in `scripts/lint-workflows.mjs`.
+2. Download `actionlint_<new-version>_checksums.txt` from the matching
+   [actionlint GitHub release](https://github.com/rhysd/actionlint/releases)
+   and commit it as `scripts/actionlint_<new-version>_checksums.txt`.
+3. Remove `scripts/actionlint_<old-version>_checksums.txt`.
+4. Update the **Current pin** line in this section.
+5. Run `npm run lint:workflows`.
+
+The checksums file is source, not a cache artifact. Keep it committed so
+bootstrap checksum verification does not depend on GitHub being reachable for
+that file.
 
 ### Adoption tracking
 
