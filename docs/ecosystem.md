@@ -93,8 +93,11 @@ sequenceDiagram
   C->>F: Clone fork add upstream remote
   opt Optional tracking issue
     C->>GH: Open package submission issue on upstream
+    C->>F: Branch package slash issue-number hyphen slug on fork
   end
-  C->>F: Branch package slash slug on fork
+  opt No tracking issue
+    C->>F: Branch package slash slug on fork
+  end
   C->>GH: Open draft PR fork branch to upstream main
   Note over C: Local author package build validate-artifacts
   C->>F: Push branch commits
