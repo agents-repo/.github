@@ -6,9 +6,7 @@ We take the security of the agents-repo ecosystem seriously.
 
 Please report vulnerabilities privately with GitHub Private Vulnerability
 Reporting instead of public GitHub issues, discussions, pull requests, or
-public social channels (including X and Reddit).
-
-Report vulnerabilities privately using GitHub Private Vulnerability Reporting on the affected repository:
+public social channels (including X and Reddit):
 
 | Repository | Report URL |
 | --- | --- |
