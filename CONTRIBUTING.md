@@ -10,7 +10,9 @@ This project follows the [Code of Conduct](CODE_OF_CONDUCT.md). By participating
 
 ## Security
 
-Do not report security vulnerabilities in public GitHub issues, discussions, pull requests, or public social channels (including X and Reddit). See [SECURITY.md](SECURITY.md) for private reporting instructions.
+Do not report security vulnerabilities in public GitHub issues, discussions,
+pull requests, or public social channels (including X and Reddit). See
+[SECURITY.md](SECURITY.md) for private reporting instructions.
 
 ## Where to contribute
 
