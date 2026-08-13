@@ -79,7 +79,11 @@ New or updated packages are contributed to **registry** via pull request from a
 contributor fork (or upstream branch for maintainers). Runtime logic stays out of
 the registry; contributors add source under
 `packages/<namespace>/<package-id>/`, build ZIP artifacts, and update catalog
-metadata.
+metadata. The suggested authoring path after the draft pull request is
+`full-package-creation-flow` in the registry clone (already extracted from
+`agents-repo/agents-repo-package-creation`), then the same validate/build
+gate. See [Submit a
+package](https://agents-repo.org/docs/submitting-a-package).
 
 ```mermaid
 sequenceDiagram
@@ -98,7 +102,7 @@ sequenceDiagram
     C->>F: Branch package slash slug on fork
   end
   C->>GH: Open draft PR fork branch to upstream main
-  Note over C: Local author package build validate-artifacts
+  Note over C: Suggested full-package-creation-flow then validate-artifacts
   C->>F: Push branch commits
   C->>GH: Mark PR ready for review
   GH->>R: Squash merge feat package or fix package
