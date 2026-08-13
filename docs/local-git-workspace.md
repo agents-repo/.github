@@ -78,7 +78,7 @@ text). If the **currently checked-out** branch is gone, the script checks out
 the default branch **before** listing candidates so that branch can be included
 in the same run. `git-prune-gone-branches.sh` only switches when the current
 branch is gone; a live feature checkout is left unchanged.
-`git-refresh-main.sh` always checks out the default branch before the prompt.
+`git-refresh-main.sh` attempts to check out the default branch before the prompt.
 
 Before any deletion, the script lists every gone branch across the workspace
 and asks once for confirmation. Confirmed branches are force-deleted with
@@ -105,9 +105,9 @@ refspec in many cases).
 
 ### Refresh side effects
 
-`git-refresh-main.sh` checks out the **default branch** (usually `main`) before
-the gone-branch prompt, and leaves each repository there rather than on your
-previous feature branch.
+`git-refresh-main.sh` attempts to check out the **default branch** (usually
+`main`) before the gone-branch prompt, and leaves each repository there when
+checkout succeeds rather than on your previous feature branch.
 
 Checkout or merge fails on **dirty** working trees; that repository is marked
 failed and processing continues. The batch exits non-zero if any repository failed.

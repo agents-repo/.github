@@ -167,7 +167,7 @@ repo_leave_gone_current_branch() {
     return 0
   fi
 
-  log_info "current branch '${current_branch}' has gone upstream; checking out default"
+  log_info "current branch '${current_branch}' tracks a gone upstream; checking out default"
   repo_checkout_and_update_default
   return $?
 }
