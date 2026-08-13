@@ -73,3 +73,6 @@ implementation in [agents-repo/.github](https://github.com/agents-repo/.github).
 - [Code of Conduct](https://github.com/agents-repo/.github/blob/main/CODE_OF_CONDUCT.md)
 - [Security policy](https://github.com/agents-repo/.github/blob/main/SECURITY.md)
 - [Support](https://github.com/agents-repo/.github/blob/main/SUPPORT.md)
+- [Contact](https://agents-repo.org/contact)
+- [X](https://x.com/AgentsRepo)
+- [Reddit](https://www.reddit.com/r/agentsrepo/)
