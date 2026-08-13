@@ -54,8 +54,8 @@ Remote name defaults to `origin` (`GIT_WS_REMOTE` to override).
 | --- | --- |
 | [`git-sync-locals.sh`](../scripts/git-sync-locals.sh) | `fetch --prune`, then fast-forward **existing** local branches that track `origin/*` |
 | [`git-fetch-all-branches.sh`](../scripts/git-fetch-all-branches.sh) | `fetch --prune`, then create or update a local branch for **every** `origin` branch |
-| [`git-prune-gone-branches.sh`](../scripts/git-prune-gone-branches.sh) | `fetch --prune`, then force-delete locals whose upstream is gone (batch confirmation) |
-| [`git-refresh-main.sh`](../scripts/git-refresh-main.sh) | Prune gone → sync tracked locals → checkout default branch → `merge --ff-only` with remote |
+| [`git-prune-gone-branches.sh`](../scripts/git-prune-gone-branches.sh) | `fetch --prune`, leave gone current branch, then force-delete locals whose upstream is gone (batch confirmation) |
+| [`git-refresh-main.sh`](../scripts/git-refresh-main.sh) | `fetch --prune` → checkout default → prune gone (confirm) → sync tracked locals |
 
 Shared logic lives in [`git-workspace-lib.sh`](../scripts/git-workspace-lib.sh).
 
@@ -74,15 +74,22 @@ Shared logic lives in [`git-workspace-lib.sh`](../scripts/git-workspace-lib.sh).
 After `git fetch --prune`, locals that **used to** track a remote branch on
 `GIT_WS_REMOTE` but no longer have a matching `refs/remotes/<remote>/<branch>`
 ref are treated as gone (detected via upstream config, not `git branch -vv`
-text). Before any deletion, the script lists every gone branch across the
-workspace and asks once for confirmation. Confirmed branches are force-deleted
-with `git branch -D`. Declining the prompt skips all deletions; when run via
-`git-refresh-main.sh`, sync and default-branch checkout still proceed.
+text). If the **currently checked-out** branch is gone, the script checks out
+the default branch **before** listing candidates so that branch can be included
+in the same run. `git-prune-gone-branches.sh` only switches when the current
+branch is gone; a live feature checkout is left unchanged.
+`git-refresh-main.sh` attempts to check out the default branch before the prompt.
+
+Before any deletion, the script lists every gone branch across the workspace
+and asks once for confirmation. Confirmed branches are force-deleted with
+`git branch -D`. Declining the prompt skips all deletions; when run via
+`git-refresh-main.sh`, sync of remaining tracked locals still proceeds.
 
 Locals that **never** had an upstream are not deleted.
 
-The **currently checked-out** branch is never deleted even if its upstream is gone;
-`git-refresh-main.sh` then tries to checkout the default branch.
+The currently checked-out branch is still never deleted. If checkout of the
+default branch fails (for example a dirty working tree), that HEAD branch is
+skipped with a warning and remains.
 
 When stdin is not a TTY (for example in CI or piped input), deletion is skipped
 automatically with a warning; run the script interactively to confirm removal.
@@ -98,8 +105,9 @@ refspec in many cases).
 
 ### Refresh side effects
 
-`git-refresh-main.sh` leaves each repository on the **default branch** (usually
-`main`), not on your previous feature branch.
+`git-refresh-main.sh` attempts to check out the **default branch** (usually
+`main`) before the gone-branch prompt, and leaves each repository there when
+checkout succeeds rather than on your previous feature branch.
 
 Checkout or merge fails on **dirty** working trees; that repository is marked
 failed and processing continues. The batch exits non-zero if any repository failed.

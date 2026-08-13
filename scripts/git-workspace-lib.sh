@@ -156,6 +156,22 @@ repo_is_gone_local_branch() {
   return 0
 }
 
+# If the current branch's upstream is gone, checkout and fast-forward the default
+# branch so that branch can be included in the delete prompt.
+repo_leave_gone_current_branch() {
+  local current_branch
+
+  current_branch="$(git branch --show-current 2>/dev/null || true)"
+  [[ -n "$current_branch" ]] || return 0
+  if ! repo_is_gone_local_branch "$current_branch"; then
+    return 0
+  fi
+
+  log_info "current branch '${current_branch}' tracks a gone upstream; checking out default"
+  repo_checkout_and_update_default
+  return $?
+}
+
 # Prints gone local branch names in the current repo (one per line), excluding current branch.
 repo_list_gone_local_branches() {
   local current_branch branch_name
@@ -322,12 +338,6 @@ repo_checkout_and_update_default() {
     log_err "could not fast-forward '${default}' to ${GIT_WS_REMOTE}/${default}"
     return 1
   fi
-  return 0
-}
-
-repo_refresh_after_prune() {
-  repo_sync_tracked_locals
-  repo_checkout_and_update_default
   return 0
 }
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prune gone locals, sync tracked branches, checkout default branch, fast-forward from origin.
+# Fetch --prune, checkout default, prune gone locals, sync tracked branches.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=git-workspace-lib.sh
@@ -24,8 +24,9 @@ main() {
 
   require_git
   run_for_each_repo repo_fetch_prune || status=$?
+  run_for_each_repo repo_checkout_and_update_default || status=$?
   workspace_prune_gone_with_confirm || status=$?
-  run_for_each_repo repo_refresh_after_prune || status=$?
+  run_for_each_repo repo_sync_tracked_locals || status=$?
   return "$status"
 }
 

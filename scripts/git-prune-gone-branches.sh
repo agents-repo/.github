@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fetch --prune, then force-delete locals whose upstream was removed (batch confirmation).
+# Fetch --prune, leave gone current branch, then force-delete gone locals (batch confirmation).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=git-workspace-lib.sh
@@ -24,6 +24,7 @@ main() {
 
   require_git
   run_for_each_repo repo_fetch_prune || status=$?
+  run_for_each_repo repo_leave_gone_current_branch || status=$?
   workspace_prune_gone_with_confirm || status=$?
   return "$status"
 }
