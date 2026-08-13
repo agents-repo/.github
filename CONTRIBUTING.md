@@ -121,7 +121,9 @@ in each repository's contributor and agent instruction files.
    `package/<slug>` and describe the package in `## Related Issues`. This
    exception does **not** relax issue-first requirements for webapp, cli,
    registry-proxy, or non-package registry work (specs, tooling, platform
-   changes).
+   changes). The suggested authoring path after the draft pull request is the
+   in-tree `full-package-creation-flow`; see [Submit a
+   package](https://agents-repo.org/docs/submitting-a-package).
 
 ## Marketing and install-target vocabulary
 
