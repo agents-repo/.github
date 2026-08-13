@@ -21,6 +21,21 @@ Before opening a new request:
 For organization-wide policy questions, open an issue on
 [agents-repo/.github](https://github.com/agents-repo/.github/issues).
 
+## Community
+
+Public channels for informal discussion, ideas, and announcements:
+
+- [Contact](https://agents-repo.org/contact) — channel guide on the public site
+- [X](https://x.com/AgentsRepo) — announcements and informal conversation
+- [Reddit](https://www.reddit.com/r/agentsrepo/) — community discussion and ideas
+- GitHub Discussions (usage questions and open-ended help):
+  - [webapp discussions](https://github.com/agents-repo/webapp/discussions)
+  - [registry discussions](https://github.com/agents-repo/registry/discussions)
+
+Bugs and tracked features still use issue templates in the relevant repository.
+Security vulnerabilities stay in [SECURITY.md](SECURITY.md). Do not use X or
+Reddit for vulnerabilities or privacy requests.
+
 ## Bug reports
 
 Open an issue in the repository where the bug occurs, using its issue template
