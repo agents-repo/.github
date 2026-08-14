@@ -33,8 +33,10 @@ Public channels for informal discussion, ideas, and announcements:
   - [registry discussions](https://github.com/agents-repo/registry/discussions)
 
 Bugs and tracked features still use issue templates in the relevant repository.
-Security vulnerabilities stay in [SECURITY.md](SECURITY.md). Do not use X or
-Reddit for vulnerabilities or privacy requests.
+Security vulnerabilities stay in [SECURITY.md](SECURITY.md). Please report
+vulnerabilities privately with GitHub Private Vulnerability Reporting instead
+of public GitHub issues, discussions, pull requests, or public social channels
+(including X and Reddit). Please do not use X or Reddit for privacy requests.
 
 ## Bug reports
 
@@ -55,8 +57,8 @@ feature proposal template when the repository provides one.
 
 ## Security issues
 
-Security vulnerabilities are not handled through support channels. Report them
-privately using [SECURITY.md](SECURITY.md).
+Security vulnerabilities are not handled through support channels. Please
+report them privately using [SECURITY.md](SECURITY.md).
 
 ## Response expectations
 

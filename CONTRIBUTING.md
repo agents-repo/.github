@@ -10,9 +10,10 @@ This project follows the [Code of Conduct](CODE_OF_CONDUCT.md). By participating
 
 ## Security
 
-Do not report security vulnerabilities in public GitHub issues, discussions,
-pull requests, or public social channels (including X and Reddit). See
-[SECURITY.md](SECURITY.md) for private reporting instructions.
+Please report vulnerabilities privately with GitHub Private Vulnerability
+Reporting instead of public GitHub issues, discussions, pull requests, or
+public social channels (including X and Reddit). See [SECURITY.md](SECURITY.md)
+for private reporting instructions.
 
 ## Where to contribute
 
@@ -98,13 +99,13 @@ in each repository's contributor and agent instruction files.
 
 ## Workflow exceptions
 
-1. **Security vulnerabilities** — Follow [SECURITY.md](SECURITY.md); do not
-   open public tracking issues. Use the private advisory flow. Branch and draft
-   pull request are still required before merge to `main`. In `## Related
-   Issues`, use `Closes #<issue-number>` when maintainers provide a linked
-   private or advisory tracking issue. Otherwise, reference the private
-   security advisory identifier (for example `GHSA-...`) in `## Related Issues`
-   and coordinate linkage with maintainers.
+1. **Security vulnerabilities** — Follow [SECURITY.md](SECURITY.md).
+   Maintainers deliver the fix using the private advisory flow rather than a
+   public tracking issue. Branch and draft pull request are still required
+   before merge to `main`. In `## Related Issues`, use `Closes #<issue-number>`
+   when maintainers provide a linked private or advisory tracking issue.
+   Otherwise, reference the private security advisory identifier (for example
+   `GHSA-...`) in `## Related Issues` and coordinate linkage with maintainers.
 2. **Maintainer emergency hotfix** — Work on a `fix/<issue-number>-<slug>`
    branch (for example `fix/42-hotfix-cache-regression`) only with prior
    maintainer approval documented in an issue or advisory. Do not use a
