@@ -24,6 +24,13 @@ for GitHub Copilot, Cursor, Claude Code, and OpenAI Codex.
   [webapp](https://github.com/agents-repo/webapp); published automatically to
   [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io))
 
+## Docs and repository pages
+
+For user guides and cross-repo documentation, see [agents-repo.org/docs](https://agents-repo.org/docs/).
+For this repository's overview on the public site, see [agents-repo.org/repositories/github](https://agents-repo.org/repositories/github).
+
+When you change a user-facing or contributor workflow in this repository, update the corresponding page(s) in [agents-repo/webapp](https://github.com/agents-repo/webapp) under `src/content/docs/` in the same PR or an immediate follow-up.
+
 ## How the ecosystem fits together
 
 Contributors publish packages to **registry** via GitHub pull request. **Webapp**
