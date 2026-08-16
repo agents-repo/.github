@@ -26,8 +26,10 @@ for GitHub Copilot, Cursor, Claude Code, and OpenAI Codex.
 
 ## Docs and repository pages
 
-For user guides and cross-repo documentation, see [agents-repo.org/docs](https://agents-repo.org/docs/).
-For this repository's overview on the public site, see [agents-repo.org/repositories/github](https://agents-repo.org/repositories/github).
+For user guides and cross-repo documentation, see
+[agents-repo.org/docs/](https://agents-repo.org/docs/).
+For the `agents-repo/.github` repository overview on the public site, see
+[agents-repo.org/repositories/github/](https://agents-repo.org/repositories/github/).
 
 When you change a user-facing or contributor workflow in this
 repository, update the corresponding page(s) in
