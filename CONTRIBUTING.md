@@ -168,6 +168,9 @@ otherwise.
    merged pull requests. AI agents MUST NOT merge pull requests into the
    default branch or push commits directly to it. Integration to the default
    branch is a human-only step after review.
+8. SonarQube Cloud Automatic Analysis uses `.sonarcloud.properties` with
+   disjoint `sonar.sources` and `sonar.tests`. See **SonarCloud Automatic
+   Analysis** below.
 
 When this document conflicts with a repository's own `CONTRIBUTING.md`, the repository guide takes precedence.
 
@@ -196,6 +199,36 @@ Notes:
    package PR title rules apply (`feat(package):` / `fix(package):`).
 6. Emergency hotfix: use `fix/<issue-number>-<slug>` with maintainer approval (no
    separate `hotfix/` prefix). See **Workflow exceptions** above.
+
+## SonarCloud Automatic Analysis
+
+SonarQube Cloud Automatic Analysis (the organization default) reads
+[`.sonarcloud.properties`](https://docs.sonarsource.com/sonarqube-cloud/advanced-setup/automatic-analysis/),
+not `sonar-project.properties`. The latter filename is for CI-based analysis
+and is ignored while Automatic Analysis is on.
+
+### Norm
+
+1. `sonar.sources` and `sonar.tests` MUST be disjoint directory lists. Use
+   directory names only; Automatic Analysis does not allow wildcards on those
+   two keys.
+2. Never set `sonar.tests` while leaving `sonar.sources` as `.` (the default).
+   Nested test directories then overlap sources and analysis fails with
+   “Source and test paths overlap”.
+3. Child repositories that have nested test directories (`test/`, `tests/`,
+   `e2e/`, or similar) SHOULD set explicit `sonar.sources` and `sonar.tests` in
+   `.sonarcloud.properties`.
+4. Supported extras in `.sonarcloud.properties` include `sonar.sourceEncoding`,
+   `sonar.exclusions` / `sonar.inclusions`, `sonar.test.exclusions` /
+   `sonar.test.inclusions`, and `sonar.cpd.exclusions`.
+5. Coverage report paths (`sonar.javascript.lcov.reportPaths`) and external
+   analyzer reports are unsupported under Automatic Analysis. Do not add them
+   while Automatic Analysis is on.
+
+This organization `.github` repository has no `test/`, `tests/`, or `e2e/`
+tree. Do not add `.sonarcloud.properties` or `sonar.tests` here unless a test
+tree is introduced; `sonar.tests` pointing at missing directories fails with
+“Test files not found”.
 
 ## GitHub Actions workflow linting
 
