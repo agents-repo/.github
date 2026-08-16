@@ -13,6 +13,6 @@
     "agents:ci": "agents-repo ci"
   },
   "devDependencies": {
-    "agents-repo": "1.20.0"
+    "agents-repo": "1.20.1"
   }
 }
