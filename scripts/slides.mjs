@@ -7,8 +7,8 @@
  *   node scripts/slides.mjs preview
  *   node scripts/slides.mjs check
  */
+/* eslint-disable security/detect-non-literal-fs-filename -- deck paths are repo-relative stems from docs/slides readdir */
 import { createHash } from 'node:crypto'
-import { spawnSync } from 'node:child_process'
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
@@ -22,6 +22,7 @@ const themeDir = path.join(slidesDir, 'theme')
 const themeCssPath = path.join(themeDir, 'theme.css')
 const pdfDir = path.join(slidesDir, 'pdf')
 const buildDir = path.join(slidesDir, 'build')
+const minPdfBytes = 1024
 
 const command = process.argv[2]
 
@@ -41,31 +42,26 @@ async function listDecks() {
     }))
 }
 
+async function requireDecks() {
+  const decks = await listDecks()
+  if (decks.length === 0) {
+    throw new Error(`No Marp decks found in ${slidesDir}`)
+  }
+  return decks
+}
+
 function chromeCandidates() {
-  const fromEnv = [
+  return [
     process.env.PUPPETEER_EXECUTABLE_PATH,
-    process.env.CHROME_PATH
-  ].filter(Boolean)
-
-  const whichBins = [
-    'google-chrome',
-    'google-chrome-stable',
-    'chromium',
-    'chromium-browser',
-    'chrome'
-  ]
-    .map((bin) => {
-      const result = spawnSync('which', [bin], { encoding: 'utf8' })
-      return result.status === 0 ? result.stdout.trim() : ''
-    })
-    .filter(Boolean)
-
-  const macPaths = [
+    process.env.CHROME_PATH,
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chrome',
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     '/Applications/Chromium.app/Contents/MacOS/Chromium'
-  ]
-
-  return [...fromEnv, ...whichBins, ...macPaths]
+  ].filter(Boolean)
 }
 
 async function resolveBrowserPath() {
@@ -116,11 +112,56 @@ async function convertDeck(deck, outputPath, extraArgs) {
   await runMarp(args)
 }
 
-async function buildPdfs() {
-  const decks = await listDecks()
-  if (decks.length === 0) {
-    throw new Error(`No Marp decks found in ${slidesDir}`)
+async function assertPdfSize(filePath, stem, label, failures) {
+  try {
+    const stat = await fs.stat(filePath)
+    if (stat.size < minPdfBytes) {
+      failures.push(`${stem}: ${label} PDF is too small (${stat.size} bytes)`)
+    }
+  } catch {
+    failures.push(`${stem}: missing ${path.relative(root, filePath)}`)
   }
+}
+
+async function checkSourceFingerprint(deck, themeCss, failures) {
+  const digest = await fingerprintDeck(deck.source, themeCss)
+  const fingerprintFile = hashPath(deck.stem)
+  try {
+    const recorded = (await fs.readFile(fingerprintFile, 'utf8')).trim()
+    if (recorded !== digest) {
+      failures.push(
+        `${deck.stem}: source drifted from committed PDF fingerprint (run npm run slides:build)`
+      )
+    }
+  } catch {
+    failures.push(
+      `${deck.stem}: missing source fingerprint ${path.relative(root, fingerprintFile)}`
+    )
+  }
+}
+
+async function rebuildPdfsOrRecordMissingChrome(decks, failures) {
+  const browserPath = await resolveBrowserPath()
+  if (!browserPath) {
+    failures.push(
+      'Chromium/Chrome not found. Set PUPPETEER_EXECUTABLE_PATH or CHROME_PATH, or install Chrome.'
+    )
+    return
+  }
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'agents-repo-slides-check-'))
+  try {
+    for (const deck of decks) {
+      const tmpPdf = path.join(tmpDir, `${deck.stem}.pdf`)
+      await convertDeck(deck, tmpPdf, ['--pdf'])
+      await assertPdfSize(tmpPdf, deck.stem, 'rebuilt', failures)
+    }
+  } finally {
+    await fs.rm(tmpDir, { recursive: true, force: true })
+  }
+}
+
+async function buildPdfs() {
+  const decks = await requireDecks()
   const themeCss = await fs.readFile(themeCssPath, 'utf8')
   await fs.mkdir(pdfDir, { recursive: true })
   for (const deck of decks) {
@@ -133,10 +174,7 @@ async function buildPdfs() {
 }
 
 async function previewHtml() {
-  const decks = await listDecks()
-  if (decks.length === 0) {
-    throw new Error(`No Marp decks found in ${slidesDir}`)
-  }
+  const decks = await requireDecks()
   await fs.mkdir(buildDir, { recursive: true })
   for (const deck of decks) {
     const htmlPath = path.join(buildDir, `${deck.stem}.html`)
@@ -146,61 +184,21 @@ async function previewHtml() {
 }
 
 async function checkDecks() {
-  const decks = await listDecks()
-  if (decks.length === 0) {
-    throw new Error(`No Marp decks found in ${slidesDir}`)
-  }
+  const decks = await requireDecks()
   const themeCss = await fs.readFile(themeCssPath, 'utf8')
   const failures = []
 
   for (const deck of decks) {
-    const pdfPath = path.join(pdfDir, `${deck.stem}.pdf`)
-    try {
-      const stat = await fs.stat(pdfPath)
-      if (stat.size < 1024) {
-        failures.push(`${deck.stem}: committed PDF is too small (${stat.size} bytes)`)
-      }
-    } catch {
-      failures.push(`${deck.stem}: missing ${path.relative(root, pdfPath)}`)
-    }
-
-    const digest = await fingerprintDeck(deck.source, themeCss)
-    let recorded = ''
-    try {
-      recorded = (await fs.readFile(hashPath(deck.stem), 'utf8')).trim()
-    } catch {
-      failures.push(
-        `${deck.stem}: missing source fingerprint ${path.relative(root, hashPath(deck.stem))}`
-      )
-      continue
-    }
-    if (recorded !== digest) {
-      failures.push(
-        `${deck.stem}: source drifted from committed PDF fingerprint (run npm run slides:build)`
-      )
-    }
-  }
-
-  const browserPath = await resolveBrowserPath()
-  if (!browserPath) {
-    failures.push(
-      'Chromium/Chrome not found. Set PUPPETEER_EXECUTABLE_PATH or CHROME_PATH, or install Chrome.'
+    await assertPdfSize(
+      path.join(pdfDir, `${deck.stem}.pdf`),
+      deck.stem,
+      'committed',
+      failures
     )
-  } else {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'agents-repo-slides-check-'))
-    try {
-      for (const deck of decks) {
-        const tmpPdf = path.join(tmpDir, `${deck.stem}.pdf`)
-        await convertDeck(deck, tmpPdf, ['--pdf'])
-        const stat = await fs.stat(tmpPdf)
-        if (stat.size < 1024) {
-          failures.push(`${deck.stem}: rebuilt PDF is too small (${stat.size} bytes)`)
-        }
-      }
-    } finally {
-      await fs.rm(tmpDir, { recursive: true, force: true })
-    }
+    await checkSourceFingerprint(deck, themeCss, failures)
   }
+
+  await rebuildPdfsOrRecordMissingChrome(decks, failures)
 
   if (failures.length > 0) {
     console.error(failures.join('\n'))
