@@ -119,30 +119,40 @@ CONTRIBUTING](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBU
 
 ## Browse or install from the catalog
 
-**Webapp** and **CLI** share the same registry read model: resolve a ref
-(including major-line aliases such as `v2.x`), load `packages/index.json`,
-then per-package manifest and metadata. ZIP downloads use manifest artifact
-entries.
+Webapp and CLI both resolve a catalog ref (including major-line aliases such as
+`v2.x`) and load `packages/index.json`. After that the paths split:
+
+- **Webapp package pages** fetch
+  `packages/<namespace>/<package-id>/detail.json` (generated latest-snapshot
+  aggregate; optional `readmeMarkdown`).
+- **CLI install** fetches `versions/manifest.json`, version-scoped
+  `metadata.json`, and `<version>-<target-id>.zip` entries from the manifest.
 
 ```mermaid
 sequenceDiagram
   participant U as End user
-  participant W as Webapp or CLI
+  participant Site as Webapp
+  participant Cli as CLI
   participant P as registry-proxy
   participant Reg as registry at ref
 
-  U->>W: Open site or run install
-  W->>P: GET tags optional ref resolve
+  U->>Site: Open site
+  U->>Cli: Run install
+  Site->>P: GET tags optional ref resolve
+  Cli->>P: GET tags optional ref resolve
   P->>Reg: GitHub tags or raw content
-  W->>P: GET packages index.json
+  Site->>P: GET packages index.json
+  Cli->>P: GET packages index.json
   P->>Reg: packages index.json
-  W->>P: GET manifest metadata ZIP paths
-  P->>Reg: package version files
   alt CLI install
-    W->>W: Verify SHA extract to install target paths
-    W->>U: agents.json agents-lock.json updated
+    Cli->>P: GET manifest metadata ZIP paths
+    P->>Reg: package version files
+    Cli->>Cli: Verify SHA extract to install target paths
+    Cli->>U: agents.json agents-lock.json updated
   else Webapp browse
-    W->>U: Search download UI GitHub browse links
+    Site->>P: GET package detail.json
+    P->>Reg: latest-snapshot detail.json
+    Site->>U: Search package page download UI GitHub browse links
   end
 ```
 
