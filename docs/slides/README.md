@@ -72,12 +72,17 @@ theme or script changes here.
 PDF conversion needs Google Chrome or Chromium.
 
 - **Linux:** install `chromium` or Google Chrome. Or set
-  `PUPPETEER_EXECUTABLE_PATH` / `CHROME_PATH` to the binary.
+  `PUPPETEER_EXECUTABLE_PATH` / `CHROME_PATH` to the binary. Ubuntu 23.10+ and
+  GitHub-hosted runners disable the Chromium sandbox; `slides.mjs` sets
+  `CHROME_NO_SANDBOX=1` on Linux and when `CI` is set (Marp CLI then launches
+  Chrome with `--no-sandbox`).
 - **macOS:** Google Chrome at
   `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` is detected.
-- **CI:** `browser-actions/setup-chrome` sets `PUPPETEER_EXECUTABLE_PATH`.
+- **CI:** `browser-actions/setup-chrome` sets `PUPPETEER_EXECUTABLE_PATH`. The
+  workflow also sets `CHROME_NO_SANDBOX=1`.
 
 If `slides:build` or `slides:check` reports that Chrome was not found, install
-a browser or set one of those environment variables.
+a browser or set one of those environment variables. If Chrome reports "No
+usable sandbox", export `CHROME_NO_SANDBOX=1`.
 
 Do not commit `docs/slides/build/`.
