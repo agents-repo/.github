@@ -187,6 +187,14 @@ Install target IDs are normative in the registry
 [`install-targets.md`](https://github.com/agents-repo/registry/blob/main/specs/install-targets.md)
 spec. Marketing names: [marketing-vocabulary.md](marketing-vocabulary.md).
 
+## Presentation decks
+
+PDF walkthroughs (Marp source + committed PDF) live under
+[`docs/slides/`](slides/README.md). Start with the
+[ecosystem overview](slides/pdf/ecosystem-overview.pdf) and
+[contributing workflow](slides/pdf/contributing-workflow.pdf) decks, then the
+per-repo indexes linked from that slides README.
+
 ## Related links
 
 - Organization [Required Workflow](../CONTRIBUTING.md#required-workflow)
