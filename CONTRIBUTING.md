@@ -44,10 +44,10 @@ Platform repositories keep their own indexes (stable paths on `main`):
 - [registry-proxy `docs/slides/README.md`](https://github.com/agents-repo/registry-proxy/blob/main/docs/slides/README.md)
 
 Copy theme and `scripts/slides.mjs` from this repository when adding a platform
-deck. After editing a deck, run `npm run slides:build` and commit
-`docs/slides/pdf/`. CI runs `npm run slides:check`, which fingerprints Marp HTML
-and does not byte-compare PDFs. Reviewers MUST inspect `docs/slides/pdf/*.pdf`
-diffs.
+deck. After editing a deck, run `npm run slides:build` and commit PDFs plus
+`*.src.sha256` fingerprints under `docs/slides/pdf/`. CI runs
+`npm run slides:check`, which fingerprints Marp HTML and does not byte-compare
+PDFs. Reviewers MUST inspect `docs/slides/pdf/*.pdf` diffs.
 
 ## Docs and repository pages
 

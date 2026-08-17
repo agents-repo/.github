@@ -1,8 +1,8 @@
 # Presentation slides
 
-Marp PDF decks for the agents-repo organization. **Commit PDF only** — do not
-commit HTML. HTML preview is a local convenience under `docs/slides/build/`
-(gitignored).
+Marp PDF decks for the agents-repo organization. **Commit PDFs and
+`*.src.sha256` fingerprints** — do not commit HTML. HTML preview is a local
+convenience under `docs/slides/build/` (gitignored).
 
 Authoring: [Marp](https://marp.app/). The
 [Marp for VS Code](https://marketplace.visualstudio.com/items?itemName=marp-team.marp-vscode)
@@ -78,10 +78,11 @@ theme or script changes here.
 PDF conversion needs Google Chrome or Chromium.
 
 - **Linux:** install `chromium` or Google Chrome. Or set
-  `PUPPETEER_EXECUTABLE_PATH` / `CHROME_PATH` to the binary. Ubuntu 23.10+ and
+  `PUPPETEER_EXECUTABLE_PATH` / `CHROME_PATH` to an executable browser binary.
   GitHub-hosted runners disable the Chromium sandbox; `slides.mjs` sets
-  `CHROME_NO_SANDBOX=1` on Linux and when `CI` is set (Marp CLI then launches
-  Chrome with `--no-sandbox`).
+  `CHROME_NO_SANDBOX=1` when `CI` is set (Marp CLI then launches Chrome with
+  `--no-sandbox`). Local Linux keeps the sandbox unless you export
+  `CHROME_NO_SANDBOX=1`.
 - **macOS:** Google Chrome at
   `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` is detected.
 - **CI:** `browser-actions/setup-chrome` sets `PUPPETEER_EXECUTABLE_PATH`. The
