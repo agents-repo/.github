@@ -45,7 +45,9 @@ Platform repositories keep their own indexes (stable paths on `main`):
 
 Copy theme and `scripts/slides.mjs` from this repository when adding a platform
 deck. After editing a deck, run `npm run slides:build` and commit
-`docs/slides/pdf/`. CI runs `npm run slides:check`.
+`docs/slides/pdf/`. CI runs `npm run slides:check`, which fingerprints Marp HTML
+and does not byte-compare PDFs. Reviewers MUST inspect `docs/slides/pdf/*.pdf`
+diffs.
 
 ## Docs and repository pages
 

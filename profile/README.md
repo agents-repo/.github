@@ -38,7 +38,8 @@ repository, update the corresponding page(s) in
 
 ## Presentations
 
-PDF decks (Marp). Source and PDF links resolve on `main`.
+PDF decks (Marp). Org decks are in this repository. Platform PDFs live in each
+repository's `docs/slides/pdf/` once those decks are on `main`.
 
 | Title | Source | PDF | Audience |
 | --- | --- | --- | --- |

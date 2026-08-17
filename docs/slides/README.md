@@ -53,10 +53,16 @@ Keep decks PDF-oriented; do not add HTML-only features that break print.
 | --- | --- |
 | `npm run slides:build` | Write PDFs and source fingerprints under `docs/slides/pdf/` |
 | `npm run slides:preview:html` | Write HTML under `docs/slides/build/` (gitignored) |
-| `npm run slides:check` | Fail if a deck source drifted from the committed fingerprint, a PDF is missing, or Chrome cannot rebuild PDFs |
+| `npm run slides:check` | Fail if a deck source drifted from the committed fingerprint, a PDF is missing or not a PDF, or Chrome cannot rebuild PDFs |
 
 `slides:check` hashes Marp HTML (deterministic, no browser) rather than raw PDF
-bytes. Chrome PDF output is not bit-stable across machines or Chrome versions.
+bytes. Chrome PDF output is not bit-stable across machines or Chrome versions,
+so CI does **not** require the committed PDF bytes to match the rebuild. It
+still checks minimum size and a `%PDF-` header, rebuilds in a temp directory,
+and reports source-fingerprint drift even when a rebuild throws.
+
+Reviewers MUST inspect diffs to `docs/slides/pdf/*.pdf`. A green `slides:check`
+does not prove the committed PDF was produced from the Markdown source.
 
 After editing a deck, run `npm run slides:build` and commit the updated
 `docs/slides/pdf/` files.
