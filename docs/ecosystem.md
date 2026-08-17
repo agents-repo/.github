@@ -120,13 +120,15 @@ CONTRIBUTING](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBU
 ## Browse or install from the catalog
 
 Webapp and CLI both resolve a catalog ref (including major-line aliases such as
-`v2.x`) and load `packages/index.json`. After that the paths split:
+`v2.x`) and load `packages/index.json`. After that, the paths split:
 
 - **Webapp package pages** fetch
   `packages/<namespace>/<package-id>/detail.json` (generated latest-snapshot
   aggregate; optional `readmeMarkdown`).
-- **CLI install** fetches `versions/manifest.json`, version-scoped
-  `metadata.json`, and `<version>-<target-id>.zip` entries from the manifest.
+- **CLI install** fetches
+  `packages/<namespace>/<package-id>/versions/manifest.json`, plus
+  version-scoped `metadata.json` and `<version>-<target-id>.zip` artifacts
+  under `packages/<namespace>/<package-id>/versions/<version>/`.
 
 ```mermaid
 sequenceDiagram
@@ -136,23 +138,25 @@ sequenceDiagram
   participant P as registry-proxy
   participant Reg as registry at ref
 
-  U->>Site: Open site
-  U->>Cli: Run install
-  Site->>P: GET tags optional ref resolve
-  Cli->>P: GET tags optional ref resolve
-  P->>Reg: GitHub tags or raw content
-  Site->>P: GET packages index.json
-  Cli->>P: GET packages index.json
-  P->>Reg: packages index.json
-  alt CLI install
+  alt Webapp browse
+    U->>Site: Open site
+    Site->>P: GET tags optional ref resolve
+    P->>Reg: GitHub tags or raw content
+    Site->>P: GET packages/index.json
+    P->>Reg: packages/index.json
+    Site->>P: GET package detail.json
+    P->>Reg: latest-snapshot detail.json
+    Site->>U: Search package page download UI GitHub browse links
+  else CLI install
+    U->>Cli: Run install
+    Cli->>P: GET tags optional ref resolve
+    P->>Reg: GitHub tags or raw content
+    Cli->>P: GET packages/index.json
+    P->>Reg: packages/index.json
     Cli->>P: GET manifest metadata ZIP paths
     P->>Reg: package version files
     Cli->>Cli: Verify SHA extract to install target paths
     Cli->>U: agents.json agents-lock.json updated
-  else Webapp browse
-    Site->>P: GET package detail.json
-    P->>Reg: latest-snapshot detail.json
-    Site->>U: Search package page download UI GitHub browse links
   end
 ```
 
