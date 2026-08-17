@@ -36,6 +36,21 @@ repository, update the corresponding page(s) in
 [agents-repo/webapp](https://github.com/agents-repo/webapp) under
 `src/content/docs/` in the same PR or an immediate follow-up.
 
+## Presentations
+
+PDF decks (Marp). Source and PDF links resolve on `main`.
+
+| Title | Source | PDF | Audience |
+| --- | --- | --- | --- |
+| Ecosystem overview | [source](../docs/slides/ecosystem-overview.md) | [PDF](../docs/slides/pdf/ecosystem-overview.pdf) | New contributors and partners |
+| Contributing workflow | [source](../docs/slides/contributing-workflow.md) | [PDF](../docs/slides/pdf/contributing-workflow.pdf) | Contributors and coding agents |
+| Package creation | [registry slides](https://github.com/agents-repo/registry/blob/main/docs/slides/README.md) | [PDF](https://github.com/agents-repo/registry/blob/main/docs/slides/pdf/package-creation.pdf) | Package authors |
+| Webapp infrastructure | [webapp slides](https://github.com/agents-repo/webapp/blob/main/docs/slides/README.md) | [PDF](https://github.com/agents-repo/webapp/blob/main/docs/slides/pdf/webapp-infrastructure.pdf) | Webapp maintainers |
+| CLI usage | [cli slides](https://github.com/agents-repo/cli/blob/main/docs/slides/README.md) | [PDF](https://github.com/agents-repo/cli/blob/main/docs/slides/pdf/cli-usage.pdf) | CLI users |
+| Proxy architecture | [registry-proxy slides](https://github.com/agents-repo/registry-proxy/blob/main/docs/slides/README.md) | [PDF](https://github.com/agents-repo/registry-proxy/blob/main/docs/slides/pdf/proxy-architecture.pdf) | Proxy maintainers |
+
+Org convention and build notes: [docs/slides/README.md](../docs/slides/README.md).
+
 ## How the ecosystem fits together
 
 Contributors publish packages to **registry** via GitHub pull request. **Webapp**

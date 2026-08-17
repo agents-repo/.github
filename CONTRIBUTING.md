@@ -28,6 +28,25 @@ Choose the repository that matches the kind of work you want to do, then follow 
 | [.github](https://github.com/agents-repo/.github) | Organization-wide defaults | This repository — open an issue before implementation here |
 | [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io) | Automated Pages deploy target for webapp (not a development repo) | See [webapp deployment docs](https://github.com/agents-repo/webapp/blob/main/docs/deployment.md) |
 
+## Documentation and presentations
+
+Organization orientation decks (PDF) live in this repository:
+
+- Index: [docs/slides/README.md](docs/slides/README.md)
+- [Ecosystem overview PDF](docs/slides/pdf/ecosystem-overview.pdf)
+- [Contributing workflow PDF](docs/slides/pdf/contributing-workflow.pdf)
+
+Platform repositories keep their own indexes (stable paths on `main`):
+
+- [registry `docs/slides/README.md`](https://github.com/agents-repo/registry/blob/main/docs/slides/README.md)
+- [webapp `docs/slides/README.md`](https://github.com/agents-repo/webapp/blob/main/docs/slides/README.md)
+- [cli `docs/slides/README.md`](https://github.com/agents-repo/cli/blob/main/docs/slides/README.md)
+- [registry-proxy `docs/slides/README.md`](https://github.com/agents-repo/registry-proxy/blob/main/docs/slides/README.md)
+
+Copy theme and `scripts/slides.mjs` from this repository when adding a platform
+deck. After editing a deck, run `npm run slides:build` and commit
+`docs/slides/pdf/`. CI runs `npm run slides:check`.
+
 ## Docs and repository pages
 
 For user guides and cross-repo documentation, see

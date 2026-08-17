@@ -7,12 +7,17 @@
     "lint:workflows": "node scripts/lint-workflows.mjs",
     "lint:shell": "shellcheck --severity=warning -x scripts/git-workspace-lib.sh scripts/git-fetch-all-branches.sh scripts/git-prune-gone-branches.sh scripts/git-refresh-main.sh scripts/git-sync-locals.sh",
     "lint:all": "npm run lint:workflows && npm run lint:shell",
+    "slides:build": "node scripts/slides.mjs build",
+    "slides:preview:html": "node scripts/slides.mjs preview",
+    "slides:check": "node scripts/slides.mjs check",
     "sync:ide-instructions": "node scripts/sync-ide-instructions.mjs",
     "agents:install": "agents-repo install",
     "agents:update": "agents-repo update",
     "agents:ci": "agents-repo ci"
   },
   "devDependencies": {
+    "@marp-team/marp-cli": "4.5.0",
+    "@marp-team/marp-core": "4.4.0",
     "agents-repo": "1.20.1"
   }
 }
