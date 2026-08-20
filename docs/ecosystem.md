@@ -68,7 +68,7 @@ Pages target [agents-repo.github.io](https://github.com/agents-repo/agents-repo.
 
 Default catalog fetch URL (webapp production and org `agents.json`):
 
-`https://registry-proxy.maiconfz.workers.dev?ref=v2.x`
+`https://registry.agents-repo.org?ref=v2.x`
 
 Override with webapp `VITE_*` registry settings, CLI `agents.json` / env (for
 example `AGENTS_REPO_REGISTRY_URL`), or a direct GitHub source URL in development.
