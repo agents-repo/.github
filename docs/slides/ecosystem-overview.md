@@ -91,7 +91,7 @@ Same catalog, different paths after the index.
 
 Production webapp and org `agents.json`:
 
-`https://registry-proxy.maiconfz.workers.dev?ref=v2.x`
+`https://registry.agents-repo.org?ref=v2.x`
 
 Override with webapp `VITE_*` settings, CLI `agents.json` / env
 (`AGENTS_REPO_REGISTRY_URL`), or a direct GitHub source in development.
