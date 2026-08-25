@@ -46,7 +46,8 @@ Platform repositories keep their own indexes (stable paths on `main`):
 Copy theme and `scripts/slides.mjs` from this repository when adding a platform
 deck. After editing a deck, run `npm run slides:build` and commit PDFs plus
 `*.src.sha256` fingerprints under `docs/slides/pdf/`. CI runs
-`npm run slides:check`, which fingerprints Marp HTML and does not byte-compare
+`npm run slides:check` when slide paths change (see **PR baseline extras
+(path filters)**), which fingerprints Marp HTML and does not byte-compare
 PDFs. Reviewers MUST inspect `docs/slides/pdf/*.pdf` diffs.
 
 ## Docs and repository pages
@@ -352,6 +353,86 @@ Per-repository enforcement:
 - [agents-repo/registry-proxy#38](https://github.com/agents-repo/registry-proxy/issues/38)
 - [agents-repo/cli#53](https://github.com/agents-repo/cli/issues/53)
 
+## PR baseline extras (path filters)
+
+Skip expensive PR baseline **extras** when their files did not change. Keep
+each repository's current always-on merge gate. Do **not** lint or test only
+changed files.
+
+Child repositories MUST cite this section and MUST NOT invent a different
+path-filter shape.
+
+### Norm
+
+1. Do **not** add `on.pull_request.paths` on `pr-baseline.yml`. That can skip
+   the required `baseline` check.
+2. Always run a `changes` job that lists the pull request files through the
+   GitHub Pulls Files API (`filename` and `previous_filename`, paginated).
+3. `baseline` always runs. Do **not** put a job-level `if:` on `baseline`.
+   Extra **steps** use `if: needs.changes.outputs.<group> == 'true'`. Log skip
+   reasons when an extra does not run.
+4. Fail closed if the PR file list cannot be loaded: run extras rather than
+   skip them. The `changes` job itself MUST still succeed so `baseline` is not
+   skipped.
+5. Do **not** use `dorny/paths-filter`. Duplicate a small
+   `scripts/ci-pr-path-filters.mjs` per repository (no shared npm package).
+6. Treat `.github/workflows/pr-baseline.yml` as a trigger for extras that job
+   defines.
+7. Always-on gates stay the full `lint:all` / tests / typecheck / secrets set
+   each repository already has. Do not add typecheck or secrets where PR
+   baseline already lacks them.
+
+### Lockfiles vs agents checksum exception
+
+`package.json` and `package-lock.json` (npm lockfiles) trigger extras such as
+Chrome/`slides:check`, Pages/crawl, ZIP scan, and Node 22 compat — **except**
+the registry package checksum extra.
+
+`npm run agents:ci` (`agents-repo ci`) downloads version ZIPs via
+`https://registry.agents-repo.org` and **increments registry-proxy download
+totals**. Run the entire checksum step (remove extracts, `agents:ci`, git
+drift check) only when **agents definition** files change:
+
+- `agents.json`
+- `agents-lock.json` (the registry lock — not npm `package-lock.json`)
+- `.github/agents/**`
+- `.cursor/skills/**`
+- `.claude/agents/**`
+- `.agents/skills/**`
+- `.github/workflows/pr-baseline.yml`
+
+Do **not** run `agents:ci` because npm `package.json` / `package-lock.json`
+changed. Child matchers MUST NOT copy npm lockfiles into the `agents` path
+group.
+
+Do **not** add `agents:ci` to every `main` push, webapp release, or deploy
+(that would inflate download counts). Do **not** change registry-proxy
+download accounting.
+
+### Path groups
+
+| Group | Typical extra | Paths |
+| --- | --- | --- |
+| `slides` | Chrome + `slides:check` | `docs/slides/**`, `scripts/slides.mjs`, npm lockfiles, `pr-baseline.yml` |
+| `agents` | `agents:ci` checksum | agents definition files and `pr-baseline.yml` only — **not** npm lockfiles |
+| `pages` | `build:pages` + crawl tests (webapp) | `src/**`, `public/**`, `scripts/**` except `scripts/slides.mjs`, `index.html`, Vite/tsconfig, `.env.production`, `.nvmrc`, npm lockfiles, `pr-baseline.yml`, and only `test/crawl-files.integration.test.mjs` plus `test/pwa-sw.integration.test.mjs`. **Not** `eslint.config.js`. **Not** all of `test/**` |
+| `zips` | `package:scan-zips` (registry) | `packages/**`, `scripts/**` except `scripts/slides.mjs`, `specs/**`, npm lockfiles, `pr-baseline.yml` |
+| `node22` | optional `compat-node22` (cli) | `.nvmrc`, `.node-version`, npm lockfiles, `.github/actions/setup-node-pinned-npm/**`, `pr-baseline.yml`. Does **not** turn on Chrome/slides/`agents:ci` |
+
+### Always-on vs extras
+
+| Repo | Always-on in `baseline` | Path-filtered extras |
+| --- | --- | --- |
+| `.github` | workflow lint, IDE sync | Chrome + `slides:check`, `agents:ci` |
+| cli | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`, `agents:ci`; optional `compat-node22` |
+| webapp | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `agents:ci`, `build:pages` + `test:crawl-files` |
+| registry | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:ci`, `package:scan-zips` |
+| registry-proxy | `env:check`, `lint:all`, IDE sync, tests, `check:secrets` | Chrome + `slides:check`, `agents:ci` |
+
+Safety net: extras skipped on a pull request still run where that repository
+already runs them on `main` / release (and webapp deploy for Pages/crawl). Do
+not add `agents:ci` to those safety-net workflows.
+
 ## Agent instruction files
 
 | Repository | GitHub Copilot | Cursor | Claude Code | OpenAI Codex |
@@ -400,12 +481,13 @@ Use the npm scripts for bulk install, update, and CI (CLI version is pinned in
 ```bash
 npm run agents:install   # bulk sync from agents.json
 npm run agents:update    # refresh within semver ranges
-npm run agents:ci        # same command pr-baseline uses after npm ci
+npm run agents:ci        # checksum extra in pr-baseline when agents paths change
 ```
 
 Commit `agents.json`, `agents-lock.json`, and extracted paths (`.github/agents/`,
 `.cursor/skills/`, `.claude/agents/`, `.agents/skills/`). Do not hand-edit
-extracted package files.
+extracted package files. PR baseline runs `agents:ci` only for agents
+definition files (not npm lockfiles); see **PR baseline extras (path filters)**.
 
 ## Changing organization-wide defaults
 
