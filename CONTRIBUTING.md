@@ -376,8 +376,8 @@ path-filter shape.
    skipped.
 5. Do **not** use `dorny/paths-filter`. Duplicate a small
    `scripts/ci-pr-path-filters.mjs` per repository (no shared npm package).
-6. Treat `.github/workflows/pr-baseline.yml` as a trigger for extras that job
-   defines.
+6. Treat `.github/workflows/pr-baseline.yml` and
+   `scripts/ci-pr-path-filters.mjs` as triggers for extras that job defines.
 7. Always-on gates stay the full `lint:all` / tests / typecheck / secrets set
    each repository already has. Do not add typecheck or secrets where PR
    baseline already lacks them.
@@ -400,6 +400,7 @@ drift check) only when **agents definition** files change:
 - `.claude/agents/**`
 - `.agents/skills/**`
 - `.github/workflows/pr-baseline.yml`
+- `scripts/ci-pr-path-filters.mjs`
 
 Do **not** run `agents:ci` because npm `package.json` / `package-lock.json`
 changed. Child matchers MUST NOT copy npm lockfiles into the `agents` path
@@ -413,11 +414,11 @@ download accounting.
 
 | Group | Typical extra | Paths |
 | --- | --- | --- |
-| `slides` | Chrome + `slides:check` | `docs/slides/**`, `scripts/slides.mjs`, npm lockfiles, `pr-baseline.yml` |
-| `agents` | `agents:ci` checksum | agents definition files and `pr-baseline.yml` only — **not** npm lockfiles |
-| `pages` | `build:pages` + crawl tests (webapp) | `src/**`, `public/**`, `scripts/**` except `scripts/slides.mjs`, `index.html`, Vite/tsconfig, `.env.production`, `.nvmrc`, npm lockfiles, `pr-baseline.yml`, and only `test/crawl-files.integration.test.mjs` plus `test/pwa-sw.integration.test.mjs`. **Not** `eslint.config.js`. **Not** all of `test/**` |
-| `zips` | `package:scan-zips` (registry) | `packages/**`, `scripts/**` except `scripts/slides.mjs`, `specs/**`, npm lockfiles, `pr-baseline.yml` |
-| `node22` | optional `compat-node22` (cli) | `.nvmrc`, `.node-version`, npm lockfiles, `.github/actions/setup-node-pinned-npm/**`, `pr-baseline.yml`. Does **not** turn on Chrome/slides/`agents:ci` |
+| `slides` | Chrome + `slides:check` | `docs/slides/**`, `scripts/slides.mjs`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs` |
+| `agents` | `agents:ci` checksum | agents definition files, `pr-baseline.yml`, and `scripts/ci-pr-path-filters.mjs` only — **not** npm lockfiles |
+| `pages` | `build:pages` + crawl tests (webapp) | `src/**`, `public/**`, `scripts/**` except `scripts/slides.mjs`, `index.html`, Vite/tsconfig, `.env.production`, `.nvmrc`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs`, and only `test/crawl-files.integration.test.mjs` plus `test/pwa-sw.integration.test.mjs`. **Not** `eslint.config.js`. **Not** all of `test/**` |
+| `zips` | `package:scan-zips` (registry) | `packages/**`, `scripts/**` except `scripts/slides.mjs`, `specs/**`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs` |
+| `node22` | optional `compat-node22` (cli) | `.nvmrc`, `.node-version`, npm lockfiles, `.github/actions/setup-node-pinned-npm/**`, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs`. Does **not** turn on Chrome/slides/`agents:ci` |
 
 ### Always-on vs extras
 
