@@ -68,6 +68,13 @@ folder, use the shell scripts documented in
 [docs/local-git-workspace.md](docs/local-git-workspace.md) (`scripts/git-*.sh`)
 to fetch, prune stale locals, and refresh the default branch across clones.
 
+## Cursor Cloud environments
+
+Repository-managed Cloud Agent bootstrap lives in each development repo's
+`.cursor/environment.json`. See [docs/cursor-cloud.md](docs/cursor-cloud.md)
+for the multi-repo layout, pinned Node/npm versions, and the
+`/exec-daemon/node` PATH gotcha.
+
 ## Required Workflow
 
 Every task in an active development repository MUST follow this full lifecycle.
