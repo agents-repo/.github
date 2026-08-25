@@ -1,0 +1,11 @@
+{
+  "name": "Agents Repo",
+  "install": "bash .cursor/install.sh",
+  "repositoryDependencies": [
+    "github.com/agents-repo/agents-repo.github.io",
+    "github.com/agents-repo/cli",
+    "github.com/agents-repo/registry",
+    "github.com/agents-repo/registry-proxy",
+    "github.com/agents-repo/webapp"
+  ]
+}
