@@ -12,7 +12,7 @@ that file over a dashboard personal or team environment when it is present.
 
 | Repository | Role |
 | --- | --- |
-| `.github` (this repo) | Multi-repo bootstrap. `install` also runs `npm ci` in sibling development clones when they exist. `repositoryDependencies` lists the other organization repos so generated GitHub tokens can reach them. |
+| `.github` (this repo) | Multi-repo bootstrap. `install` runs `HUSKY=0 npm ci --ignore-scripts` here, then each sibling's `.cursor/install.sh` when that file is present. `repositoryDependencies` lists the other organization repos so generated GitHub tokens can reach them. |
 | `cli`, `registry`, `registry-proxy`, `webapp` | Single-repo bootstrap (`HUSKY=0 npm ci` after activating pinned Node/npm). |
 | `agents-repo.github.io` | Not a development repo. Do not add Cloud install here. |
 

@@ -111,9 +111,10 @@ For long issue or PR bodies, prefer `--body-file` over inline quoted text.
 
 This repository commits `.cursor/environment.json` for the organization
 multi-repo Cloud Agent workspace. Builds run `.cursor/install.sh`, which
-activates Node `24.18.0` and npm `12.0.1`, then `HUSKY=0 npm ci` in this
-clone and in sibling `cli`, `registry`, `registry-proxy`, and `webapp`
-clones when they are present. See [docs/cursor-cloud.md](docs/cursor-cloud.md).
+activates Node `24.18.0` and npm `12.0.1`, then `HUSKY=0 npm ci --ignore-scripts`
+in this clone. Sibling `cli`, `registry`, `registry-proxy`, and `webapp`
+clones are installed by their own `.cursor/install.sh` when that file is
+present. See [docs/cursor-cloud.md](docs/cursor-cloud.md).
 
 `/exec-daemon/node` (Node 22) may precede nvm on `PATH`. Before running
 repo scripts, prepend the pinned Node bin:
