@@ -67,6 +67,11 @@ does not prove the committed PDF was produced from the Markdown source.
 After editing a deck, run `npm run slides:build` and commit the updated
 `docs/slides/pdf/` files.
 
+PR baseline CI runs Chrome + `slides:check` only when slide paths, npm
+lockfiles, or `.github/workflows/pr-baseline.yml` change. See
+[CONTRIBUTING.md — PR baseline extras (path filters)](../../CONTRIBUTING.md#pr-baseline-extras-path-filters).
+Local `npm run slides:check` is still the full check.
+
 ## Theme sync
 
 Platform repositories SHOULD copy `docs/slides/theme/theme.css` and
