@@ -136,7 +136,8 @@ before handoff (humans still mark the PR ready for review):
    available for follow-up—**not** as a substitute for these pre-ready steps.
 
 Repository-specific validation commands and optional IDE tooling are documented
-in each repository's contributor and agent instruction files.
+in each repository's contributor and agent instruction files. For this
+repository, see [docs/development.md](docs/development.md).
 
 ## Workflow exceptions
 
@@ -424,7 +425,7 @@ download accounting.
 
 | Repo | Always-on in `baseline` | Path-filtered extras |
 | --- | --- | --- |
-| `.github` | workflow lint, IDE sync | Chrome + `slides:check`, `agents:ci` |
+| `.github` | workflow lint, IDE sync; optional local `env:check` | Chrome + `slides:check`, `agents:ci` |
 | cli | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`, `agents:ci`; optional `compat-node22` |
 | webapp | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `agents:ci`, `build:pages` + `test:crawl-files` |
 | registry | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:ci`, `package:scan-zips` |
