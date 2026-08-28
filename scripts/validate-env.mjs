@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
@@ -51,22 +52,47 @@ function readRequiredNpmVersion(rootDir) {
   return normalize(match[1]);
 }
 
+function resolveNpmCliInvocation() {
+  const npmExecPath = process.env.npm_execpath;
+  if (npmExecPath) {
+    return { command: process.execPath, args: [npmExecPath, "--version"] };
+  }
+
+  return {
+    command: path.join(path.dirname(process.execPath), "npm"),
+    args: ["--version"],
+  };
+}
+
+function detectNpmVersion() {
+  const userAgent = process.env.npm_config_user_agent;
+  const npmMatch = userAgent ? /npm\/(\d+\.\d+\.\d+)/.exec(userAgent) : null;
+  if (npmMatch?.[1]) {
+    return normalize(npmMatch[1]);
+  }
+
+  const { command, args } = resolveNpmCliInvocation();
+  try {
+    return normalize(execFileSync(command, args, { encoding: "utf8" }));
+  } catch {
+    return "";
+  }
+}
+
 function main() {
   const rootDir = repoRoot();
   const requiredNodeVersion = readRequiredNodeVersion(rootDir);
   const requiredNpmVersion = readRequiredNpmVersion(rootDir);
 
   const nodeVersion = normalize(process.version);
-  const userAgent = process.env.npm_config_user_agent;
-  const npmMatch = userAgent ? /npm\/(\d+\.\d+\.\d+)/.exec(userAgent) : null;
-  const npmVersion = normalize(npmMatch?.[1] || "");
+  const npmVersion = detectNpmVersion();
 
   if (nodeVersion !== requiredNodeVersion) {
     fail(`Node.js ${requiredNodeVersion} is required, found ${nodeVersion}.`);
   }
 
   if (!npmVersion) {
-    fail("Unable to detect npm version from npm_config_user_agent. Run this command via 'npm run env:check'.");
+    fail("Unable to detect npm version. Run via 'npm run env:check' or ensure npm is on PATH.");
   }
 
   if (npmVersion !== requiredNpmVersion) {

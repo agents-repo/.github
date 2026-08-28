@@ -13,6 +13,7 @@ applies community health file inheritance.
 Human contributor guidance lives at the repository root:
 
 - [CONTRIBUTING.md](CONTRIBUTING.md)
+- [docs/development.md](docs/development.md)
 - [SECURITY.md](SECURITY.md)
 - [SUPPORT.md](SUPPORT.md)
 

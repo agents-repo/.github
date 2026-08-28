@@ -17,6 +17,7 @@ Repository-level files override organization defaults. See GitHub's documentatio
 - [Security](SECURITY.md)
 - [Support](SUPPORT.md)
 - [Organization profile](profile/README.md)
+- Development guide: [docs/development.md](docs/development.md)
 - Ecosystem overview: [docs/ecosystem.md](docs/ecosystem.md)
 - Presentation slides: [docs/slides/README.md](docs/slides/README.md)
 - Local multi-repo Git workspace: [docs/local-git-workspace.md](docs/local-git-workspace.md)
