@@ -126,6 +126,22 @@ export PATH="$(dirname "$(nvm which 24.18.0)"):$PATH"
 
 Do not start long-running servers from `install`.
 
+## Validation
+
+Before handing off work on this repository, run:
+
+```bash
+npm run lint:all
+npm run sync:ide-instructions -- --check
+```
+
+When the change touches slide sources, also run `npm run slides:check` (see
+[docs/slides/README.md](/docs/slides/README.md)). When the change touches
+`agents.json`, `agents-lock.json`, or extracted agent/skill paths, also run
+`npm run agents:ci`.
+
+Optional: `npm run env:check` verifies pinned Node/npm when present.
+
 PR baseline extras (Chrome/`slides:check` and `agents:ci`) are path-filtered.
 See [CONTRIBUTING.md — PR baseline extras (path filters)](/CONTRIBUTING.md#pr-baseline-extras-path-filters).
 Do not treat npm lockfiles as an `agents:ci` trigger.
