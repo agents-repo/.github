@@ -4,6 +4,7 @@
   "type": "module",
   "packageManager": "npm@12.0.1",
   "scripts": {
+    "env:check": "node scripts/validate-env.mjs",
     "lint:workflows": "node scripts/lint-workflows.mjs",
     "lint:shell": "shellcheck --severity=warning -x scripts/git-workspace-lib.sh scripts/git-fetch-all-branches.sh scripts/git-prune-gone-branches.sh scripts/git-refresh-main.sh scripts/git-sync-locals.sh .cursor/install.sh",
     "lint:all": "npm run lint:workflows && npm run lint:shell",
