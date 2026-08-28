@@ -37,100 +37,32 @@ implementation for organization-wide documentation and configuration changes.
 
 ## Required Workflow (Task Start)
 
-Before implementation, agents MUST:
-
-1. Open a tracking issue (plain issue in this repository).
-2. Create a branch named `<prefix>/<issue-number>-<slug>`.
-3. Push the branch and open a draft pull request targeting `main` before
-   implementation commits. Pull requests MUST be created as drafts
-   (`gh pr create --draft`). In `## Related Issues`, include
-   `Closes #<issue-number>` for standard tasks, or follow the security-advisory
-   format defined in the **Workflow exceptions** section of `CONTRIBUTING.md`
-   when applicable. GitHub
-   cannot open a PR when head and base are identical; push a scaffolding commit
-   on the task branch first if needed (see `CONTRIBUTING.md`).
-
-Agents MAY push additional commits to the task branch when requested.
-Agents MUST NOT push to `main`, merge PRs into `main`, or mark pull requests
-ready for review.
-After validation, the developer manually marks the pull request ready for
-review; agents MUST NOT perform that step.
-Agents MUST complete requested implementation work on the task branch, then
-hand off. Ready-for-review and merge are for a human maintainer.
-
-## Branch naming
-
-Branch names MUST follow `<prefix>/<issue-number>-<slug>`, where `<slug>` is
-short lowercase kebab-case. See [CONTRIBUTING.md — Branch prefix reference](../../CONTRIBUTING.md#branch-prefix-reference)
-for the canonical mapping table and footnotes.
-
-Use the prefix that matches the work category:
-
-- bug or inconsistency: `fix/`
-- spec change: `spec/` (not used in registry-proxy)
-- feature proposal: `feat/`
-- task or chore: `chore/`
-- documentation-only work (non-spec): `docs/`
-- registry package submission (registry only): `package/`
-
-Branch prefix categorizes work; conventional **commit** (or squash-merge) prefix
-determines automated release bumps.
+Follow [CONTRIBUTING.md — Required Workflow](../../CONTRIBUTING.md#required-workflow)
+(plain issue in this repository → `chore/<issue>-<slug>` branch → draft PR
+before implementation). Use [branch prefix reference](../../CONTRIBUTING.md#branch-prefix-reference)
+for prefixes. Agents MUST NOT push to `main`, merge PRs into `main`, or mark
+pull requests ready for review.
 
 ## Pre-ready agent handoff
 
-Before handoff on a task branch, agents MUST follow
-[CONTRIBUTING.md — Pre-ready agent handoff](../../CONTRIBUTING.md#pre-ready-agent-handoff)
-(IDE-neutral). Record validation evidence in the draft pull request. Agents
-MUST NOT mark pull requests ready for review.
-
-Task start in this organization authorizes workflow scaffolding (issue,
-branch, draft PR) even when generic tooling rules defer commits until
-requested. Repo-level agent instructions govern this workspace and supersede
-generic commit or pull request timing rules for workflow setup steps.
+Follow [CONTRIBUTING.md — Pre-ready agent handoff](../../CONTRIBUTING.md#pre-ready-agent-handoff).
+Record validation evidence in the draft PR.
 
 ## Default Branch Integration (Agents)
 
-- AI agents and coding assistants MUST NOT merge pull requests into `main`
-  (including `gh pr merge`, squash/rebase merge, or local `git merge` followed
-  by push).
-- AI agents MUST NOT push commits directly to `main`.
-- Integration to `main` is a human-only, manual step performed by maintainers
-  after review. All contributors MUST deliver changes to `main` only through
-  merged pull requests.
-- Agents MUST complete requested implementation work on the task branch, then
-  hand off and state that merge is for a human maintainer.
+Agents MUST NOT merge or push to `main`. Integration is human-only after review.
 
-## GitHub Communication Method (gh CLI Preferred)
+## GitHub Communication (gh CLI)
 
-For GitHub communication in this repository, agents and contributors SHOULD use
-`gh` CLI:
-
-- view issue context: `gh issue view <number> --repo agents-repo/.github`
-- create issue:
-  `gh issue create --repo agents-repo/.github --title "..." --body-file <file>`
-- create draft PR (MUST use `--draft`):
-  `gh pr create --repo agents-repo/.github --draft --title "..." --body-file <file>`
-
-For long issue or PR bodies, prefer `--body-file` over inline quoted text.
+Prefer `gh` for issues and draft PRs (`gh pr create --draft`). See
+[CONTRIBUTING.md — Shared norms](../../CONTRIBUTING.md#shared-norms).
 
 ## Cursor Cloud environment
 
-This repository commits `.cursor/environment.json` for the organization
-multi-repo Cloud Agent workspace. Builds run `.cursor/install.sh`, which
-activates Node `24.18.0` and npm `12.0.1`, then `HUSKY=0 npm ci --ignore-scripts`
-in this clone. Sibling `cli`, `registry`, `registry-proxy`, and `webapp`
-clones are installed by their own `.cursor/install.sh` when that file is
-present. See [docs/cursor-cloud.md](../../docs/cursor-cloud.md).
-
-`/exec-daemon/node` (Node 22) may precede nvm on `PATH`. Before running
-repo scripts, prepend the pinned Node bin:
-
-```bash
-export NVM_DIR="$HOME/.nvm"
-. "$NVM_DIR/nvm.sh"
-nvm use 24.18.0
-export PATH="$(dirname "$(nvm which 24.18.0)"):$PATH"
-```
+Multi-repo workspace is intentional: `repositoryDependencies` loads sibling
+repos so contributors see org and child-repo norms in one session. See
+[docs/cursor-cloud.md](../../docs/cursor-cloud.md) for install, pinned Node/npm,
+`.cursorignore` template, and path-scoped Copilot instructions.
 
 Do not start long-running servers from `install`.
 

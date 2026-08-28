@@ -1,0 +1,7 @@
+# Cursor indexer exclusions — see docs/cursor-cloud.md
+node_modules/
+package-lock.json
+.cache/
+dist/
+coverage/
+docs/slides/pdf/
