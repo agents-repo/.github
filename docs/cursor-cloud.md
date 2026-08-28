@@ -40,3 +40,48 @@ Do not use `nvm which current` on Cloud VMs; it can resolve to
 `/exec-daemon/node`.
 
 `.cursor/install.sh` does this automatically during environment builds.
+
+## Multi-repo workspace (intentional)
+
+The **Agents Repo** environment loads all sibling repositories listed in
+`repositoryDependencies`. Each repo contributes one `alwaysApply` Cursor rule;
+that stacking is intentional so contributors working in any child repo still
+see org and sibling norms. Do not switch to a single-repo workspace to save
+tokens unless the task is strictly local to one repository.
+
+## `.cursorignore` template
+
+Each development repository SHOULD commit a root `.cursorignore` to keep
+lockfiles, build output, caches, and large artifacts out of the Cursor indexer.
+Do **not** ignore normative sources agents need (`specs/`, `packages/` source
+trees, registry skill extract paths).
+
+Shared baseline (tune per repo):
+
+```gitignore
+node_modules/
+package-lock.json
+.cache/
+dist/
+coverage/
+```
+
+| Repository | Additional entries |
+| --- | --- |
+| `.github` | `docs/slides/pdf/` |
+| `registry` | `packages/**/versions/**/*.zip`, target-specific package ZIP globs |
+| `webapp` | `playwright-report/`, `test-results/` |
+| `registry-proxy` | `.wrangler/`, `docs/slides/build/` |
+
+## Path-scoped Copilot instructions
+
+GitHub Copilot loads `.github/instructions/*.instructions.md` when `applyTo`
+matches edited paths. Use short bullets and doc links—not pasted workflow
+walls. Reference implementations:
+
+- `registry-proxy/.github/instructions/` (worker, deploy, migrate, release)
+- `cli/.github/instructions/` (src, specs, commands docs)
+- `webapp/.github/instructions/` (src, e2e, accessibility)
+
+Point to these from `.github/copilot-instructions.md`; do not duplicate bodies
+in always-on IDE mirrors.
