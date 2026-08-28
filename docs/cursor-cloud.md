@@ -22,7 +22,7 @@ dev servers. The webapp Vite server belongs in `terminals` on that repository.
 ## Pinned toolchain
 
 Development repos pin Node **24.18.0** (`.nvmrc` where present) and npm
-**12.0.1** (`package.json` `packageManager`). Registry, webapp, and
+**12.0.1** (`package.json` `packageManager`). `.github`, registry, webapp, and
 registry-proxy `env:check` scripts require the exact Node patch.
 
 Cursor Cloud VMs may put `/exec-daemon/node` (Node 22) ahead of nvm on
