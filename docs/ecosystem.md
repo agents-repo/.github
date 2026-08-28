@@ -203,3 +203,52 @@ per-repo indexes linked from that slides README.
 - [Webapp development](https://github.com/agents-repo/webapp/blob/main/docs/development.md)
 - [CLI architecture](https://github.com/agents-repo/cli/blob/main/docs/ARCHITECTURE.md)
 - [Webapp deployment](https://github.com/agents-repo/webapp/blob/main/docs/deployment.md)
+
+## AI contributor quick reference
+
+Use this section to pick a repository, primary docs, and validation commands.
+For the full always-on vs path-filtered CI matrix, see
+[CONTRIBUTING.md — Always-on vs extras](../CONTRIBUTING.md#always-on-vs-extras).
+
+### Repo ownership
+
+| Repo | Owns |
+| --- | --- |
+| [registry](https://github.com/agents-repo/registry) | Normative `specs/`, `packages/` catalog, validation tooling |
+| [registry-proxy](https://github.com/agents-repo/registry-proxy) | Cloudflare Worker delivery, caching, download counts |
+| [webapp](https://github.com/agents-repo/webapp) | agents-repo.org UI |
+| [cli](https://github.com/agents-repo/cli) | `npx agents-repo` installer |
+| [.github](https://github.com/agents-repo/.github) | Org workflow, ecosystem docs, Cloud workspace manifest |
+
+### Start here (per repo)
+
+| Repo | Primary docs |
+| --- | --- |
+| `.github` | [development.md](development.md), [copilot-instructions.md](../.github/copilot-instructions.md) |
+| `cli` | [ARCHITECTURE.md](https://github.com/agents-repo/cli/blob/main/docs/ARCHITECTURE.md), [AGENT_SKILLS.md](https://github.com/agents-repo/cli/blob/main/docs/AGENT_SKILLS.md) |
+| `webapp` | [ARCHITECTURE.md](https://github.com/agents-repo/webapp/blob/main/docs/ARCHITECTURE.md), [development.md](https://github.com/agents-repo/webapp/blob/main/docs/development.md) |
+| `registry` | [ai-onboarding.md](https://github.com/agents-repo/registry/blob/main/docs/ai-onboarding.md), `specs/` |
+| `registry-proxy` | [proxy-vs-registry.md](https://github.com/agents-repo/registry-proxy/blob/main/docs/proxy-vs-registry.md), [AI_GUIDELINES.md](https://github.com/agents-repo/registry-proxy/blob/main/docs/AI_GUIDELINES.md) |
+
+### Local handoff (one line per repo)
+
+| Repo | Handoff commands |
+| --- | --- |
+| `.github` | `npm run lint:all` + `sync:ide-instructions --check` |
+| `cli` | `env:check`, `lint:all`, `typecheck`, `test`, `check:secrets` |
+| `webapp` | `env:check`, `lint:all`, `test`, `typecheck`, `build:pages`, `test:crawl-files` |
+| `registry` | `env:check`, `lint:all`, `test:run`, `typecheck`, `package:scan-zips` |
+| `registry-proxy` | `env:check`, `lint:all`, `check:secrets`, `test` |
+
+### Skills vs package skills
+
+- **General workflow skills** (issue intake, planning, review): installed in
+  app repos via `agents.json` — see each repo's skills doc or `.agents/skills/`.
+- **Package skills** (`package-creator`, `full-package-creation-flow`, etc.):
+  use in **registry** for catalog submissions.
+
+### Fork vs upstream registry
+
+External contributors fork **agents-repo/registry** and open PRs to upstream
+`main`. Personal fork maintenance (Cloud bootstrap, CI parity) is maintainer
+manual work outside this org plan.
