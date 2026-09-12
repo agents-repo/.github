@@ -19,6 +19,6 @@
   "devDependencies": {
     "@marp-team/marp-cli": "4.5.0",
     "@marp-team/marp-core": "4.4.0",
-    "agents-repo": "1.22.0"
+    "agents-repo": "1.22.1"
   }
 }
