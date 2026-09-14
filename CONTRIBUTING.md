@@ -19,6 +19,9 @@ for private reporting instructions.
 
 Choose the repository that matches the kind of work you want to do, then follow that repository's detailed contributing guide.
 
+For organization-wide product direction (outcomes only, no dates), see
+[Roadmap](ROADMAP.md).
+
 | Repository | Purpose | Detailed guide |
 | --- | --- | --- |
 | [registry](https://github.com/agents-repo/registry) | Specs, schemas, packages | [`.github/CONTRIBUTING.md`](https://github.com/agents-repo/registry/blob/main/.github/CONTRIBUTING.md) |
