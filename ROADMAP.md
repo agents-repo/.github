@@ -40,7 +40,7 @@ Active FOSS UX and contributor-experience outcomes.
 ### Registry & specs
 
 - No separate registry issues in this batch; author doc updates in
-  [webapp#288](https://github.com/agents-repo/webapp/issues/288) link to
+  [agents-repo/webapp#288](https://github.com/agents-repo/webapp/issues/288) link to
   [registry specs](https://github.com/agents-repo/registry/tree/main/specs).
 
 ### Community
@@ -55,11 +55,11 @@ Near-term follow-ons after the current epic batch.
 ### Webapp
 
 - Cross-link this roadmap from About, `/contribute`, and docs once the hub ships
-  ([webapp#284](https://github.com/agents-repo/webapp/issues/284)).
+  ([agents-repo/webapp#284](https://github.com/agents-repo/webapp/issues/284)).
 
 ### CLI
 
-- Close remaining npm-parity gaps called out in CLI docs (for example global
+- Close remaining npm-parity gaps called out in CLI docs (for example, global
   `ci`/`doctor`, extended install aliases) as individual issues land.
 
 ### Registry & specs
@@ -104,12 +104,12 @@ Ideas under consideration; not committed. Do not treat these as scheduled work.
 - GitHub activity feeds on package detail pages.
 - Category landing pages (the catalog has roughly three categories today).
 - Subjective trust signals (GitHub stars, quality scores) — see
-  [webapp#285](https://github.com/agents-repo/webapp/issues/285) constraints.
+  [agents-repo/webapp#285](https://github.com/agents-repo/webapp/issues/285) constraints.
 
 ### CLI
 
 - Automated doc codegen across repositories (related:
-  [cli#133](https://github.com/agents-repo/cli/issues/133) explores inventory
+  [agents-repo/cli#133](https://github.com/agents-repo/cli/issues/133) explores inventory
   sync, not full codegen).
 
 ### Registry & specs
