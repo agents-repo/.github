@@ -87,8 +87,9 @@ resolve_worker_directories() {
 
 # cursor agent worker: worker-level flags before "start"; only start subcommand flags after.
 assemble_worker_start_cmd() {
-  local -n out_ref=$1
+  local out_ref_name=$1
   shift
+  local -n out_ref=$out_ref_name
   local -a worker_dirs=()
   local dir
 
@@ -154,16 +155,19 @@ main() {
 
   log_info "workspace: ${WORKSPACE_ROOT}"
 
-  local -a worker_dirs=()
   local -a cmd=()
-  local dir
-
-  mapfile -t worker_dirs < <(resolve_worker_directories)
-  for dir in "${worker_dirs[@]}"; do
-    log_info "worker-dir: ${dir}"
-  done
+  local i
 
   assemble_worker_start_cmd cmd "${forward_args[@]}"
+
+  for ((i = 0; i < ${#cmd[@]}; i++)); do
+    if [[ "${cmd[$i]}" == --worker-dir ]]; then
+      i=$((i + 1))
+      if [[ $i -lt ${#cmd[@]} ]]; then
+        log_info "worker-dir: ${cmd[$i]}"
+      fi
+    fi
+  done
 
   if [[ "$dry_run" -eq 1 ]]; then
     printf '%q ' "${cmd[@]}"
