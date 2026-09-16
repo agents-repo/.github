@@ -4,8 +4,6 @@
 
 [Unit]
 Description=Cursor private agent worker (agents-repo multi-repo)
-After=network-online.target
-Wants=network-online.target
 
 [Service]
 Type=simple
