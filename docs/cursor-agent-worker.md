@@ -47,10 +47,11 @@ export CURSOR_AGENT_WORKER_VERBOSE=1
 ./.github/scripts/cursor-agent-worker-start.sh
 ```
 
-Forward extra flags to `cursor agent worker start` (after `--`):
+Forward extra **worker-level** flags to `cursor agent worker` (after `--`; placed
+before `start`):
 
 ```bash
-./.github/scripts/cursor-agent-worker-start.sh -- --management-addr ':8080'
+./.github/scripts/cursor-agent-worker-start.sh -- --management-addr 127.0.0.1:8080
 ```
 
 Leave the process running in a terminal or use the systemd setup below.

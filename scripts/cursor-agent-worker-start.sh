@@ -13,7 +13,7 @@ CURSOR_AGENT_WORKER_VERBOSE="${CURSOR_AGENT_WORKER_VERBOSE:-0}"
 
 usage() {
   cat <<EOF
-Usage: $(basename "$0") [options] [--] [cursor agent worker start options...]
+Usage: $(basename "$0") [options] [--] [cursor agent worker options...]
 
 Start \`cursor agent worker start\` with --worker-dir for each git clone under
 WORKSPACE_ROOT. The .github directory is passed first when present.
@@ -28,8 +28,9 @@ Environment:
   CURSOR_AGENT_WORKER_NAME    Default for --name
   CURSOR_AGENT_WORKER_VERBOSE  Set to 1 to pass --verbose to cursor agent worker start
 
-Any arguments after -- are forwarded to \`cursor agent worker start\` (for example
---pool or --management-addr).
+Any arguments after -- are forwarded to \`cursor agent worker\` before \`start\`
+(for example --pool or --management-addr). Use CURSOR_AGENT_WORKER_VERBOSE=1 for
+\`start --verbose\`.
 
 See docs/cursor-agent-worker.md for Linux startup (systemd user service).
 EOF
@@ -78,31 +79,34 @@ resolve_worker_directories() {
   done
 }
 
-build_worker_start_argv() {
+# cursor agent worker: worker-level flags before "start"; only start subcommand flags after.
+assemble_worker_start_cmd() {
+  local -n out_ref=$1
+  shift
   local -a worker_dirs=()
-  local -a cmd=(cursor agent worker start)
   local dir
 
   mapfile -t worker_dirs < <(resolve_worker_directories)
 
+  out_ref=(cursor agent worker)
+
   for dir in "${worker_dirs[@]}"; do
-    cmd+=(--worker-dir "$dir")
+    out_ref+=(--worker-dir "$dir")
   done
 
   if [[ -n "$CURSOR_AGENT_WORKER_NAME" ]]; then
-    cmd+=(--name "$CURSOR_AGENT_WORKER_NAME")
-  fi
-
-  if [[ "$CURSOR_AGENT_WORKER_VERBOSE" == "1" ]]; then
-    cmd+=(--verbose)
+    out_ref+=(--name "$CURSOR_AGENT_WORKER_NAME")
   fi
 
   if [[ "$#" -gt 0 ]]; then
-    cmd+=("$@")
+    out_ref+=("$@")
   fi
 
-  printf '%q ' "${cmd[@]}"
-  printf '\n'
+  out_ref+=(start)
+
+  if [[ "$CURSOR_AGENT_WORKER_VERBOSE" == "1" ]]; then
+    out_ref+=(--verbose)
+  fi
 }
 
 main() {
@@ -144,32 +148,21 @@ main() {
 
   log_info "workspace: ${WORKSPACE_ROOT}"
 
-  if [[ "$dry_run" -eq 1 ]]; then
-    build_worker_start_argv "${forward_args[@]}"
-    return 0
-  fi
-
   local -a worker_dirs=()
-  local -a cmd=(cursor agent worker start)
+  local -a cmd=()
   local dir
 
   mapfile -t worker_dirs < <(resolve_worker_directories)
-
   for dir in "${worker_dirs[@]}"; do
     log_info "worker-dir: ${dir}"
-    cmd+=(--worker-dir "$dir")
   done
 
-  if [[ -n "$CURSOR_AGENT_WORKER_NAME" ]]; then
-    cmd+=(--name "$CURSOR_AGENT_WORKER_NAME")
-  fi
+  assemble_worker_start_cmd cmd "${forward_args[@]}"
 
-  if [[ "$CURSOR_AGENT_WORKER_VERBOSE" == "1" ]]; then
-    cmd+=(--verbose)
-  fi
-
-  if [[ "${#forward_args[@]}" -gt 0 ]]; then
-    cmd+=("${forward_args[@]}")
+  if [[ "$dry_run" -eq 1 ]]; then
+    printf '%q ' "${cmd[@]}"
+    printf '\n'
+    return 0
   fi
 
   exec "${cmd[@]}"
