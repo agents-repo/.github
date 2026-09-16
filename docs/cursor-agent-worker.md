@@ -14,7 +14,7 @@ identity), and runs `cursor agent worker start`.
 
 - [Cursor](https://cursor.com) installed with the `cursor` CLI on `PATH`
 - `cursor agent login` completed once for the account that should own the worker
-- Bash 4+ and sibling clones under one `WORKSPACE_ROOT` (see
+- Bash 4.3+ and sibling clones under one `WORKSPACE_ROOT` (see
   [local-git-workspace.md](local-git-workspace.md))
 
 ## Manual start

@@ -4,6 +4,12 @@
 
 set -euo pipefail
 
+if [[ "${BASH_VERSINFO[0]}" -lt 4 ]] ||
+  [[ "${BASH_VERSINFO[0]}" -eq 4 && "${BASH_VERSINFO[1]}" -lt 3 ]]; then
+  echo "cursor-agent-worker-start.sh requires Bash 4.3+ (nameref); found ${BASH_VERSION}" >&2
+  exit 1
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=git-workspace-lib.sh
 source "${SCRIPT_DIR}/git-workspace-lib.sh"
@@ -137,8 +143,8 @@ main() {
         break
         ;;
       *)
-        forward_args+=("$1")
-        shift
+        log_err "unexpected argument: $1 (use -- before cursor agent worker options)"
+        exit 1
         ;;
     esac
   done
