@@ -52,6 +52,7 @@ Remote name defaults to `origin` (`GIT_WS_REMOTE` to override).
 
 | Script | Purpose |
 | --- | --- |
+| [`cursor-agent-worker-start.sh`](../scripts/cursor-agent-worker-start.sh) | Start local `cursor agent worker` with `--worker-dir` for each clone ([docs](cursor-agent-worker.md)) |
 | [`git-sync-locals.sh`](../scripts/git-sync-locals.sh) | `fetch --prune`, then fast-forward **existing** local branches that track `origin/*` |
 | [`git-fetch-all-branches.sh`](../scripts/git-fetch-all-branches.sh) | `fetch --prune`, then create or update a local branch for **every** `origin` branch |
 | [`git-prune-gone-branches.sh`](../scripts/git-prune-gone-branches.sh) | `fetch --prune`, leave gone current branch, then force-delete locals whose upstream is gone (batch confirmation) |

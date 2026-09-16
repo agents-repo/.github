@@ -1,0 +1,18 @@
+# Example systemd user unit for cursor agent worker (multi-repo workspace).
+# Install: cp to ~/.config/systemd/user/cursor-agent-worker.service and edit paths.
+# Docs: docs/cursor-agent-worker.md
+
+[Unit]
+Description=Cursor private agent worker (agents-repo multi-repo)
+
+[Service]
+Type=simple
+Environment=WORKSPACE_ROOT=/home/USER/dev/projects/agents-repo
+Environment=CURSOR_AGENT_WORKER_NAME=agents-repo-linux
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/USER/dev/projects/agents-repo/.github/scripts/cursor-agent-worker-start.sh
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=default.target

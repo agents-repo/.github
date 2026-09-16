@@ -6,7 +6,7 @@
   "scripts": {
     "env:check": "node scripts/validate-env.mjs",
     "lint:workflows": "node scripts/lint-workflows.mjs",
-    "lint:shell": "shellcheck --severity=warning -x scripts/git-workspace-lib.sh scripts/git-fetch-all-branches.sh scripts/git-prune-gone-branches.sh scripts/git-refresh-main.sh scripts/git-sync-locals.sh .cursor/install.sh",
+    "lint:shell": "shellcheck --severity=warning -x scripts/git-workspace-lib.sh scripts/git-fetch-all-branches.sh scripts/git-prune-gone-branches.sh scripts/git-refresh-main.sh scripts/git-sync-locals.sh scripts/cursor-agent-worker-start.sh .cursor/install.sh",
     "lint:all": "npm run lint:workflows && npm run lint:shell",
     "slides:build": "node scripts/slides.mjs build",
     "slides:preview:html": "node scripts/slides.mjs preview",

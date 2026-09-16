@@ -19,6 +19,9 @@ that file over a dashboard personal or team environment when it is present.
 Install scripts must be idempotent and must terminate. They must not start
 dev servers. The webapp Vite server belongs in `terminals` on that repository.
 
+For a **local machine** private worker over the same sibling-clone layout, see
+[cursor-agent-worker.md](cursor-agent-worker.md) (`scripts/cursor-agent-worker-start.sh`).
+
 ## Pinned toolchain
 
 Development repos pin Node **24.18.0** (`.nvmrc` where present) and npm

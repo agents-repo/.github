@@ -12,6 +12,8 @@ manifest. It is not an application runtime.
    (canonical agent instructions).
 3. For ecosystem context, see [ecosystem.md](ecosystem.md) and
    [cursor-cloud.md](cursor-cloud.md).
+4. For a local private agent worker over sibling clones, see
+   [cursor-agent-worker.md](cursor-agent-worker.md).
 
 ## Validation
 

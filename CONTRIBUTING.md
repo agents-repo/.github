@@ -72,6 +72,10 @@ folder, use the shell scripts documented in
 [docs/local-git-workspace.md](docs/local-git-workspace.md) (`scripts/git-*.sh`)
 to fetch, prune stale locals, and refresh the default branch across clones.
 
+To run a private Cursor agent worker over the same sibling-clone layout (including
+Linux startup via systemd), see
+[docs/cursor-agent-worker.md](docs/cursor-agent-worker.md).
+
 ## Cursor Cloud environments
 
 Repository-managed Cloud Agent bootstrap lives in each development repo's
