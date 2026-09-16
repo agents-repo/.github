@@ -119,6 +119,7 @@ assemble_worker_start_cmd() {
 main() {
   local dry_run=0
   local forward_args=()
+  local unexpected_arg
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -144,7 +145,8 @@ main() {
         break
         ;;
       *)
-        log_err "unexpected argument: $1 (use -- before cursor agent worker options)"
+        unexpected_arg=$1
+        log_err "unexpected argument: ${unexpected_arg} (use -- before cursor agent worker options)"
         exit 1
         ;;
     esac
