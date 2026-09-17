@@ -6,7 +6,8 @@ active work.
 
 ## How to use this doc
 
-- **Now** lists outcomes with filed tracking issues.
+- **Now** lists outcomes with filed tracking issues. It MAY be empty between
+  epics. When a batch ships, remove those issues from **Now**.
 - **Next** and **Later** describe near- and long-term intent without issue
   numbers unless work is already tracked elsewhere.
 - **Exploring** holds ideas we are not committing to yet.
@@ -15,47 +16,16 @@ active work.
 
 ## Now
 
-Active FOSS UX and contributor-experience outcomes.
+No multi-repo epic is listed here. Open issues in each repository remain the
+source of truth for active work.
 
-### Webapp
-
-- Install-first home activation (hero, CTAs, five-step how-it-works) —
-  [agents-repo/webapp#283](https://github.com/agents-repo/webapp/issues/283)
-- Unified `/contribute` contributor hub —
-  [agents-repo/webapp#284](https://github.com/agents-repo/webapp/issues/284)
-- Package trust signals and error recovery —
-  [agents-repo/webapp#285](https://github.com/agents-repo/webapp/issues/285)
-- Catalog discovery polish (install on cards, “Start here”, search match context) —
-  [agents-repo/webapp#286](https://github.com/agents-repo/webapp/issues/286)
-- Share metadata with install command in social previews —
-  [agents-repo/webapp#287](https://github.com/agents-repo/webapp/issues/287)
-- Author and AI discoverability doc updates —
-  [agents-repo/webapp#288](https://github.com/agents-repo/webapp/issues/288)
-
-### CLI
-
-- CLI ↔ webapp command inventory sync check —
-  [agents-repo/cli#133](https://github.com/agents-repo/cli/issues/133)
-
-### Registry & specs
-
-- No separate registry issues in this batch; author doc updates in
-  [agents-repo/webapp#288](https://github.com/agents-repo/webapp/issues/288) link to
-  [registry specs](https://github.com/agents-repo/registry/tree/main/specs).
-
-### Community
-
-- Contributor hub and doc updates above improve FOSS onboarding paths on the
-  public site without replacing per-repository CONTRIBUTING guides.
+The FOSS UX / contributor-hub batch is complete: install-first home,
+`/contribute`, package trust and error recovery, catalog discovery polish,
+share metadata, author and AI docs, and CLI ↔ webapp command inventory check.
 
 ## Next
 
-Near-term follow-ons after the current epic batch.
-
-### Webapp
-
-- Cross-link this roadmap from About, `/contribute`, and docs once the hub ships
-  ([agents-repo/webapp#284](https://github.com/agents-repo/webapp/issues/284)).
+Near-term follow-ons after the shipped FOSS UX batch.
 
 ### CLI
 
