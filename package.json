@@ -14,11 +14,12 @@
     "sync:ide-instructions": "node scripts/sync-ide-instructions.mjs",
     "agents:install": "agents-repo install",
     "agents:update": "agents-repo update",
-    "agents:ci": "agents-repo ci"
+    "agents:ci": "agents-repo ci",
+    "agents:verify": "agents-repo verify"
   },
   "devDependencies": {
     "@marp-team/marp-cli": "4.5.0",
     "@marp-team/marp-core": "4.4.0",
-    "agents-repo": "1.22.1"
+    "agents-repo": "1.23.0"
   }
 }
