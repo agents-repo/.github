@@ -390,11 +390,11 @@ path-filter shape.
    each repository already has. Do not add typecheck or secrets where PR
    baseline already lacks them.
 
-### Lockfiles vs agents checksum exception
+### Lockfiles vs agents verify exception
 
 `package.json` and `package-lock.json` (npm lockfiles) trigger extras such as
 Chrome/`slides:check`, Pages/crawl, ZIP scan, and Node 22 compat — **except**
-the registry package checksum extra.
+the `agents:verify` extra.
 
 `npm run agents:verify` (`agents-repo verify`) validates lock/config parity and
 on-disk install surfaces **without** downloading version ZIPs. Use it in PR
@@ -429,7 +429,7 @@ while still serving ZIPs.
 | Group | Typical extra | Paths |
 | --- | --- | --- |
 | `slides` | Chrome + `slides:check` | `docs/slides/**`, `scripts/slides.mjs`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs` |
-| `agents` | `agents:verify` checksum | agents definition files, `pr-baseline.yml`, and `scripts/ci-pr-path-filters.mjs` only — **not** npm lockfiles |
+| `agents` | `agents:verify` (parity) | agents definition files, `pr-baseline.yml`, and `scripts/ci-pr-path-filters.mjs` only — **not** npm lockfiles |
 | `pages` | `build:pages` + crawl tests (webapp) | `src/**`, `public/**`, `scripts/**` except `scripts/slides.mjs`, `index.html`, Vite/tsconfig, `.env.production`, `.nvmrc`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs`, and only `test/crawl-files.integration.test.mjs` plus `test/pwa-sw.integration.test.mjs`. **Not** `eslint.config.js`. **Not** all of `test/**` |
 | `zips` | `package:scan-zips` (registry) | `packages/**`, `scripts/**` except `scripts/slides.mjs`, `specs/**`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs` |
 | `node22` | optional `compat-node22` (cli) | `.nvmrc`, `.node-version`, npm lockfiles, `.github/actions/setup-node-pinned-npm/**`, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs`. Does **not** turn on Chrome/slides/`agents:ci` |
@@ -499,7 +499,7 @@ Use the npm scripts for bulk install, update, and CI (CLI version is pinned in
 ```bash
 npm run agents:install   # bulk sync from agents.json
 npm run agents:update    # refresh within semver ranges
-npm run agents:verify    # checksum extra in pr-baseline when agents paths change
+npm run agents:verify    # parity extra in pr-baseline when agents paths change
 ```
 
 Commit `agents.json`, `agents-lock.json`, and extracted paths (`.github/agents/`,

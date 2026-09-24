@@ -33,7 +33,7 @@ npm run env:check
 Path-filtered extras (see [CONTRIBUTING — PR baseline extras](../CONTRIBUTING.md#pr-baseline-extras-path-filters)):
 
 - `npm run slides:check` — when `docs/slides/**` or `scripts/slides.mjs` change
-- `npm run agents:verify` — when `agents.json`, registry lockfile, or extracted agent paths change (PR baseline parity)
+- `npm run agents:verify` — when `agents.json`, `agents-lock.json`, or extracted agent paths change (PR baseline parity)
 
 ## What to edit
 
@@ -42,7 +42,7 @@ Path-filtered extras (see [CONTRIBUTING — PR baseline extras](../CONTRIBUTING.
 | Agent instructions | `.github/copilot-instructions.md` → `npm run sync:ide-instructions` |
 | Contributor workflow | `CONTRIBUTING.md` |
 | Presentation decks | `docs/slides/*.md` → `npm run slides:build` / `slides:check` |
-| Registry workflow packages | `agents.json` → `npm run agents:install` / `agents:ci` |
+| Registry workflow packages | `agents.json` → `npm run agents:install` / `agents:verify` / `agents:ci` |
 | GitHub Actions | `.github/workflows/` → `npm run lint:workflows` |
 
 ## Child repository instructions
