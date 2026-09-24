@@ -33,7 +33,7 @@ npm run env:check
 Path-filtered extras (see [CONTRIBUTING — PR baseline extras](../CONTRIBUTING.md#pr-baseline-extras-path-filters)):
 
 - `npm run slides:check` — when `docs/slides/**` or `scripts/slides.mjs` change
-- `npm run agents:ci` — when `agents.json`, lockfile, or extracted agent paths change
+- `npm run agents:verify` — when `agents.json`, registry lockfile, or extracted agent paths change (PR baseline parity)
 
 ## What to edit
 
