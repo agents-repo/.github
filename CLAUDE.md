@@ -73,13 +73,14 @@ npm run sync:ide-instructions -- --check
 When the change touches slide sources, also run `npm run slides:check` (see
 [docs/slides/README.md](docs/slides/README.md)). When the change touches
 `agents.json`, `agents-lock.json`, or extracted agent/skill paths, also run
-`npm run agents:ci`.
+`npm run agents:verify` (PR baseline parity). Run full `npm run agents:ci`
+locally before changing registry locks or extracted package files.
 
 Optional: `npm run env:check` verifies pinned Node/npm when present.
 
-PR baseline extras (Chrome/`slides:check` and `agents:ci`) are path-filtered.
+PR baseline extras (Chrome/`slides:check` and `agents:verify`) are path-filtered.
 See [CONTRIBUTING.md — PR baseline extras (path filters)](CONTRIBUTING.md#pr-baseline-extras-path-filters).
-Do not treat npm lockfiles as an `agents:ci` trigger.
+Do not treat npm lockfiles as an `agents:verify` trigger.
 
 ## IDE Instructions in This Repository
 

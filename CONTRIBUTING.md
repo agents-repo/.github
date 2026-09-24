@@ -390,16 +390,20 @@ path-filter shape.
    each repository already has. Do not add typecheck or secrets where PR
    baseline already lacks them.
 
-### Lockfiles vs agents checksum exception
+### Lockfiles vs agents verify exception
 
 `package.json` and `package-lock.json` (npm lockfiles) trigger extras such as
 Chrome/`slides:check`, Pages/crawl, ZIP scan, and Node 22 compat — **except**
-the registry package checksum extra.
+the `agents:verify` extra.
 
-`npm run agents:ci` (`agents-repo ci`) downloads version ZIPs via
-`https://registry.agents-repo.org` and **increments registry-proxy download
-totals**. Run the entire checksum step (remove extracts, `agents:ci`, git
-drift check) only when **agents definition** files change:
+`npm run agents:verify` (`agents-repo verify`) validates lock/config parity and
+on-disk install surfaces **without** downloading version ZIPs. Use it in PR
+baseline instead of destructive `agents:ci` (which re-downloads every artifact
+and, without the download-metrics opt-out header, would increment
+registry-proxy totals).
+
+Run the entire agents verification step (`agents:verify`, git drift check)
+only when **agents definition** files change:
 
 - `agents.json`
 - `agents-lock.json` (the registry lock — not npm `package-lock.json`)
@@ -410,20 +414,22 @@ drift check) only when **agents definition** files change:
 - `.github/workflows/pr-baseline.yml`
 - `scripts/ci-pr-path-filters.mjs`
 
-Do **not** run `agents:ci` because npm `package.json` / `package-lock.json`
+Do **not** run `agents:verify` because npm `package.json` / `package-lock.json`
 changed. Child matchers MUST NOT copy npm lockfiles into the `agents` path
 group.
 
-Do **not** add `agents:ci` to every `main` push, webapp release, or deploy
-(that would inflate download counts). Do **not** change registry-proxy
-download accounting.
+Do **not** add `agents:verify` or full `agents:ci` to every `main` push,
+webapp release, or deploy. Run full `agents-repo ci` locally before changing
+locks or extracts; it sends `Agents-Repo-Download-Metrics: skip` on artifact
+downloads. Registry-proxy honors that header to skip D1 download metrics
+while still serving ZIPs.
 
 ### Path groups
 
 | Group | Typical extra | Paths |
 | --- | --- | --- |
 | `slides` | Chrome + `slides:check` | `docs/slides/**`, `scripts/slides.mjs`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs` |
-| `agents` | `agents:ci` checksum | agents definition files, `pr-baseline.yml`, and `scripts/ci-pr-path-filters.mjs` only — **not** npm lockfiles |
+| `agents` | `agents:verify` (parity) | agents definition files, `pr-baseline.yml`, and `scripts/ci-pr-path-filters.mjs` only — **not** npm lockfiles |
 | `pages` | `build:pages` + crawl tests (webapp) | `src/**`, `public/**`, `scripts/**` except `scripts/slides.mjs`, `index.html`, Vite/tsconfig, `.env.production`, `.nvmrc`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs`, and only `test/crawl-files.integration.test.mjs` plus `test/pwa-sw.integration.test.mjs`. **Not** `eslint.config.js`. **Not** all of `test/**` |
 | `zips` | `package:scan-zips` (registry) | `packages/**`, `scripts/**` except `scripts/slides.mjs`, `specs/**`, npm lockfiles, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs` |
 | `node22` | optional `compat-node22` (cli) | `.nvmrc`, `.node-version`, npm lockfiles, `.github/actions/setup-node-pinned-npm/**`, `pr-baseline.yml`, `scripts/ci-pr-path-filters.mjs`. Does **not** turn on Chrome/slides/`agents:ci` |
@@ -432,15 +438,15 @@ download accounting.
 
 | Repo | Always-on in `baseline` | Path-filtered extras |
 | --- | --- | --- |
-| `.github` | workflow lint, IDE sync; optional local `env:check` | Chrome + `slides:check`, `agents:ci` |
-| cli | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`, `agents:ci`; optional `compat-node22` |
-| webapp | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `agents:ci`, `build:pages` + `test:crawl-files` |
-| registry | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:ci`, `package:scan-zips` |
-| registry-proxy | `env:check`, `lint:all`, IDE sync, tests, `check:secrets` | Chrome + `slides:check`, `agents:ci` |
+| `.github` | workflow lint, IDE sync; optional local `env:check` | Chrome + `slides:check`, `agents:verify` |
+| cli | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`, `agents:verify`; optional `compat-node22` |
+| webapp | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `agents:verify`, `build:pages` + `test:crawl-files` |
+| registry | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:verify`, `package:scan-zips` |
+| registry-proxy | `env:check`, `lint:all`, IDE sync, tests, `check:secrets` | Chrome + `slides:check`, `agents:verify` |
 
 Safety net: extras skipped on a pull request still run where that repository
 already runs them on `main` / release (and webapp deploy for Pages/crawl). Do
-not add `agents:ci` to those safety-net workflows.
+not add `agents:verify` to those safety-net workflows.
 
 ## Agent instruction files
 
@@ -493,12 +499,12 @@ Use the npm scripts for bulk install, update, and CI (CLI version is pinned in
 ```bash
 npm run agents:install   # bulk sync from agents.json
 npm run agents:update    # refresh within semver ranges
-npm run agents:ci        # checksum extra in pr-baseline when agents paths change
+npm run agents:verify    # parity extra in pr-baseline when agents paths change
 ```
 
 Commit `agents.json`, `agents-lock.json`, and extracted paths (`.github/agents/`,
 `.cursor/skills/`, `.claude/agents/`, `.agents/skills/`). Do not hand-edit
-extracted package files. PR baseline runs `agents:ci` only for agents
+extracted package files. PR baseline runs `agents:verify` only for agents
 definition files (not npm lockfiles); see **PR baseline extras (path filters)**.
 
 ## Changing organization-wide defaults
