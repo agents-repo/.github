@@ -92,4 +92,4 @@ jobs:
 
       - name: Skip agents verify
         if: needs.changes.outputs.agents != 'true'
-        run: echo "Skipping agents:verify; PR paths do not match agents definition files (agents.json, agents-lock.json, extracted agent paths, pr-baseline.yml, or scripts/ci-pr-path-filters.mjs). npm lockfiles alone do not trigger this step."
+        run: echo "Skipping agents:verify; PR paths do not match agents definition files (agents.json, agents-lock.json, extracted agent paths, .github/workflows/pr-baseline.yml, or scripts/ci-pr-path-filters.mjs). npm lockfiles alone do not trigger this step."
