@@ -353,7 +353,7 @@ workspace_collect_gone_branches() {
 # Returns 0 when the user confirms batch deletion; 1 to skip.
 confirm_force_delete_gone_branches() {
   local count=$#
-  local line repo_base branch_name reply
+  local line _repo_path repo_base branch_name reply
 
   if [[ "$count" -eq 0 ]]; then
     return 1

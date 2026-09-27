@@ -19,8 +19,11 @@ in child repos) or agents catalog install (`npm run agents:install` in this repo
   agents-repo.github.io/             ← optional clone
 ```
 
-The org meta-repo clone **must** be named `.github` (not `github` or another
-alias) so default `WORKSPACE_ROOT` resolution works as documented.
+The org meta-repo clone **should** be named `.github` (not `github` or another
+alias) so gone-branch pruning can recognize the documented sibling layout
+(`WORKSPACE_ROOT/.github/scripts/git-workspace-lib.sh`). Default `WORKSPACE_ROOT`
+is the parent of whichever clone contains these scripts, independent of that
+clone's directory name.
 
 Discovery scans **only direct children** of the workspace root. Each child must be
 a Git work tree (`git rev-parse --is-inside-work-tree`). Dot-directories such as
