@@ -54,11 +54,17 @@ mapfile_from_cmd() {
 }
 
 workspace_root_resolved() {
-  (cd "$WORKSPACE_ROOT" && pwd -P)
+  local status=0
+
+  (cd "$WORKSPACE_ROOT" && pwd -P) || status=$?
+  return "$status"
 }
 
 home_dir_resolved() {
-  (cd "${HOME}" && pwd -P)
+  local status=0
+
+  (cd "${HOME}" && pwd -P) || status=$?
+  return "$status"
 }
 
 is_overly_broad_workspace_root() {
@@ -66,13 +72,19 @@ is_overly_broad_workspace_root() {
   local home_resolved
 
   home_resolved="$(home_dir_resolved)"
-  [[ "$resolved" == "/" ]] || [[ "$resolved" == "$home_resolved" ]]
+  if [[ "$resolved" == "/" ]] || [[ "$resolved" == "$home_resolved" ]]; then
+    return 0
+  fi
+  return 1
 }
 
 has_documented_sibling_layout() {
   local meta="${WORKSPACE_ROOT}/.github"
 
-  is_git_repo "$meta" && [[ -f "${meta}/scripts/git-workspace-lib.sh" ]]
+  if is_git_repo "$meta" && [[ -f "${meta}/scripts/git-workspace-lib.sh" ]]; then
+    return 0
+  fi
+  return 1
 }
 
 validate_workspace_config() {
@@ -110,16 +122,16 @@ require_safe_workspace_for_destructive_ops() {
 
   resolved="$(workspace_root_resolved)"
   if is_overly_broad_workspace_root "$resolved" && [[ "${GIT_WS_ALLOW_BROAD_ROOT:-}" != "1" ]]; then
-    log_err "refusing branch prune: WORKSPACE_ROOT is too broad (${resolved})"
-    log_err "set GIT_WS_ALLOW_BROAD_ROOT=1 only when you intend workspace-wide destructive maintenance"
-    exit 1
+    log_warn "skipping gone-branch prune: WORKSPACE_ROOT is too broad (${resolved})"
+    log_warn "set GIT_WS_ALLOW_BROAD_ROOT=1 only when you intend workspace-wide destructive maintenance"
+    return 1
   fi
 
   if ! has_documented_sibling_layout && [[ "${GIT_WS_ALLOW_BROAD_ROOT:-}" != "1" ]]; then
-    log_err "refusing branch prune: WORKSPACE_ROOT is not the documented agents-repo sibling folder"
-    log_err "expected ${WORKSPACE_ROOT}/.github/scripts/git-workspace-lib.sh"
-    log_err "set GIT_WS_ALLOW_BROAD_ROOT=1 to override (you will prune every direct-child git clone)"
-    exit 1
+    log_warn "skipping gone-branch prune: WORKSPACE_ROOT is not the documented agents-repo sibling folder"
+    log_warn "expected ${WORKSPACE_ROOT}/.github/scripts/git-workspace-lib.sh"
+    log_warn "set GIT_WS_ALLOW_BROAD_ROOT=1 to override (you will prune every direct-child git clone)"
+    return 1
   fi
 
   return 0
@@ -287,8 +299,10 @@ repo_list_gone_local_branches() {
 }
 
 _repo_gone_branches_lines() {
+  local repo_path="$1"
+
   (
-    cd "$1" || exit 1
+    cd "$repo_path" || exit 1
     repo_list_gone_local_branches
   )
 }
@@ -385,7 +399,9 @@ workspace_prune_gone_with_confirm() {
   local collect_status=0
   local prune_status=0
 
-  require_safe_workspace_for_destructive_ops
+  if ! require_safe_workspace_for_destructive_ops; then
+    return 0
+  fi
 
   if ! mapfile_from_cmd candidates workspace_collect_gone_branches; then
     collect_status=1
