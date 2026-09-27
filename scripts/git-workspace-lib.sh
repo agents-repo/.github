@@ -63,6 +63,10 @@ workspace_root_resolved() {
 home_dir_resolved() {
   local status=0
 
+  if [[ -z "${HOME:-}" ]]; then
+    return 1
+  fi
+
   (cd "${HOME}" && pwd -P) || status=$?
   return "$status"
 }
@@ -71,9 +75,14 @@ is_overly_broad_workspace_root() {
   local resolved="$1"
   local home_resolved
 
-  home_resolved="$(home_dir_resolved)"
-  if [[ "$resolved" == "/" ]] || [[ "$resolved" == "$home_resolved" ]]; then
+  if [[ "$resolved" == "/" ]]; then
     return 0
+  fi
+
+  if home_resolved="$(home_dir_resolved)"; then
+    if [[ "$resolved" == "$home_resolved" ]]; then
+      return 0
+    fi
   fi
   return 1
 }
