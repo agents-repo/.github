@@ -19,13 +19,22 @@ in child repos) or agents catalog install (`npm run agents:install` in this repo
   agents-repo.github.io/             ← optional clone
 ```
 
+The org meta-repo clone **must** be named `.github` (not `github` or another
+alias) so default `WORKSPACE_ROOT` resolution works as documented.
+
 Discovery scans **only direct children** of the workspace root. Each child must be
 a Git work tree (`git rev-parse --is-inside-work-tree`). Dot-directories such as
 `.github` are included.
 
+## Cursor / VS Code multi-root workspace
+
+Open [`agents-repo.code-workspace`](../../agents-repo.code-workspace) from the
+parent folder that contains your clones (**File → Open Workspace from File**).
+See [cursor-agent-worker.md](cursor-agent-worker.md) for the same layout.
+
 ## Requirements
 
-- Bash 4+
+- Bash 4.3+ (namerefs in the shared library)
 - `git` on `PATH`
 - Linux, macOS, or WSL
 
@@ -48,13 +57,21 @@ cd ~/dev/projects/agents-repo
 
 Remote name defaults to `origin` (`GIT_WS_REMOTE` to override).
 
+`WORKSPACE_ROOT` must not be `/` or your home directory unless you explicitly set
+`GIT_WS_ALLOW_BROAD_ROOT=1`, because every script scans **all** direct-child git
+clones under that path.
+
+Scripts that force-delete gone local branches additionally require the documented
+sibling layout (a `.github` clone containing `scripts/git-workspace-lib.sh`) unless
+`GIT_WS_ALLOW_BROAD_ROOT=1`.
+
 ## Scripts
 
 | Script | Purpose |
 | --- | --- |
 | [`cursor-agent-worker-start.sh`](../scripts/cursor-agent-worker-start.sh) | Start local `cursor agent worker` with `--worker-dir` for each clone ([docs](cursor-agent-worker.md)) |
-| [`git-sync-locals.sh`](../scripts/git-sync-locals.sh) | `fetch --prune`, then fast-forward **existing** local branches that track `origin/*` |
-| [`git-fetch-all-branches.sh`](../scripts/git-fetch-all-branches.sh) | `fetch --prune`, then create or update a local branch for **every** `origin` branch |
+| [`git-sync-locals.sh`](../scripts/git-sync-locals.sh) | `fetch --prune`, then fast-forward **existing** locals whose upstream is on `GIT_WS_REMOTE` (default `origin`) |
+| [`git-fetch-all-branches.sh`](../scripts/git-fetch-all-branches.sh) | `fetch --prune`, then for each branch on `GIT_WS_REMOTE`: create a tracking local, or fast-forward when that local already tracks it; skip same-named locals with a missing or different upstream |
 | [`git-prune-gone-branches.sh`](../scripts/git-prune-gone-branches.sh) | `fetch --prune`, leave gone current branch, then force-delete locals whose upstream is gone (batch confirmation) |
 | [`git-refresh-main.sh`](../scripts/git-refresh-main.sh) | `fetch --prune` → checkout default → prune gone (confirm) → sync tracked locals |
 
@@ -64,11 +81,19 @@ Shared logic lives in [`git-workspace-lib.sh`](../scripts/git-workspace-lib.sh).
 
 | Script | Typical use |
 | --- | --- |
-| `git-refresh-main.sh` | Frequent: stale branch cleanup, update tracking branches, end on updated `main` everywhere |
-| `git-fetch-all-branches.sh` | Occasional: after new remote branches appear that you want as local tracking branches |
+| `git-refresh-main.sh` | Frequent: stale branch cleanup, update tracking branches, end on the updated default branch in each repo |
+| `git-fetch-all-branches.sh` | Occasional: after new remote branches appear that you want as local tracking branches (does not rewrite locals that track another upstream) |
 | `git-sync-locals.sh` / `git-prune-gone-branches.sh` | Debugging one step; prefer `git-refresh-main.sh` for daily use |
 
 ## Safety and edge cases
+
+### Workspace root scope
+
+Pointing `WORKSPACE_ROOT` at a parent that contains many unrelated git clones (for
+example your entire `~/dev/projects` folder) can affect every repository directly
+under that directory. Prefer the agents-repo parent folder from
+[Expected layout](#expected-layout). Branch pruning refuses to run when the layout
+marker is missing, unless you opt in with `GIT_WS_ALLOW_BROAD_ROOT=1`.
 
 ### Pruning “gone” upstreams
 
@@ -100,9 +125,7 @@ automatically with a warning; run the script interactively to confirm removal.
 Fast-forward only. Diverged locals produce a warning; the script continues with
 other branches and repositories.
 
-For the **checked-out** branch, sync uses `git merge --ff-only origin/<name>`
-instead of a refspec fetch (Git refuses to fetch into the current branch via
-refspec in many cases).
+For the **checked-out** branch, sync uses `git merge --ff-only <GIT_WS_REMOTE>/<name>` instead of a refspec fetch (Git refuses to fetch into the current branch via refspec in many cases).
 
 ### Refresh side effects
 
@@ -115,7 +138,8 @@ failed and processing continues. The batch exits non-zero if any repository fail
 
 ### Default branch
 
-Resolved from `refs/remotes/origin/HEAD`, with fallback to `main`.
+Resolved from `refs/remotes/<GIT_WS_REMOTE>/HEAD` (remote defaults to `origin`),
+with fallback to `main`.
 
 ## Help
 
