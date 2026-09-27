@@ -79,10 +79,8 @@ is_overly_broad_workspace_root() {
     return 0
   fi
 
-  if home_resolved="$(home_dir_resolved)"; then
-    if [[ "$resolved" == "$home_resolved" ]]; then
-      return 0
-    fi
+  if home_resolved="$(home_dir_resolved)" && [[ "$resolved" == "$home_resolved" ]]; then
+    return 0
   fi
   return 1
 }
