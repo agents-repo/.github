@@ -100,7 +100,10 @@ validate_workspace_config() {
     exit 1
   fi
 
-  resolved="$(workspace_root_resolved)"
+  if ! resolved="$(workspace_root_resolved)"; then
+    log_err "failed to resolve WORKSPACE_ROOT: ${WORKSPACE_ROOT}"
+    exit 1
+  fi
   if is_overly_broad_workspace_root "$resolved"; then
     if [[ "${GIT_WS_ALLOW_BROAD_ROOT:-}" != "1" ]]; then
       log_err "WORKSPACE_ROOT is too broad (${resolved})"
@@ -120,7 +123,10 @@ validate_workspace_config() {
 require_safe_workspace_for_destructive_ops() {
   local resolved
 
-  resolved="$(workspace_root_resolved)"
+  if ! resolved="$(workspace_root_resolved)"; then
+    log_err "failed to resolve WORKSPACE_ROOT: ${WORKSPACE_ROOT}"
+    return 1
+  fi
   if is_overly_broad_workspace_root "$resolved" && [[ "${GIT_WS_ALLOW_BROAD_ROOT:-}" != "1" ]]; then
     log_warn "skipping gone-branch prune: WORKSPACE_ROOT is too broad (${resolved})"
     log_warn "set GIT_WS_ALLOW_BROAD_ROOT=1 only when you intend workspace-wide destructive maintenance"
