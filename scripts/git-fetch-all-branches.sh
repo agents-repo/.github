@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Create or fast-forward local branches for every origin branch.
+# For each branch on GIT_WS_REMOTE (default: origin): create a tracking local, or
+# fast-forward when that local already tracks the matching remote branch; skip
+# same-named locals with a missing or different upstream.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=git-workspace-lib.sh

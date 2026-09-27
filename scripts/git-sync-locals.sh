@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync local branches that track origin (fast-forward only). Does not create new locals.
+# Fast-forward locals whose upstream is on GIT_WS_REMOTE (default: origin). Does not create new locals.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=git-workspace-lib.sh

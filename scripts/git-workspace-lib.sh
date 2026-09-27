@@ -2,6 +2,11 @@
 # Shared helpers for multi-repo git workspace maintenance.
 # Source this file; do not execute directly.
 
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  printf 'error: source this file; do not execute directly\n' >&2
+  exit 1
+fi
+
 GIT_WS_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ -z "${WORKSPACE_ROOT:-}" ]]; then
@@ -33,6 +38,62 @@ mark_failed() {
   return 0
 }
 
+# Populates the array named by $1 from stdout of command "$2" and later args.
+# Returns the command's exit status (or 1 if mapfile fails). Unlike
+# mapfile -t arr < <(cmd), this does not ignore a non-zero exit from cmd.
+mapfile_from_cmd() {
+  local -n _target=$1
+  shift
+  local _tmp _status=0
+
+  _tmp="$(mktemp "${TMPDIR:-/tmp}/git-ws-mapfile.XXXXXX")" || return 1
+  "$@" >"$_tmp" || _status=$?
+  mapfile -t _target <"$_tmp" || _status=1
+  rm -f "$_tmp"
+  return "$_status"
+}
+
+workspace_root_resolved() {
+  local status=0
+
+  (cd "$WORKSPACE_ROOT" && pwd -P) || status=$?
+  return "$status"
+}
+
+home_dir_resolved() {
+  local status=0
+
+  if [[ -z "${HOME:-}" ]]; then
+    return 1
+  fi
+
+  (cd "${HOME}" && pwd -P) || status=$?
+  return "$status"
+}
+
+is_overly_broad_workspace_root() {
+  local resolved="$1"
+  local home_resolved
+
+  if [[ "$resolved" == "/" ]]; then
+    return 0
+  fi
+
+  if home_resolved="$(home_dir_resolved)" && [[ "$resolved" == "$home_resolved" ]]; then
+    return 0
+  fi
+  return 1
+}
+
+has_documented_sibling_layout() {
+  local meta="${WORKSPACE_ROOT}/.github"
+
+  if is_git_repo "$meta" && [[ -f "${meta}/scripts/git-workspace-lib.sh" ]]; then
+    return 0
+  fi
+  return 1
+}
+
 validate_workspace_config() {
   local resolved
 
@@ -46,15 +107,55 @@ validate_workspace_config() {
     exit 1
   fi
 
-  resolved="$(cd "$WORKSPACE_ROOT" && pwd -P)"
-  if [[ "$resolved" == "/" ]] || [[ "$resolved" == "${HOME}" ]]; then
-    log_warn "WORKSPACE_ROOT is broad (${resolved}); confirm this is intentional"
+  if ! resolved="$(workspace_root_resolved)"; then
+    log_err "failed to resolve WORKSPACE_ROOT: ${WORKSPACE_ROOT}"
+    exit 1
+  fi
+  if is_overly_broad_workspace_root "$resolved"; then
+    if [[ "${GIT_WS_ALLOW_BROAD_ROOT:-}" != "1" ]]; then
+      log_err "WORKSPACE_ROOT is too broad (${resolved})"
+      log_err "these scripts affect every git clone directly under WORKSPACE_ROOT"
+      log_err "set GIT_WS_ALLOW_BROAD_ROOT=1 only when you intend that scope"
+      exit 1
+    fi
+    log_warn "WORKSPACE_ROOT is broad (${resolved}); proceeding because GIT_WS_ALLOW_BROAD_ROOT=1"
+  elif ! has_documented_sibling_layout; then
+    log_warn "WORKSPACE_ROOT does not match the documented sibling layout (.github, registry, cli, webapp, …)"
+    log_warn "confirm WORKSPACE_ROOT points at the agents-repo parent folder, not a higher directory"
+  fi
+
+  return 0
+}
+
+require_safe_workspace_for_destructive_ops() {
+  local resolved
+
+  if ! resolved="$(workspace_root_resolved)"; then
+    log_err "failed to resolve WORKSPACE_ROOT: ${WORKSPACE_ROOT}"
+    return 1
+  fi
+  if is_overly_broad_workspace_root "$resolved" && [[ "${GIT_WS_ALLOW_BROAD_ROOT:-}" != "1" ]]; then
+    log_warn "skipping gone-branch prune: WORKSPACE_ROOT is too broad (${resolved})"
+    log_warn "set GIT_WS_ALLOW_BROAD_ROOT=1 only when you intend workspace-wide destructive maintenance"
+    return 1
+  fi
+
+  if ! has_documented_sibling_layout && [[ "${GIT_WS_ALLOW_BROAD_ROOT:-}" != "1" ]]; then
+    log_warn "skipping gone-branch prune: WORKSPACE_ROOT is not the documented agents-repo sibling folder"
+    log_warn "expected ${WORKSPACE_ROOT}/.github/scripts/git-workspace-lib.sh"
+    log_warn "set GIT_WS_ALLOW_BROAD_ROOT=1 to override (you will prune every direct-child git clone)"
+    return 1
   fi
 
   return 0
 }
 
 require_git() {
+  if ((BASH_VERSINFO[0] < 4)) \
+    || ((BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] < 3)); then
+    log_err "bash 4.3+ required (found ${BASH_VERSION}); install a newer bash on macOS (e.g. Homebrew)"
+    exit 1
+  fi
   if ! command -v git >/dev/null 2>&1; then
     log_err "git not found on PATH"
     exit 1
@@ -74,13 +175,30 @@ is_git_repo() {
 # Prints absolute paths to direct-child git clones under WORKSPACE_ROOT (sorted).
 discover_git_repos() {
   local dir
-  while IFS= read -r -d '' dir; do
-    if is_git_repo "$dir"; then
-      printf '%s\n' "$dir"
-    fi
-  done < <(
-    LC_ALL=C find "$WORKSPACE_ROOT" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z
-  )
+  local null_sort_ok=0
+
+  if printf 'b\0a' | LC_ALL=C sort -z >/dev/null 2>&1; then
+    null_sort_ok=1
+  fi
+
+  if [[ "$null_sort_ok" -eq 1 ]]; then
+    while IFS= read -r -d '' dir; do
+      if is_git_repo "$dir"; then
+        printf '%s\n' "$dir"
+      fi
+    done < <(
+      LC_ALL=C find "$WORKSPACE_ROOT" -mindepth 1 -maxdepth 1 -type d -print0 | LC_ALL=C sort -z
+    )
+  else
+    while IFS= read -r dir; do
+      [[ -z "$dir" ]] && continue
+      if is_git_repo "$dir"; then
+        printf '%s\n' "$dir"
+      fi
+    done < <(
+      LC_ALL=C find "$WORKSPACE_ROOT" -mindepth 1 -maxdepth 1 -type d | LC_ALL=C sort
+    )
+  fi
   return 0
 }
 
@@ -92,10 +210,11 @@ repo_header() {
 
 resolve_default_branch() {
   local default=""
-  default="$(
-    git symbolic-ref --short "refs/remotes/${GIT_WS_REMOTE}/HEAD" 2>/dev/null \
-      | sed "s|^${GIT_WS_REMOTE}/||"
-  )"
+  local ref=""
+  ref="$(git symbolic-ref --short "refs/remotes/${GIT_WS_REMOTE}/HEAD" 2>/dev/null || true)"
+  if [[ -n "$ref" ]]; then
+    default="${ref#${GIT_WS_REMOTE}/}"
+  fi
   if [[ -z "$default" ]]; then
     default="main"
   fi
@@ -192,31 +311,49 @@ repo_list_gone_local_branches() {
   return 0
 }
 
-# Prints repo_path|repo_basename|branch_name for each deletable gone branch workspace-wide.
+_repo_gone_branches_lines() {
+  local repo_path="$1"
+
+  (
+    cd "$repo_path" || exit 1
+    repo_list_gone_local_branches
+  )
+}
+
+# Prints repo_path<TAB>repo_basename<TAB>branch_name for each deletable gone branch
+# workspace-wide (tab is not valid in git ref names).
 workspace_collect_gone_branches() {
   local repo repo_base branch_name
   local repos=()
+  local branches=()
 
-  mapfile -t repos < <(discover_git_repos)
+  if ! mapfile_from_cmd repos discover_git_repos; then
+    log_err "could not discover git repositories under ${WORKSPACE_ROOT}"
+    mark_failed
+    return 1
+  fi
 
   for repo in "${repos[@]}"; do
     [[ -z "$repo" ]] && continue
     repo_base="$(basename "$repo")"
-    while IFS= read -r branch_name; do
+    branches=()
+    if ! mapfile_from_cmd branches _repo_gone_branches_lines "$repo"; then
+      log_err "could not collect gone branches in ${repo_base}"
+      mark_failed
+      continue
+    fi
+    for branch_name in "${branches[@]}"; do
       [[ -z "$branch_name" ]] && continue
-      printf '%s|%s|%s\n' "$repo" "$repo_base" "$branch_name"
-    done < <(
-      cd "$repo" || exit 1
-      repo_list_gone_local_branches
-    )
+      printf '%s\t%s\t%s\n' "$repo" "$repo_base" "$branch_name"
+    done
   done
-  return 0
+  return "$GIT_WS_FAILED"
 }
 
 # Returns 0 when the user confirms batch deletion; 1 to skip.
 confirm_force_delete_gone_branches() {
   local count=$#
-  local line repo_base branch_name reply
+  local line _repo_path repo_base branch_name reply
 
   if [[ "$count" -eq 0 ]]; then
     return 1
@@ -224,9 +361,7 @@ confirm_force_delete_gone_branches() {
 
   printf '\nThe following local branches have gone upstreams and will be force-deleted:\n\n'
   for line in "$@"; do
-    repo_base="${line#*|}"
-    repo_base="${repo_base%%|*}"
-    branch_name="${line##*|}"
+    IFS=$'\t' read -r _repo_path repo_base branch_name <<<"$line"
     printf '  [%s] %s\n' "$repo_base" "$branch_name"
   done
   printf '\n'
@@ -254,10 +389,7 @@ workspace_force_prune_gone_locals() {
   local line repo_path repo_base branch_name
 
   for line in "$@"; do
-    repo_path="${line%%|*}"
-    repo_base="${line#*|}"
-    repo_base="${repo_base%%|*}"
-    branch_name="${line##*|}"
+    IFS=$'\t' read -r repo_path repo_base branch_name <<<"$line"
 
     if (
       cd "$repo_path" || exit 1
@@ -277,19 +409,26 @@ workspace_force_prune_gone_locals() {
 
 workspace_prune_gone_with_confirm() {
   local candidates=()
+  local collect_status=0
+  local prune_status=0
 
-  mapfile -t candidates < <(workspace_collect_gone_branches)
-
-  if [[ "${#candidates[@]}" -eq 0 ]]; then
+  if ! require_safe_workspace_for_destructive_ops; then
     return 0
   fi
 
-  if confirm_force_delete_gone_branches "${candidates[@]}"; then
-    workspace_force_prune_gone_locals "${candidates[@]}"
-    return $?
+  if ! mapfile_from_cmd candidates workspace_collect_gone_branches; then
+    collect_status=1
   fi
 
-  return 0
+  if [[ "${#candidates[@]}" -eq 0 ]]; then
+    return "$collect_status"
+  fi
+
+  if confirm_force_delete_gone_branches "${candidates[@]}"; then
+    workspace_force_prune_gone_locals "${candidates[@]}" || prune_status=$?
+  fi
+
+  [[ "$collect_status" -eq 0 && "$prune_status" -eq 0 ]]
 }
 
 repo_fetch_all_remote_branches() {
@@ -325,6 +464,10 @@ repo_checkout_and_update_default() {
 
   default="$(resolve_default_branch)"
   if ! git checkout "$default" 2>/dev/null; then
+    if git show-ref --verify --quiet "refs/heads/${default}"; then
+      log_err "could not checkout '${default}' (local branch exists; check worktree or conflicts)"
+      return 1
+    fi
     if ! git show-ref --verify --quiet "refs/remotes/${GIT_WS_REMOTE}/${default}"; then
       log_err "could not checkout '${default}' (missing locally and on ${GIT_WS_REMOTE})"
       return 1
@@ -347,7 +490,10 @@ run_for_each_repo() {
   local repos=()
   local repo_count=0
 
-  mapfile -t repos < <(discover_git_repos)
+  if ! mapfile_from_cmd repos discover_git_repos; then
+    log_err "could not discover git repositories under ${WORKSPACE_ROOT}"
+    exit 1
+  fi
   repo_count="${#repos[@]}"
 
   if [[ "$repo_count" -eq 0 ]]; then
@@ -386,7 +532,9 @@ Options:
 Environment:
   WORKSPACE_ROOT   Parent directory containing sibling git clones
                    (default: parent of the .github clone containing these scripts)
-  GIT_WS_REMOTE    Remote name (default: origin)
+  GIT_WS_REMOTE              Remote name (default: origin)
+  GIT_WS_ALLOW_BROAD_ROOT    Set to 1 to allow WORKSPACE_ROOT=/, \$HOME, or
+                             non-documented layouts for destructive maintenance
 EOF
   return 0
 }
