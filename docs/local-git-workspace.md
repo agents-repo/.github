@@ -31,10 +31,25 @@ a Git work tree (`git rev-parse --is-inside-work-tree`). Dot-directories such as
 
 ## Cursor / VS Code multi-root workspace
 
-Open `agents-repo.code-workspace` from the parent folder that contains your clones
-(the file lives next to the sibling repos, not inside `.github`; it is not tracked
-in this repository). Use **File → Open Workspace from File**.
-See [cursor-agent-worker.md](cursor-agent-worker.md) for the same layout.
+Open [`agents-repo.code-workspace`](../agents-repo.code-workspace) from **this**
+clone (**File → Open Workspace from File**). Folder paths are relative to the
+`.github` repository root (`../cli`, `../registry`, …).
+
+Registry workflow skills install only in this hub — see
+[org-workspace-and-agents.md](org-workspace-and-agents.md).
+
+See [cursor-agent-worker.md](cursor-agent-worker.md) for the same sibling layout.
+
+## npm git script aliases
+
+From this repository root:
+
+| Script | Shell script |
+| --- | --- |
+| `npm run git:sync-locals` | `scripts/git-sync-locals.sh` |
+| `npm run git:fetch-all` | `scripts/git-fetch-all-branches.sh` |
+| `npm run git:prune-gone` | `scripts/git-prune-gone-branches.sh` |
+| `npm run git:refresh` | `scripts/git-refresh-main.sh` |
 
 ## Requirements
 

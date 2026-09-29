@@ -52,6 +52,13 @@ that stacking is intentional so contributors working in any child repo still
 see org and sibling norms. Do not switch to a single-repo workspace to save
 tokens unless the task is strictly local to one repository.
 
+Registry workflow **skills** (`.cursor/skills/` from catalog install) live in
+the **`.github`** clone only. Open
+[agents-repo.code-workspace](../agents-repo.code-workspace) or use this
+multi-repo Cloud environment so planning and review skills are available. A
+single-repo Cloud session on `webapp` or `cli` alone does not load the hub
+catalog. See [org-workspace-and-agents.md](org-workspace-and-agents.md).
+
 ## `.cursorignore` template
 
 Each development repository SHOULD commit a root `.cursorignore` to keep
