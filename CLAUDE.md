@@ -47,7 +47,7 @@ implementation for organization-wide documentation and configuration changes.
 
 | Path | Purpose |
 | --- | --- |
-| [`.cursor/rules/`](.cursor/rules) | Always-on org rules (`agents-org.mdc`) |
+| [`.cursor/rules/`](.cursor/rules/agents-org.mdc) | Always-on org rules (`agents-org.mdc`) |
 | [`.cursor/skills/`](.cursor/skills) | Registry workflow packages (org hub install target) |
 | [agents-repo.code-workspace](agents-repo.code-workspace) | Multi-root workspace including sibling platform repos |
 
