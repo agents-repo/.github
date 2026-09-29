@@ -8,7 +8,7 @@ manifest. It is not an application runtime.
 
 1. Read [CONTRIBUTING.md](../CONTRIBUTING.md) for the required issue → branch →
    draft PR workflow.
-2. Read [`.github/copilot-instructions.md`](../.github/copilot-instructions.md)
+2. Read [`.cursor/rules/agents-org.mdc`](../.cursor/rules/agents-org.mdc)
    (canonical agent instructions).
 3. For ecosystem context, see [ecosystem.md](ecosystem.md),
    [org-workspace-and-agents.md](org-workspace-and-agents.md), [ci.md](ci.md), and
@@ -40,7 +40,7 @@ Path-filtered extras (see [CONTRIBUTING — PR baseline extras](../CONTRIBUTING.
 
 | Change type | Canonical files |
 | --- | --- |
-| Agent instructions | `.github/copilot-instructions.md` → `npm run sync:ide-instructions` |
+| Agent instructions | `.cursor/rules/agents-org.mdc` → `npm run sync:ide-instructions` |
 | Contributor workflow | `CONTRIBUTING.md` |
 | Presentation decks | `docs/slides/*.md` → `npm run slides:build` / `slides:check` |
 | Registry workflow packages | `agents.json` → `npm run agents:install` / `agents:verify` / `agents:ci` |
@@ -48,5 +48,5 @@ Path-filtered extras (see [CONTRIBUTING — PR baseline extras](../CONTRIBUTING.
 
 ## Child repository instructions
 
-Each application repository maintains its own `.github/copilot-instructions.md`.
+Each application repository maintains its own `.cursor/rules/agents-*.mdc`.
 See the agent instruction matrix in [CONTRIBUTING.md](../CONTRIBUTING.md#agent-instruction-files).
