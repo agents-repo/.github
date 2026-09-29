@@ -439,10 +439,10 @@ while still serving ZIPs.
 | Repo | Always-on in `baseline` | Path-filtered extras |
 | --- | --- | --- |
 | `.github` | workflow lint, IDE sync; optional local `env:check` | Chrome + `slides:check`, `agents:verify` |
-| cli | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`, `agents:verify`; optional `compat-node22` |
-| webapp | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `agents:verify`, `build:pages` + `test:crawl-files` |
-| registry | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:verify`, `package:scan-zips` |
-| registry-proxy | `env:check`, `lint:all`, IDE sync, tests, `check:secrets` | Chrome + `slides:check`, `agents:verify` |
+| cli | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`; optional `compat-node22` — **no `agents:verify`** |
+| webapp | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `build:pages` + `test:crawl-files` — **no `agents:verify`** |
+| registry | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:verify` (minimal package-creation catalog), `package:scan-zips` |
+| registry-proxy | `env:check`, `lint:all`, IDE sync, tests, `check:secrets` | Chrome + `slides:check` — **no `agents:verify`** |
 
 Safety net: extras skipped on a pull request still run where that repository
 already runs them on `main` / release (and webapp deploy for Pages/crawl). Do
@@ -479,33 +479,50 @@ This repository uses automated sync for Cursor, Claude Code, and OpenAI Codex
 mirrors — replacing the former manual Pattern B (edit Copilot and Cursor files
 in the same change).
 
-### Registry workflow packages (CLI)
+### Registry workflow packages (org hub)
 
-Install and refresh catalog packages with the [agents-repo CLI](https://github.com/agents-repo/cli).
-`agents.json` points at `https://registry.agents-repo.org` (organization
-catalog proxy).
+Curated [agents-repo](https://github.com/agents-repo/cli) registry workflow
+packages install in **`agents-repo/.github` only** — not in `cli`, `webapp`, or
+`registry-proxy`. This clone owns `agents.json`, `agents-lock.json`, and
+extracted paths (`.cursor/skills/`, `.github/agents/`, `.claude/agents/`,
+`.agents/skills/`).
 
-Bootstrap only when `agents.json` is missing (one-time; use a published CLI
-release or `npm exec agents-repo -- init` after `npm ci`):
+**Exception:** [agents-repo/registry](https://github.com/agents-repo/registry)
+keeps a **minimal** catalog (`agents-repo/agents-repo-package-creation` only)
+for in-tree package authoring. Planning and review `maiconfz/*` packages belong
+in the hub.
+
+Overview: [docs/org-workspace-and-agents.md](docs/org-workspace-and-agents.md).
+Open [agents-repo.code-workspace](agents-repo.code-workspace) from this clone so
+Cursor loads hub skills alongside sibling repos.
+
+**Day-to-day maintenance** (from this repository root):
 
 ```bash
+npm ci
+npm run agents:install   # sync extracts from agents.json
+npm run agents:update    # refresh within semver ranges in agents.json
+npm run agents:verify    # lock and on-disk surface parity (PR baseline)
+```
+
+Run `npm run agents:ci` locally before changing `agents-lock.json` or extracted
+paths (full lock-pinned reinstall).
+
+**Bootstrap** (one-time; CLI pinned in `package.json`):
+
+```bash
+npm ci
 npm exec agents-repo -- init --targets github-copilot claude-code cursor openai-codex
 ```
 
-Use the npm scripts for bulk install, update, and CI (CLI version is pinned in
-`package.json` / `package-lock.json`, distinct from registry packages in
-`agents-lock.json`):
+Commit `agents.json`, `agents-lock.json`, and extracted paths only when they
+change via **`agents-repo` install or update**. Do not hand-edit extracted
+package files — including fixes found during `review-fix-ship`. Improve skills
+upstream in [registry](https://github.com/agents-repo/registry), publish, bump
+semver here, then reinstall.
 
-```bash
-npm run agents:install   # bulk sync from agents.json
-npm run agents:update    # refresh within semver ranges
-npm run agents:verify    # parity extra in pr-baseline when agents paths change
-```
-
-Commit `agents.json`, `agents-lock.json`, and extracted paths (`.github/agents/`,
-`.cursor/skills/`, `.claude/agents/`, `.agents/skills/`). Do not hand-edit
-extracted package files. PR baseline runs `agents:verify` only for agents
-definition files (not npm lockfiles); see **PR baseline extras (path filters)**.
+PR baseline runs `agents:verify` only for agents definition files (not npm
+lockfiles); see **PR baseline extras (path filters)** and [docs/ci.md](docs/ci.md).
 
 ## Changing organization-wide defaults
 

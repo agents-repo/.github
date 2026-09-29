@@ -15,7 +15,11 @@
     "agents:install": "agents-repo install",
     "agents:update": "agents-repo update",
     "agents:ci": "agents-repo ci",
-    "agents:verify": "agents-repo verify"
+    "agents:verify": "agents-repo verify",
+    "git:sync-locals": "bash scripts/git-sync-locals.sh",
+    "git:fetch-all": "bash scripts/git-fetch-all-branches.sh",
+    "git:prune-gone": "bash scripts/git-prune-gone-branches.sh",
+    "git:refresh": "bash scripts/git-refresh-main.sh"
   },
   "devDependencies": {
     "@marp-team/marp-cli": "4.5.0",

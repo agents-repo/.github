@@ -2,10 +2,23 @@
 
 # Organization .github Repository — Agent Guidelines
 
+## Quick index
+
+| Topic | Where to start |
+| --- | --- |
+| Org hub catalog and workspace | [docs/org-workspace-and-agents.md](docs/org-workspace-and-agents.md) |
+| CI by repository | [docs/ci.md](docs/ci.md) |
+| Required workflow (issue → branch → draft PR) | [CONTRIBUTING.md — Required Workflow](CONTRIBUTING.md#required-workflow) |
+| Local sibling clones + git scripts | [docs/local-git-workspace.md](docs/local-git-workspace.md) |
+| Multi-root workspace file | [agents-repo.code-workspace](agents-repo.code-workspace) |
+| Child repo agent entry | [cli](https://github.com/agents-repo/cli), [webapp](https://github.com/agents-repo/webapp), [registry](https://github.com/agents-repo/registry), [registry-proxy](https://github.com/agents-repo/registry-proxy) — each repo's `AGENTS.md` |
+| Hub registry packages | [CONTRIBUTING — Registry workflow packages](CONTRIBUTING.md#registry-workflow-packages-org-hub) + [section below](#registry-workflow-agents) |
+
 ## Project Purpose
 
-This repository holds organization-wide community health files and shared
-configuration for the **agents-repo** GitHub organization.
+This repository holds organization-wide community health files, the **org hub**
+registry workflow catalog, shared git workspace scripts, and governance for the
+**agents-repo** GitHub organization.
 
 Repository-level files in other repos override these defaults when GitHub
 applies community health file inheritance.
@@ -29,6 +42,44 @@ Human contributor guidance lives at the repository root:
 
 This repository does not use issue forms. Open a plain issue before
 implementation for organization-wide documentation and configuration changes.
+
+## Cursor configuration
+
+| Path | Purpose |
+| --- | --- |
+| [`.cursor/rules/`](.cursor/rules/agents-org.mdc) | Always-on org rules (`agents-org.mdc`) |
+| [`.cursor/skills/`](.cursor/skills) | Registry workflow packages (org hub install target) |
+| [agents-repo.code-workspace](agents-repo.code-workspace) | Multi-root workspace including sibling platform repos |
+
+Child repos keep repo-specific `.cursor/rules/` for coding standards. Shared
+planning/review skills install **here**, not in cli/webapp/registry-proxy.
+
+## Registry workflow agents
+
+Curated packages from [registry.agents-repo.org](https://registry.agents-repo.org)
+install **only** in this repository (`agents.json`, `agents-lock.json`,
+`.cursor/skills/`). Open the workspace file so Cursor loads these skills while
+editing sibling clones.
+
+| Package | Primary entry |
+| --- | --- |
+| `maiconfz/feature-exploration-planner` | `feature-exploration-planning` flow |
+| `maiconfz/github-interactive-issue-implementation-planner` | `issue-implementation-planning` flow |
+| `maiconfz/plan-refiner` | Plan refinement skills |
+| `maiconfz/review-fix-ship` | `review-fix-ship` flow (local diff review) |
+| `maiconfz/github-pr-review-triage` | PR review triage (after push) |
+| `maiconfz/ai-first-project-readiness` | AI readiness planning |
+| `maiconfz/context-token-reduction` | Context token reduction |
+
+**Issues:** Open tracking issues on the **repository that owns the work** (webapp,
+cli, registry, etc.). Org-wide changes use **this** repository. Do not default
+gh-backed flows to `agents-repo/.github` unless the issue lives here.
+
+**Do not edit** extracted files under `.cursor/skills/`. Fix upstream in
+[registry](https://github.com/agents-repo/registry), publish, bump `agents.json`
+here, then `npm run agents:install` / `agents:verify` / `agents:ci`.
+
+CLI maintenance: [docs/org-workspace-and-agents.md](docs/org-workspace-and-agents.md#cli-contributors-verifying-the-hub-lock).
 
 ## Required Workflow (Task Start)
 

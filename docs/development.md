@@ -10,7 +10,8 @@ manifest. It is not an application runtime.
    draft PR workflow.
 2. Read [`.github/copilot-instructions.md`](../.github/copilot-instructions.md)
    (canonical agent instructions).
-3. For ecosystem context, see [ecosystem.md](ecosystem.md) and
+3. For ecosystem context, see [ecosystem.md](ecosystem.md),
+   [org-workspace-and-agents.md](org-workspace-and-agents.md), [ci.md](ci.md), and
    [cursor-cloud.md](cursor-cloud.md).
 4. For a local private agent worker over sibling clones, see
    [cursor-agent-worker.md](cursor-agent-worker.md).

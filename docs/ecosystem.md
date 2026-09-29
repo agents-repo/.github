@@ -61,7 +61,7 @@ flowchart TB
 | [registry-proxy](https://github.com/agents-repo/registry-proxy) | Read-only Cloudflare Worker: cached access to registry files and tag listing |
 | [webapp](https://github.com/agents-repo/webapp) | Browse, search, and download UI; deploys to [agents-repo.org](https://agents-repo.org/) |
 | [cli](https://github.com/agents-repo/cli) | Official `npx agents-repo` installer and project config (`agents.json`, lockfile) |
-| [.github](https://github.com/agents-repo/.github) | Organization profile, CONTRIBUTING, security and support defaults |
+| [.github](https://github.com/agents-repo/.github) | Organization profile, CONTRIBUTING, **org hub** registry workflow catalog, git workspace scripts |
 
 Public site: [agents-repo.org](https://agents-repo.org/) (built from **webapp**;
 Pages target [agents-repo.github.io](https://github.com/agents-repo/agents-repo.github.io)).
@@ -244,9 +244,11 @@ For the full always-on vs path-filtered CI matrix, see
 ### Skills vs package skills
 
 - **General workflow skills** (issue intake, planning, review): installed in
-  app repos via `agents.json` — see each repo's skills doc or `.agents/skills/`.
+  **`agents-repo/.github` only** — open
+  [agents-repo.code-workspace](https://github.com/agents-repo/.github/blob/main/agents-repo.code-workspace).
+  See [org-workspace-and-agents.md](org-workspace-and-agents.md).
 - **Package skills** (`package-creator`, `full-package-creation-flow`, etc.):
-  use in **registry** for catalog submissions.
+  minimal `agents.json` in **registry** for catalog submissions.
 
 ### Fork vs upstream registry
 
