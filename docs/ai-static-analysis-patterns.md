@@ -102,7 +102,7 @@ spawnSync('npx', ['jscpd', '--config', config, target], { cwd: REPO_ROOT });
 **Prefer** an absolute CLI under `node_modules` plus the current Node binary:
 
 ```javascript
-const jscpdCli = path.join(REPO_ROOT, 'node_modules', 'jscpd', 'bin', 'jscpd');
+const jscpdCli = path.join(REPO_ROOT, 'node_modules', 'jscpd', 'run-jscpd.js');
 spawnSync(process.execPath, [jscpdCli, '--config', config, target], {
   cwd: REPO_ROOT,
   stdio: 'inherit',
