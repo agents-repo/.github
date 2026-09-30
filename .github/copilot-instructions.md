@@ -8,7 +8,7 @@
 | --- | --- |
 | Org hub catalog and workspace | [docs/org-workspace-and-agents.md](../docs/org-workspace-and-agents.md) |
 | CI by repository | [docs/ci.md](../docs/ci.md) |
-| Sonar / ESLint patterns + local jscpd | [docs/ai-static-analysis-patterns.md](../docs/ai-static-analysis-patterns.md) |
+| Sonar / ESLint patterns + local jscpd | [docs/ai-static-analysis-patterns.md](../docs/ai-static-analysis-patterns.md#per-repository-entry-points) |
 | Required workflow (issue → branch → draft PR) | [CONTRIBUTING.md — Required Workflow](../CONTRIBUTING.md#required-workflow) |
 | Local sibling clones + git scripts | [docs/local-git-workspace.md](../docs/local-git-workspace.md) |
 | Multi-root workspace file | [agents-repo.code-workspace](../agents-repo.code-workspace) |
