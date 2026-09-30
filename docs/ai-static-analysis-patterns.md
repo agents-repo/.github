@@ -16,6 +16,18 @@ one sweep.
   comments for Sonar rules.
 - Preparing a registry pull request that touches `packages/**`.
 
+## Per-repository entry points
+
+| Repository | Always-on agents | Contributor docs |
+| --- | --- | --- |
+| `.github` | [agents-org.mdc](../.cursor/rules/agents-org.mdc) quick index | [docs/development.md](development.md) (incl. `dup:check` / workspace) |
+| `cli` | `agents-cli.mdc` § Shared scripts and static analysis | `docs/development.md` § SonarQube Cloud |
+| `webapp` | `agents-webapp.mdc` § Shared scripts and static analysis | `docs/development.md` § SonarQube Cloud |
+| `registry` | `agents-registry.mdc` § Shared scripts and static analysis | [docs/ai-onboarding.md](https://github.com/agents-repo/registry/blob/main/docs/ai-onboarding.md); README § SonarQube Cloud and duplication checks |
+| `registry-proxy` | `agents-registry-proxy.mdc` § Shared scripts and static analysis | [docs/AI_GUIDELINES.md](https://github.com/agents-repo/registry-proxy/blob/main/docs/AI_GUIDELINES.md) |
+
+Hub tracking [agents-repo/.github#131](https://github.com/agents-repo/.github/issues/131)–[#134](https://github.com/agents-repo/.github/issues/134) (agent pointers and local `dup:check`) shipped on `main` in [cli#141](https://github.com/agents-repo/cli/pull/141), [webapp#318](https://github.com/agents-repo/webapp/pull/318), [registry#256](https://github.com/agents-repo/registry/pull/256), and [registry-proxy#123](https://github.com/agents-repo/registry-proxy/pull/123). This table is the canonical index.
+
 ## Sonar / ESLint patterns
 
 ### 1. Super-linear / catastrophic backtracking (`javascript:S5852`, `sonarjs/super-linear-regex`)

@@ -64,10 +64,19 @@ Path triggers and lockfile exceptions are defined in
 | registry | `npm ci && npm run lint:all && npm test`; `agents:verify` when catalog paths change |
 | registry-proxy | `npm ci && npm run lint:all && npm test` |
 
+When you change duplicated `scripts/` (for example `sync-ide-instructions.mjs`),
+run `npm run dup:check` in the touched repository before handoff. From the org
+hub clone, also run `npm run dup:check:workspace` when sibling platform repos
+are checked out. See [Local duplication checks (jscpd)](ai-static-analysis-patterns.md#local-duplication-checks-jscpd).
+jscpd is **not** part of PR baseline CI until
+[agents-repo/.github#126](https://github.com/agents-repo/.github/issues/126).
+
 ## Contributor guides
 
 - Org hub and workspace: [org-workspace-and-agents.md](org-workspace-and-agents.md)
 - Local git scripts: [local-git-workspace.md](local-git-workspace.md)
 - Cursor Cloud: [cursor-cloud.md](cursor-cloud.md)
-- Per-repo detail: each repository’s `docs/development.md` and
-  `.github/CONTRIBUTING.md`
+- Per-repo detail: each repository’s `.github/CONTRIBUTING.md` and contributor
+  docs — `docs/development.md` (cli, webapp, org hub), [registry
+  `docs/ai-onboarding.md`](https://github.com/agents-repo/registry/blob/main/docs/ai-onboarding.md),
+  [registry-proxy `docs/AI_GUIDELINES.md`](https://github.com/agents-repo/registry-proxy/blob/main/docs/AI_GUIDELINES.md)
