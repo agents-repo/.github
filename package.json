@@ -23,8 +23,7 @@
     "git:refresh": "bash scripts/git-refresh-main.sh",
     "dup:check": "jscpd --config .jscpd.json --baseline .jscpd-baseline.json --fail-on-new-clones 0 .",
     "dup:check:baseline": "jscpd --config .jscpd.json --baseline .jscpd-baseline.json --update-baseline .",
-    "dup:check:workspace": "node scripts/jscpd-workspace.mjs",
-    "dup:check:cross-workspace": "node scripts/jscpd-cross-workspace.mjs"
+    "dup:check:workspace": "node scripts/jscpd-workspace.mjs"
   },
   "devDependencies": {
     "@marp-team/marp-cli": "4.5.0",
