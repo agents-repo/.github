@@ -10,10 +10,12 @@ manifest. It is not an application runtime.
    draft PR workflow.
 2. Read [`.cursor/rules/agents-org.mdc`](../.cursor/rules/agents-org.mdc)
    (canonical agent instructions).
-3. For ecosystem context, see [ecosystem.md](ecosystem.md),
+3. Before editing shared scripts or Sonar-prone JavaScript, read
+   [ai-static-analysis-patterns.md](ai-static-analysis-patterns.md).
+4. For ecosystem context, see [ecosystem.md](ecosystem.md),
    [org-workspace-and-agents.md](org-workspace-and-agents.md), [ci.md](ci.md), and
    [cursor-cloud.md](cursor-cloud.md).
-4. For a local private agent worker over sibling clones, see
+5. For a local private agent worker over sibling clones, see
    [cursor-agent-worker.md](cursor-agent-worker.md).
 
 ## Validation
