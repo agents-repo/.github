@@ -10,8 +10,8 @@ one sweep.
 
 ## When to read this
 
-- Editing `scripts/sync-ide-instructions.mjs`, `scripts/lint-workflows.mjs`, or
-  other files known to be duplicated per repo.
+- Editing `scripts/sync-ide-instructions.mjs`, `scripts/lint-workflows.mjs`,
+  `scripts/jscpd-run.mjs`, or other files known to be duplicated per repo.
 - Adding or changing regex, YAML/JSON string escaping, or `eslint-disable`
   comments for Sonar rules.
 - Preparing a registry pull request that touches `packages/**`.
@@ -73,6 +73,38 @@ should use `String.raw` or a `RegExp` with clear intent.
   refactor is unsafe or misleading (for example platform-specific branches in
   `lint-workflows.mjs`).
 - Do not blanket-disable Sonar rules on whole files without maintainer agreement.
+
+### 5. Trusted `PATH` for subprocesses (`javascript:S4036`)
+
+Sonar flags `spawnSync('npx', …)`, `execSync('tool', …)`, and similar calls when
+the executable name is resolved through the caller’s `PATH`, which may include
+user-writable directories.
+
+**Avoid:**
+
+```javascript
+spawnSync('npx', ['jscpd', '--config', config, target], { cwd: REPO_ROOT });
+```
+
+**Prefer** an absolute CLI under `node_modules` plus the current Node binary:
+
+```javascript
+const jscpdCli = path.join(REPO_ROOT, 'node_modules', 'jscpd', 'bin', 'jscpd');
+spawnSync(process.execPath, [jscpdCli, '--config', config, target], {
+  cwd: REPO_ROOT,
+  stdio: 'inherit',
+});
+```
+
+For OS utilities (`curl`, `tar`, `actionlint` on `PATH`), reuse the trusted
+`PATH` pattern in `scripts/lint-workflows.mjs` (`TRUSTED_PATH_DIRS` +
+`resolveTrustedExecutable` / `trustedEnv()`). Do not append `node_modules/.bin`
+to `PATH` to satisfy Sonar; resolve the binary path instead.
+
+**Checklist:** Hub workspace scripts that spawn tools should mirror
+`lint-workflows.mjs` or `jscpd-run.mjs`, not bare `npx` / unqualified command
+names. `package.json` `dup:check` scripts may keep `jscpd` because npm prepends
+`node_modules/.bin` only for that npm lifecycle invocation.
 
 ## Duplicated fixes across sibling repos
 
