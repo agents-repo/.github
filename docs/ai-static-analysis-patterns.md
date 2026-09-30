@@ -102,7 +102,7 @@ spawnSync('npx', ['jscpd', '--config', config, target], { cwd: REPO_ROOT });
 **Prefer** an absolute CLI under `node_modules` plus the current Node binary:
 
 ```javascript
-const jscpdCli = path.join(REPO_ROOT, 'node_modules', 'jscpd', 'bin', 'jscpd');
+const jscpdCli = path.join(REPO_ROOT, 'node_modules', 'jscpd', 'run-jscpd.js');
 spawnSync(process.execPath, [jscpdCli, '--config', config, target], {
   cwd: REPO_ROOT,
   stdio: 'inherit',
@@ -157,28 +157,34 @@ chore context in the PR body.
 ## Local duplication checks (jscpd)
 
 [jscpd](https://github.com/kucherenko/jscpd) finds copy-paste duplication.
-**It is not run in GitHub Actions yet** (see [Future CI](#future-ci)).
+**PR baseline CI** on every platform repo runs `npm run dup:check` (dedicated
+step, not part of `lint:all`). Each repo commits `.jscpd-baseline.json`; CI uses
+`--fail-on-new-clones 0` so only **new** clones fail the build. Refresh the
+baseline after intentional deduplication with `npm run dup:check:baseline`.
 
 | Command | Where | Purpose |
 | --- | --- | --- |
-| `npm run dup:check` | Any repo with jscpd configured | Scan **this repository** only |
-| `npm run dup:check:workspace` | Org `.github` hub | Scan hub + sibling `cli`, `webapp`, `registry`, `registry-proxy` when clones exist |
+| `npm run dup:check` | Any repo with jscpd configured | Scan **this repository**; enforced in PR baseline |
+| `npm run dup:check:baseline` | Same | Rewrite `.jscpd-baseline.json` from current tree (maintainer-only) |
+| `npm run dup:check:workspace` | Org `.github` hub | Scan hub + sibling `cli`, `webapp`, `registry`, `registry-proxy` when clones exist (local only) |
 | `npm run dup:check:cross-workspace` | Org `.github` hub (optional) | Also include `feline-click` siblings when checked out next to `agents-repo` |
 
-**When to run:** Before handoff when you change shared scripts or copy logic
-between repos. Record a short summary in the draft PR validation section.
+**When to run locally:** Before handoff when you change shared scripts or copy
+logic between repos. From the org hub, also run `dup:check:workspace` when
+sibling clones exist. Record a short summary in the draft PR validation section.
 
-First runs may report many clones (known copies such as `sync-ide-instructions.mjs`);
-use reports to decide whether to fix, exclude paths in `.jscpd.json`, or track
-deduplication work separately.
+### `.jscpd.json` ignore policy (intentional duplication)
 
-## Future CI
+Ignored paths are not scanned. Do **not** ignore canonical `.cursor/rules/**/*.mdc`
+(edit there; mirrors are checked via `sync:ide-instructions --check`).
 
-After baselines and thresholds are agreed, implement blocking checks per
-repository. Tracking issue: [agents-repo/.github#126](https://github.com/agents-repo/.github/issues/126).
+| Category | Typical globs | Repos |
+| --- | --- | --- |
+| Build output | `**/node_modules/**`, `**/dist/**`, `**/build/**`, … | All |
+| IDE mirrors | `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.github/instructions/**` | All |
+| Registry installs | `**/.cursor/skills/**`, `**/.github/agents/**`, `**/.claude/agents/**`, `**/.agents/skills/**` | All (no-op when absent) |
+| Package version snapshots | `packages/**/versions/**` | Registry |
+| Locale doc mirrors | `src/content/docs/es/**`, `pt-br/**`, `pt-pt/**` | Webapp |
 
-Prerequisites before enabling CI:
-
-1. Shared `.jscpd.json` ignores (generated mirrors, `node_modules`, build output).
-2. Documented `minLines` / `minTokens` from a maintainer baseline run.
-3. No wiring into `lint:all` until the CI issue is implemented.
+Cross-repo copies of scripts such as `sync-ide-instructions.mjs` remain in scope
+per repository; use hub `dup:check:workspace` to compare siblings locally.

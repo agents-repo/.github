@@ -438,11 +438,11 @@ while still serving ZIPs.
 
 | Repo | Always-on in `baseline` | Path-filtered extras |
 | --- | --- | --- |
-| `.github` | workflow lint, IDE sync; optional local `env:check` | Chrome + `slides:check`, `agents:verify` |
-| cli | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`; optional `compat-node22` — **no `agents:verify`** |
-| webapp | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `build:pages` + `test:crawl-files` — **no `agents:verify`** |
-| registry | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:verify` (minimal package-creation catalog), `package:scan-zips` |
-| registry-proxy | `env:check`, `lint:all`, IDE sync, tests, `check:secrets` | Chrome + `slides:check` — **no `agents:verify`** |
+| `.github` | workflow lint, `dup:check`, IDE sync; optional local `env:check` | Chrome + `slides:check`, `agents:verify` |
+| cli | `env:check`, `lint:all`, `dup:check`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`; optional `compat-node22` — **no `agents:verify`** |
+| webapp | `env:check`, `lint:all`, `dup:check`, IDE sync, typecheck, tests | Chrome + `slides:check`, `build:pages` + `test:crawl-files` — **no `agents:verify`** |
+| registry | `env:check`, `lint:all`, `dup:check`, IDE sync, tests, typecheck | Chrome + `slides:check`, `agents:verify` (minimal package-creation catalog), `package:scan-zips` |
+| registry-proxy | `env:check`, `lint:all`, `dup:check`, IDE sync, tests, `check:secrets` | Chrome + `slides:check` — **no `agents:verify`** |
 
 Safety net: extras skipped on a pull request still run where that repository
 already runs them on `main` / release (and webapp deploy for Pages/crawl). Do

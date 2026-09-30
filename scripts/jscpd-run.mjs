@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONFIG = path.join(REPO_ROOT, '.jscpd.json');
-const JSCPD_CLI = path.join(REPO_ROOT, 'node_modules', 'jscpd', 'bin', 'jscpd');
+const JSCPD_CLI = path.join(REPO_ROOT, 'node_modules', 'jscpd', 'run-jscpd.js');
 
 function resolveJscpdInvocation() {
   if (!fs.existsSync(JSCPD_CLI)) {

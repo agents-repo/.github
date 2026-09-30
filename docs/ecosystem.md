@@ -235,11 +235,11 @@ For the full always-on vs path-filtered CI matrix, see
 
 | Repo | Handoff commands |
 | --- | --- |
-| `.github` | `npm run lint:all` + `sync:ide-instructions --check` |
-| `cli` | `env:check`, `lint:all`, `typecheck`, `test`, `check:secrets` |
-| `webapp` | `env:check`, `lint:all`, `test`, `typecheck`, `build:pages`, `test:crawl-files` |
-| `registry` | `env:check`, `lint:all`, `test:run`, `typecheck`, `package:scan-zips` |
-| `registry-proxy` | `env:check`, `lint:all`, `check:secrets`, `test` |
+| `.github` | `npm run lint:all`, `dup:check`, `sync:ide-instructions --check` |
+| `cli` | `env:check`, `lint:all`, `dup:check`, `typecheck`, `test`, `check:secrets` |
+| `webapp` | `env:check`, `lint:all`, `dup:check`, `test`, `typecheck`, `build:pages`, `test:crawl-files` |
+| `registry` | `env:check`, `lint:all`, `dup:check`, `test:run`, `typecheck`, `package:scan-zips` |
+| `registry-proxy` | `env:check`, `lint:all`, `dup:check`, `check:secrets`, `test` |
 
 ### Skills vs package skills
 

@@ -13,11 +13,11 @@ registry skills install and how to open the multi-root workspace.
 
 | Repository | Workflow | Triggers | Always-on baseline | Path-filtered extras |
 | --- | --- | --- | --- | --- |
-| [.github](https://github.com/agents-repo/.github) | [pr-baseline.yml](../.github/workflows/pr-baseline.yml) | `pull_request` | Workflow lint, ShellCheck on git scripts, IDE sync check | Chrome + `slides:check`, **`agents:verify`** |
-| [cli](https://github.com/agents-repo/cli) | [pr-baseline.yml](https://github.com/agents-repo/cli/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`; optional `compat-node22` — **no `agents:verify`** |
-| [webapp](https://github.com/agents-repo/webapp) | [pr-baseline.yml](https://github.com/agents-repo/webapp/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, IDE sync, typecheck, tests | Chrome + `slides:check`, `build:pages` + crawl tests, CLI `check:docs-sync` — **no `agents:verify`** |
-| [registry](https://github.com/agents-repo/registry) | [pr-baseline.yml](https://github.com/agents-repo/registry/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, IDE sync, tests, typecheck | Chrome + `slides:check`, **`agents:verify`** (minimal package-creation catalog), `package:scan-zips` |
-| [registry-proxy](https://github.com/agents-repo/registry-proxy) | [pr-baseline.yml](https://github.com/agents-repo/registry-proxy/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, IDE sync, tests, `check:secrets` | Chrome + `slides:check` — **no `agents:verify`** |
+| [.github](https://github.com/agents-repo/.github) | [pr-baseline.yml](../.github/workflows/pr-baseline.yml) | `pull_request` | Workflow lint, ShellCheck on git scripts, **`dup:check`**, IDE sync check | Chrome + `slides:check`, **`agents:verify`** |
+| [cli](https://github.com/agents-repo/cli) | [pr-baseline.yml](https://github.com/agents-repo/cli/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, **`dup:check`**, IDE sync, typecheck, tests, `check:secrets` | Chrome + `slides:check`; optional `compat-node22` — **no `agents:verify`** |
+| [webapp](https://github.com/agents-repo/webapp) | [pr-baseline.yml](https://github.com/agents-repo/webapp/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, **`dup:check`**, IDE sync, typecheck, tests | Chrome + `slides:check`, `build:pages` + crawl tests, CLI `check:docs-sync` — **no `agents:verify`** |
+| [registry](https://github.com/agents-repo/registry) | [pr-baseline.yml](https://github.com/agents-repo/registry/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, **`dup:check`**, IDE sync, tests, typecheck | Chrome + `slides:check`, **`agents:verify`** (minimal package-creation catalog), `package:scan-zips` |
+| [registry-proxy](https://github.com/agents-repo/registry-proxy) | [pr-baseline.yml](https://github.com/agents-repo/registry-proxy/blob/main/.github/workflows/pr-baseline.yml) | `pull_request` | `env:check`, `lint:all`, **`dup:check`**, IDE sync, tests, `check:secrets` | Chrome + `slides:check` — **no `agents:verify`** |
 
 Each repository may also run release, deploy, or `main`-branch safety-net jobs
 not listed here. See that repo’s `.github/workflows/` and
@@ -58,18 +58,15 @@ Path triggers and lockfile exceptions are defined in
 
 | Repository | Typical handoff |
 | --- | --- |
-| `.github` | `npm ci && npm run lint:all && npm run sync:ide-instructions -- --check`; `agents:verify` / `agents:ci` when catalog paths change |
-| cli | `npm ci && npm run lint:all && npm test` |
-| webapp | `npm ci && npm run lint:all && npm run test && npm run typecheck` |
-| registry | `npm ci && npm run lint:all && npm test`; `agents:verify` when catalog paths change |
-| registry-proxy | `npm ci && npm run lint:all && npm test` |
+| `.github` | `npm ci && npm run lint:all && npm run dup:check && npm run sync:ide-instructions -- --check`; `agents:verify` / `agents:ci` when catalog paths change |
+| cli | `npm ci && npm run lint:all && npm run dup:check && npm test` |
+| webapp | `npm ci && npm run lint:all && npm run dup:check && npm run test && npm run typecheck` |
+| registry | `npm ci && npm run lint:all && npm run dup:check && npm test`; `agents:verify` when catalog paths change |
+| registry-proxy | `npm ci && npm run lint:all && npm run dup:check && npm test` |
 
 When you change duplicated `scripts/` (for example `sync-ide-instructions.mjs`),
-run `npm run dup:check` in the touched repository before handoff. From the org
-hub clone, also run `npm run dup:check:workspace` when sibling platform repos
-are checked out. See [Local duplication checks (jscpd)](ai-static-analysis-patterns.md#local-duplication-checks-jscpd).
-jscpd is **not** part of PR baseline CI until
-[agents-repo/.github#126](https://github.com/agents-repo/.github/issues/126).
+also run `npm run dup:check:workspace` from the org hub when sibling platform
+repos are checked out. See [Local duplication checks (jscpd)](ai-static-analysis-patterns.md#local-duplication-checks-jscpd).
 
 ## Contributor guides
 
