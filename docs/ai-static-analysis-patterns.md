@@ -167,7 +167,6 @@ baseline after intentional deduplication with `npm run dup:check:baseline`.
 | `npm run dup:check` | Any repo with jscpd configured | Scan **this repository**; enforced in PR baseline |
 | `npm run dup:check:baseline` | Same | Rewrite `.jscpd-baseline.json` from current tree (maintainer-only) |
 | `npm run dup:check:workspace` | Org `.github` hub | Scan hub + sibling `cli`, `webapp`, `registry`, `registry-proxy` when clones exist (local only) |
-| `npm run dup:check:cross-workspace` | Org `.github` hub (optional) | Also include `feline-click` siblings when checked out next to `agents-repo` |
 
 **When to run locally:** Before handoff when you change shared scripts or copy
 logic between repos. From the org hub, also run `dup:check:workspace` when
