@@ -27,7 +27,7 @@ npm run lint:all
 npm run sync:ide-instructions -- --check
 ```
 
-Optional local duplication scan (not CI; see
+Duplication scan (PR baseline runs `dup:check`; see
 [ai-static-analysis-patterns.md — jscpd](ai-static-analysis-patterns.md#local-duplication-checks-jscpd)):
 
 ```bash

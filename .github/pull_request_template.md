@@ -39,5 +39,5 @@ List commands run and key results.
   agents or automation).
 - [ ] When editing shared scripts or Sonar-prone JS: reviewed
   [ai-static-analysis-patterns.md](https://github.com/agents-repo/.github/blob/main/docs/ai-static-analysis-patterns.md)
-  and ran `npm run dup:check` locally when duplication risk is high (honor system
-  until CI enforcement lands).
+  and ran `npm run dup:check` when duplication risk is high (also enforced in PR
+  baseline CI).
