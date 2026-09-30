@@ -97,6 +97,35 @@ describe('sync-ide-instructions', () => {
     assert.match(instructions, /# Source path rule/);
   });
 
+  it('quotes copilotApplyTo when emitting path-scoped instructions', async () => {
+    const repo = makeTempRepo();
+    tempRepos.push(repo);
+    writeCanonical(repo, '# Org\n');
+    const pathMdc = [
+      '---',
+      'description: Use for specs',
+      'alwaysApply: false',
+      'copilotApplyTo: specs/**',
+      'copilotInstructionsFile: specs.instructions.md',
+      '---',
+      '',
+      '# Specs path rule',
+      '',
+    ].join('\n');
+    fs.writeFileSync(path.join(repo, '.cursor', 'rules', 'path-specs.mdc'), pathMdc, 'utf-8');
+
+    const { execFile } = await import('node:child_process');
+    const { promisify } = await import('node:util');
+    const execFileAsync = promisify(execFile);
+    await execFileAsync('node', ['scripts/sync-ide-instructions.mjs'], { cwd: repo });
+
+    const instructions = fs.readFileSync(
+      path.join(repo, '.github', 'instructions', 'specs.instructions.md'),
+      'utf-8',
+    );
+    assert.match(instructions, /applyTo: "specs\/\*\*"/);
+  });
+
   it('exits non-zero on drift when --check', async () => {
     const repo = makeTempRepo();
     tempRepos.push(repo);
