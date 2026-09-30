@@ -450,34 +450,36 @@ not add `agents:verify` to those safety-net workflows.
 
 ## Agent instruction files
 
-| Repository | GitHub Copilot | Cursor | Claude Code | OpenAI Codex |
+| Repository | Cursor (canonical) | GitHub Copilot | Claude Code | OpenAI Codex |
 | --- | --- | --- | --- | --- |
-| [registry](https://github.com/agents-repo/registry) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry.mdc` | `CLAUDE.md` | `AGENTS.md` |
-| [webapp](https://github.com/agents-repo/webapp) | `.github/copilot-instructions.md` | `.cursor/rules/agents-webapp.mdc` | `CLAUDE.md` | `AGENTS.md` |
-| [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` | `.cursor/rules/agents-registry-proxy.mdc` | `CLAUDE.md` | `AGENTS.md` |
-| [cli](https://github.com/agents-repo/cli) | `.github/copilot-instructions.md` | `.cursor/rules/agents-cli.mdc` | `CLAUDE.md` | `AGENTS.md` |
-| [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` | `.cursor/rules/agents-org.mdc` | `CLAUDE.md` | `AGENTS.md` |
+| [registry](https://github.com/agents-repo/registry) | `.cursor/rules/agents-registry.mdc` | `.github/copilot-instructions.md` (generated) | `CLAUDE.md` (generated) | `AGENTS.md` (generated) |
+| [webapp](https://github.com/agents-repo/webapp) | `.cursor/rules/agents-webapp.mdc` | `.github/copilot-instructions.md` (generated) | `CLAUDE.md` (generated) | `AGENTS.md` (generated) |
+| [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.cursor/rules/agents-registry-proxy.mdc` | `.github/copilot-instructions.md` (generated) | `CLAUDE.md` (generated) | `AGENTS.md` (generated) |
+| [cli](https://github.com/agents-repo/cli) | `.cursor/rules/agents-cli.mdc` | `.github/copilot-instructions.md` (generated) | `CLAUDE.md` (generated) | `AGENTS.md` (generated) |
+| [.github](https://github.com/agents-repo/.github) (this repo) | `.cursor/rules/agents-org.mdc` | `.github/copilot-instructions.md` (generated) | `CLAUDE.md` (generated) | `AGENTS.md` (generated) |
+
+Path-scoped norms (where present): additional `.cursor/rules/*.mdc` with
+`copilotInstructionsFile` generate `.github/instructions/*.instructions.md`.
 
 For repo selection, validation cheat sheets, and skill routing, see
 [docs/ecosystem.md — AI contributor quick reference](docs/ecosystem.md#ai-contributor-quick-reference).
 
-In each child repository (including `cli`), run `npm run sync:ide-instructions`
-in that repo after editing its `.github/copilot-instructions.md`. Older
-documentation may refer to the retired `sync:cursor-rules` npm script name.
+In each repository, run `npm run sync:ide-instructions` in that repo after
+editing canonical `.cursor/rules/` files. Older documentation may refer to the
+retired `sync:cursor-rules` npm script name.
 
-Edit `.github/copilot-instructions.md` as the canonical project-guidelines source.
-Regenerate IDE mirrors after changes:
+Edit the repo-wide `.cursor/rules/agents-*.mdc` file as the canonical
+project-guidelines source. Regenerate mirrors after changes:
 
 ```bash
 npm run sync:ide-instructions
 ```
 
-Do not edit `.cursor/rules/`, `CLAUDE.md`, or `AGENTS.md` directly when they are
-generated mirrors.
+Do not edit `.github/copilot-instructions.md`, `CLAUDE.md`, or `AGENTS.md`
+directly when they are generated mirrors.
 
-This repository uses automated sync for Cursor, Claude Code, and OpenAI Codex
-mirrors — replacing the former manual Pattern B (edit Copilot and Cursor files
-in the same change).
+Automated sync generates GitHub Copilot, Claude Code, and OpenAI Codex mirrors
+from Cursor rules.
 
 ### Registry workflow packages (org hub)
 

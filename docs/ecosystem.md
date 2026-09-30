@@ -225,7 +225,7 @@ For the full always-on vs path-filtered CI matrix, see
 
 | Repo | Primary docs |
 | --- | --- |
-| `.github` | [development.md](development.md), [copilot-instructions.md](../.github/copilot-instructions.md) |
+| `.github` | [development.md](development.md), [agents-org.mdc](../.cursor/rules/agents-org.mdc) |
 | `cli` | [ARCHITECTURE.md](https://github.com/agents-repo/cli/blob/main/docs/ARCHITECTURE.md), [AGENT_SKILLS.md](https://github.com/agents-repo/cli/blob/main/docs/AGENT_SKILLS.md) |
 | `webapp` | [ARCHITECTURE.md](https://github.com/agents-repo/webapp/blob/main/docs/ARCHITECTURE.md), [development.md](https://github.com/agents-repo/webapp/blob/main/docs/development.md) |
 | `registry` | [ai-onboarding.md](https://github.com/agents-repo/registry/blob/main/docs/ai-onboarding.md), `specs/` |

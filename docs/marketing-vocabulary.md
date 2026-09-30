@@ -38,11 +38,11 @@ Document install-target → path mappings factually (for example Copilot agent
 paths, Cursor skills/rules) without preferring one vendor in **product**
 positioning sentences.
 
-Repositories that mirror project guidelines from
-`.github/copilot-instructions.md` may also generate `CLAUDE.md` (Claude Code) and
-`AGENTS.md` (OpenAI Codex) via `npm run sync:ide-instructions`. These filenames
-follow each tool's convention for repo-level instructions; they are contributor
-files, not install targets.
+Platform repositories author project guidelines in `.cursor/rules/agents-*.mdc`
+first, then generate `.github/copilot-instructions.md` (GitHub Copilot),
+`CLAUDE.md` (Claude Code), and `AGENTS.md` (OpenAI Codex) via
+`npm run sync:ide-instructions`. These filenames follow each tool's convention
+for repo-level instructions; they are contributor files, not install targets.
 
 ## Catalog packages (out of scope)
 

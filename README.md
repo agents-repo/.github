@@ -23,13 +23,13 @@ Repository-level files override organization defaults. See GitHub's documentatio
 - Presentation slides: [docs/slides/README.md](docs/slides/README.md)
 - Local multi-repo Git workspace: [docs/local-git-workspace.md](docs/local-git-workspace.md)
 - Marketing vocabulary: [docs/marketing-vocabulary.md](docs/marketing-vocabulary.md)
-- GitHub Copilot project instructions: [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
-- Cursor project rules: [`.cursor/rules/agents-org.mdc`](.cursor/rules/agents-org.mdc)
+- Cursor project rules (canonical): [`.cursor/rules/agents-org.mdc`](.cursor/rules/agents-org.mdc)
+- GitHub Copilot project instructions (generated): [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
 
-Agent instruction files use a canonical source and generated mirrors. Edit
-[`.github/copilot-instructions.md`](.github/copilot-instructions.md), then run
+Agent instruction files use a canonical Cursor rule and generated mirrors. Edit
+[`.cursor/rules/agents-org.mdc`](.cursor/rules/agents-org.mdc), then run
 `npm run sync:ide-instructions` and commit the updated mirrors (`AGENTS.md`,
-`CLAUDE.md`, `.cursor/rules/agents-org.mdc`). Do not edit generated mirror
+`CLAUDE.md`, `.github/copilot-instructions.md`). Do not edit generated mirror
 files directly.
 
 Organization home: https://github.com/agents-repo

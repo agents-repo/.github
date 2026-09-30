@@ -1,4 +1,4 @@
-<!-- Generated: .github/copilot-instructions.md. Run npm run sync:ide-instructions -->
+<!-- Generated: .cursor/rules/agents-org.mdc. Run npm run sync:ide-instructions -->
 
 # Organization .github Repository — Agent Guidelines
 
@@ -34,11 +34,11 @@ Human contributor guidance lives at the repository root:
 
 | Repository | Agent instructions |
 | --- | --- |
-| [registry](https://github.com/agents-repo/registry) | `.github/copilot-instructions.md` → `.cursor/rules/agents-registry.mdc` |
-| [webapp](https://github.com/agents-repo/webapp) | `.github/copilot-instructions.md` → `.cursor/rules/agents-webapp.mdc` |
-| [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.github/copilot-instructions.md` → `.cursor/rules/agents-registry-proxy.mdc` |
-| [cli](https://github.com/agents-repo/cli) | `.github/copilot-instructions.md` → `.cursor/rules/agents-cli.mdc` |
-| [.github](https://github.com/agents-repo/.github) (this repo) | `.github/copilot-instructions.md` → `.cursor/rules/agents-org.mdc` |
+| [registry](https://github.com/agents-repo/registry) | `.cursor/rules/agents-registry.mdc` → synced mirrors |
+| [webapp](https://github.com/agents-repo/webapp) | `.cursor/rules/agents-webapp.mdc` → synced mirrors |
+| [registry-proxy](https://github.com/agents-repo/registry-proxy) | `.cursor/rules/agents-registry-proxy.mdc` → synced mirrors |
+| [cli](https://github.com/agents-repo/cli) | `.cursor/rules/agents-cli.mdc` → synced mirrors |
+| [.github](https://github.com/agents-repo/.github) (this repo) | `.cursor/rules/agents-org.mdc` → synced mirrors |
 
 This repository does not use issue forms. Open a plain issue before
 implementation for organization-wide documentation and configuration changes.
@@ -135,12 +135,12 @@ Do not treat npm lockfiles as an `agents:verify` trigger.
 
 ## IDE Instructions in This Repository
 
-Edit `.github/copilot-instructions.md` (this file) as the canonical source, then
+Edit `.cursor/rules/agents-org.mdc` (this file) as the canonical source, then
 regenerate mirrors:
 
 ```bash
 npm run sync:ide-instructions
 ```
 
-Mirrors: `.cursor/rules/agents-org.mdc`, `CLAUDE.md`, `AGENTS.md`. Do not edit
+Mirrors: `.github/copilot-instructions.md`, `CLAUDE.md`, `AGENTS.md`. Do not edit
 generated mirror files directly.

@@ -12,6 +12,7 @@
     "slides:preview:html": "node scripts/slides.mjs preview",
     "slides:check": "node scripts/slides.mjs check",
     "sync:ide-instructions": "node scripts/sync-ide-instructions.mjs",
+    "test:sync": "node --test test/sync-ide-instructions.test.mjs",
     "agents:install": "agents-repo install",
     "agents:update": "agents-repo update",
     "agents:ci": "agents-repo ci",
