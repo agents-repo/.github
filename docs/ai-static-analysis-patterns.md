@@ -182,7 +182,7 @@ Ignored paths are not scanned. Do **not** ignore canonical `.cursor/rules/**/*.m
 | Build output | `**/node_modules/**`, `**/dist/**`, `**/build/**`, … | All |
 | IDE mirrors | `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.github/instructions/**` | All |
 | Registry installs | `**/.cursor/skills/**`, `**/.github/agents/**`, `**/.claude/agents/**`, `**/.agents/skills/**` | All (no-op when absent) |
-| Package version snapshots | `packages/**/versions/**` | Registry |
+| Registry catalog | `packages/**` (includes version snapshots and package roots) | Registry |
 | Locale doc mirrors | `src/content/docs/es/**`, `pt-br/**`, `pt-pt/**` | Webapp |
 
 Cross-repo copies of scripts such as `sync-ide-instructions.mjs` remain in scope
