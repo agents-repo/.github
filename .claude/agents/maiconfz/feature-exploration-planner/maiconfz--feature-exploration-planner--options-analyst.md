@@ -3,7 +3,7 @@ name: maiconfz--feature-exploration-planner--options-analyst
 description: >-
   Compare feature implementation options, trade-offs, risks, and non-goals
   against intake and landscape context. One-shot; no Q&A loop.
-version: 1.0.0
+version: 1.0.1
 tools:
   - filesystem
 inputs:

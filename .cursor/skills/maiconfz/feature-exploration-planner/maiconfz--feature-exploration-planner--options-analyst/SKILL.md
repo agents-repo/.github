@@ -64,4 +64,4 @@ follow-ups, or empty).
 - `options-summary` (string): Markdown comparison of approaches with recommendation.
 - `open-questions` (string): Non-blocking follow-ups only; empty when none.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

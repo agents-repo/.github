@@ -74,4 +74,4 @@ follow-ups, or empty).
 - `feature-brief` (string): Primary handoff markdown text; not a required file.
 - `open-questions` (string): Non-blocking follow-ups only; empty when none.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

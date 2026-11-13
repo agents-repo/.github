@@ -108,4 +108,4 @@ finished revision without a question loop.
 - `open-questions` (string): Empty unless the draft is unusable or the workspace is unreadable.
 - `assumption-log` (string): Labeled assumptions used to fill gaps; also inlined in refined-plan.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

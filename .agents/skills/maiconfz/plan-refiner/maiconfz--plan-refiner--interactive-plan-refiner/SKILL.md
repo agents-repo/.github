@@ -111,4 +111,4 @@ and does not intake GitHub issues.
 - `open-questions` (string): Markdown list of open questions; blocking items first.
 - `assumption-log` (string): Always empty for this agent; do not log unverified guesses.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

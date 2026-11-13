@@ -1,9 +1,9 @@
 ---
 name: maiconfz--ai-first-project-readiness--improvement-planner
 description: >-
-  Ask-first, plan-only drafts of phased or full-shot AI-readiness improvements.
-  Does not implement.
-version: 1.1.1
+  Ask-first, plan-only harness-readiness improvements from a scored readiness
+  report. Does not implement.
+version: 1.2.0
 license: MIT
 tools:
   - filesystem
@@ -31,8 +31,9 @@ outputs:
 # Overview
 
 Draft a **plan-only** improvement plan from a `readiness-report` after the
-user consents. Choose **phased** (ordered phases with exit criteria) or
-**full-shot** (one sequenced plan covering the same gaps).
+user consents. Use the scorecard, gaps, and remediation deliverables from
+the report as planning inputs. Choose **phased** (ordered phases with exit
+criteria) or **full-shot** (one sequenced plan covering the same gaps).
 
 Do not implement. If consent or plan mode is missing, ask and stop.
 
@@ -42,8 +43,9 @@ check consent → check plan-mode → draft plan or ask blockers
 
 ## Responsibilities
 
-- Treat `readiness-report` as the source of findings. MAY re-read cited
-  evidence paths in the host tree to make the plan concrete.
+- Treat `readiness-report` as the source of findings, including the
+  scorecard and remediation deliverables. MAY re-read cited evidence paths
+  in the host tree to make the plan concrete.
 - If `planning-consent` is not true: do not plan. Ask whether to proceed.
   Leave `improvement-plan` empty. Put the consent question in
   `blocking-questions`.
@@ -51,8 +53,17 @@ check consent → check plan-mode → draft plan or ask blockers
   drafting. Do not assume a mode.
 - When consent and mode are set, write `improvement-plan` as markdown with
   at least:
-  - Goal and scope tied to the report
-  - What to add or improve (docs, agents, skills, rules, tooling)
+  - Goal and scope tied to the report scorecard and its highest-severity
+    or lowest-scoring gaps
+  - Default phase priority (adjust when the report scorecard or findings
+    suggest otherwise): (1) context noise reduction, (2) sensor scripts,
+    task-completion criteria, and env pins, (3) guide modularization,
+    documentation, tooling inventory, and structural clarity, (4)
+    machine-readable specs
+  - Remediation templates from the report embedded as concrete plan
+    artifacts (index-based `AGENTS.md`, `.cursorignore`, validation scripts)
+  - What to add or improve (docs, agents, skills, rules, tooling, MCP,
+    hooks, automations)
   - Ordered steps (phases with exit criteria, or one full-shot sequence)
   - Files or areas likely touched in the **host** project
   - Risks, dependencies, and non-goals
@@ -73,6 +84,10 @@ check consent → check plan-mode → draft plan or ask blockers
 - MUST NOT treat a chat-web `readiness-report` from `ai-first-chat` as
   this agent's `improvement-plan` or as a host-tree plan. That report is
   remote-or-upload evidence for chat-web only.
+- MUST NOT attribute the audit framework, rubric, or recommendations to a
+  named author, book, or proprietary methodology.
+- MUST NOT reproduce copyrighted checklist text; plan content must be
+  original and evidence-based.
 - Prefer asking over assumptions that would change the plan.
 
 ## Interaction Contract

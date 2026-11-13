@@ -3,7 +3,7 @@ name: maiconfz--plan-refiner--automatic-plan-refiner
 description: >-
   Assumption-first quality pass on an existing plan: full repo check, fills gaps
   with documented assumptions. One-shot refined plan. Does not implement.
-version: 1.0.0
+version: 1.0.1
 tools:
   - filesystem
 inputs:
