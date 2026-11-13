@@ -83,4 +83,4 @@ usable evidence exists; empty otherwise.
 - `reply` (string): User-visible markdown in the user's language.
 - `idea-brief` (string): Lighter structured idea brief; empty when there is no usable evidence or the message is too thin to structure.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

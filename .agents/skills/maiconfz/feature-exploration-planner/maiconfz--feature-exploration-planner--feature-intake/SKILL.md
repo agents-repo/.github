@@ -74,4 +74,4 @@ list, or empty when none).
 - `intake-summary` (string): Structured intake summary quoting or paraphrasing user intent.
 - `blocking-questions` (string): Markdown list of blocking questions; empty when none.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

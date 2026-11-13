@@ -3,7 +3,7 @@ name: maiconfz--feature-exploration-planner--feature-definition-planner
 description: >-
   Synthesize a feature-brief text output from intake, landscape, and options
   artifacts. Preserves original user intent. One-shot; planning only.
-version: 1.0.0
+version: 1.0.1
 license: MIT
 tools:
   - filesystem

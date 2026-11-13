@@ -1,24 +1,26 @@
 ---
 name: maiconfz--ai-first-project-readiness--ai-first-project-planning
 description: >-
-  Analyze readiness, ask consent, then draft a phased or full-shot improvement
-  plan. Use when the user needs the
+  Analyze harness readiness, ask consent, then draft a phased or full-shot
+  improvement plan. Use when the user needs the
   maiconfz--ai-first-project-readiness--ai-first-project-planning workflow.
 ---
 # Overview
 
-Workspace entry for this package. Analyze the **host project**, present
-the report, **ask before planning**, then draft a phased or full-shot
-improvement plan. Planning only. Does not include `ai-first-chat`.
+Workspace entry for this package. Analyze the **host project** for AI-first
+and harness readiness, present the scored report, **ask before planning**,
+then draft a phased or full-shot improvement plan. Planning only. Does not
+include `ai-first-chat`.
 
 ```text
-analyze → present report → ask consent → ask plan-mode → plan → handoff
+analyze → present scored report → ask consent → ask plan-mode → plan → handoff
 ```
 
 ## Steps
 
 1. **Analyze** — Invoke `ai-readiness-analyst` with optional
-   `user-clarifications`. Present `readiness-report` to the user.
+   `user-clarifications`. Present `readiness-report` (including scorecard
+   and remediation deliverables) to the user.
 
 2. **Consent** — If `planning-consent` is not true, ask whether to
    proceed to improvement planning. If the user declines, hand off the
@@ -83,4 +85,4 @@ execution with another agent.
 - maiconfz--ai-first-project-readiness--ai-readiness-analyst
 - maiconfz--ai-first-project-readiness--improvement-planner
 
-<!-- agents-repo package version: 1.1.1 -->
+<!-- agents-repo package version: 1.2.0 -->

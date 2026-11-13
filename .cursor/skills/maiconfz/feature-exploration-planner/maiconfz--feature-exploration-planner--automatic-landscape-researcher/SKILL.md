@@ -65,4 +65,4 @@ read intake → search → cite → report → log gaps
 - `assumption-log` (string): Labeled assumptions and unverified gaps from research.
 - `blocking-questions` (string): Empty unless search is impossible.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

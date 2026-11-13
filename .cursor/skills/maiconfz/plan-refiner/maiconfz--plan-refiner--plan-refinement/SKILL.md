@@ -59,7 +59,7 @@ a different agent.
 - **Path in `draft-plan` does not exist or is not markdown:** Ask for a
   valid path or pasted plan.
 - **User supplies an issue URL or number instead of a plan:** Stop.
-  Point at `maiconfz/github-interactive-issue-implementation-planner`.
+  Point at `maiconfz/github-issue-implementation-planner`.
   Do not invoke that package from this flow.
 - **Automatic returns `open-questions` because the workspace is
   unreadable:** Do not loop. Surface the questions and stop.
@@ -96,4 +96,4 @@ optional `user-clarifications`.
 - maiconfz--plan-refiner--interactive-plan-refiner
 - maiconfz--plan-refiner--automatic-plan-refiner
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

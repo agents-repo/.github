@@ -68,7 +68,7 @@ editing sibling clones.
 | Package | Primary entry |
 | --- | --- |
 | `maiconfz/feature-exploration-planner` | `feature-exploration-planning` flow |
-| `maiconfz/github-interactive-issue-implementation-planner` | `issue-implementation-planning` flow |
+| `maiconfz/github-issue-implementation-planner` | `issue-implementation-planning` flow |
 | `maiconfz/plan-refiner` | Plan refinement skills |
 | `maiconfz/review-fix-ship` | `review-fix-ship` flow (local diff review) |
 | `maiconfz/github-pr-review-triage` | PR review triage (after push) |

@@ -67,4 +67,4 @@ impossible), and empty `assumption-log`.
 - `blocking-questions` (string): Markdown list; empty unless search cannot proceed.
 - `assumption-log` (string): Always empty for this agent.
 
-<!-- agents-repo package version: 1.0.0 -->
+<!-- agents-repo package version: 1.0.1 -->

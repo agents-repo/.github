@@ -1,25 +1,25 @@
 {
   "lockfileVersion": 3,
-  "resolvedRef": "v2.3.3",
+  "resolvedRef": "v2.3.15",
   "packages": {
     "maiconfz/ai-first-project-readiness": {
-      "version": "1.1.1",
+      "version": "1.2.0",
       "byTarget": {
         "github-copilot": {
-          "integrity": "sha256-70de69995a736457c306153e9875cda90261f4f703850d53a67f9905ede87920",
-          "artifact": "1.1.1-github-copilot.zip"
+          "integrity": "sha256-3f3c50ddad3245de34e0194fd395ea89946116cbed2af0015e955309d83841c9",
+          "artifact": "1.2.0-github-copilot.zip"
         },
         "claude-code": {
-          "integrity": "sha256-1ba69bd6e8ceaa9f8f9adc17471010aaedf576d1a4df0a91d32d09782453ec22",
-          "artifact": "1.1.1-claude-code.zip"
+          "integrity": "sha256-6d203026e06e8f5f26fdff5404ac4529638bc32bf46039b70d6d6f8863c7bca5",
+          "artifact": "1.2.0-claude-code.zip"
         },
         "cursor": {
-          "integrity": "sha256-fe051a06ec7137d5754e59665290ea0aa27e2d5c242890787cc988fb95ace1fd",
-          "artifact": "1.1.1-cursor.zip"
+          "integrity": "sha256-70e69a2c006cbf6935f5edc5dde79bb8721d54757a95c353bf4e0e18a2982709",
+          "artifact": "1.2.0-cursor.zip"
         },
         "openai-codex": {
-          "integrity": "sha256-fca5a66aa9144b44d49d3e1c010c13f66e630fcc5bbd6df8dbf616d6a96a07be",
-          "artifact": "1.1.1-openai-codex.zip"
+          "integrity": "sha256-a11ebe1a00d15af4a7e1c923ce3529f28264bc1a96e529dc4d0b02c58ec58339",
+          "artifact": "1.2.0-openai-codex.zip"
         }
       },
       "pathEncodingVersion": 1
@@ -47,89 +47,89 @@
       "pathEncodingVersion": 1
     },
     "maiconfz/feature-exploration-planner": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "byTarget": {
         "github-copilot": {
-          "integrity": "sha256-6ded7871233c52b0477edd503d1d49cf3d49789fe88242425ade2bea2190bbe6",
-          "artifact": "1.0.0-github-copilot.zip"
+          "integrity": "sha256-e418579daea2e07d4de5093146dd00827465f41ee66b551f95712fe2b773f258",
+          "artifact": "1.0.1-github-copilot.zip"
         },
         "claude-code": {
-          "integrity": "sha256-dd8d0d1edc6ead01190a94213b7321fa5d39f914cdea01d8e324c7a82ca41905",
-          "artifact": "1.0.0-claude-code.zip"
+          "integrity": "sha256-b21b9434a6036a71b6f2e346cc3e1dd899b8861d31061826abb5b95c543299c9",
+          "artifact": "1.0.1-claude-code.zip"
         },
         "cursor": {
-          "integrity": "sha256-622f618f9df65d27419a9f05b663c47c0fb6750fe6c9bd17a0ef66360ecdea75",
-          "artifact": "1.0.0-cursor.zip"
+          "integrity": "sha256-edc90e56c52323c779febad813d211d68a9bf3ef54a596cf9904a6229ab56954",
+          "artifact": "1.0.1-cursor.zip"
         },
         "openai-codex": {
-          "integrity": "sha256-066021407444f702210ed3c028e094fa54ceeff35fb3229d9cdf44a80fed1ba0",
-          "artifact": "1.0.0-openai-codex.zip"
+          "integrity": "sha256-13924a45c9430ecb652824fdd4460afe1f2f80d35cd411ad41683fe7b109235b",
+          "artifact": "1.0.1-openai-codex.zip"
         }
       },
       "pathEncodingVersion": 1
     },
-    "maiconfz/github-interactive-issue-implementation-planner": {
-      "version": "1.1.1",
+    "maiconfz/github-issue-implementation-planner": {
+      "version": "1.0.0",
       "byTarget": {
         "github-copilot": {
-          "integrity": "sha256-db2a0428ad5ae5fce4fbe174e31f2368366c3155bcaeba6d2000c70de4e9fec8",
-          "artifact": "1.1.1-github-copilot.zip"
+          "integrity": "sha256-1f5455cd65d189f610dfd3c8126321e8534ff2ce61e9f6c2c46a124c1cbb5679",
+          "artifact": "1.0.0-github-copilot.zip"
         },
         "claude-code": {
-          "integrity": "sha256-3a741de392653646f39f913992c051d83387fce0439285b02f4df9524d591e5f",
-          "artifact": "1.1.1-claude-code.zip"
+          "integrity": "sha256-65a21b5cacdfeddd3e21a2263ef0f901b70c9f8da491109f0a1e4811eeae9553",
+          "artifact": "1.0.0-claude-code.zip"
         },
         "cursor": {
-          "integrity": "sha256-357a1aa5129f13de9d2216291a272ee4bb761b6165d3ee4b183d1f3efba71657",
-          "artifact": "1.1.1-cursor.zip"
+          "integrity": "sha256-b6c81078fc8c250dc75989a3dfd3c37206d40271303ddb0d524e714409ce8592",
+          "artifact": "1.0.0-cursor.zip"
         },
         "openai-codex": {
-          "integrity": "sha256-fce90f1f6a126fb39627d8f88716439538888262f55affc926e6cae718d22198",
-          "artifact": "1.1.1-openai-codex.zip"
+          "integrity": "sha256-222ec5bfa99509787d5ced777dceeee39571e9ac4c728a647d84eec7328aa08e",
+          "artifact": "1.0.0-openai-codex.zip"
         }
       },
       "pathEncodingVersion": 1
     },
     "maiconfz/github-pr-review-triage": {
-      "version": "1.2.1",
+      "version": "1.4.0",
       "byTarget": {
         "github-copilot": {
-          "integrity": "sha256-5654092ac420d4a1b35d62a555d906ae568015bbaf6cb0c3bfcdc83c2b9e2608",
-          "artifact": "1.2.1-github-copilot.zip"
+          "integrity": "sha256-31a4136117ca69a6914931ca3d2caac9078f013507e1dbc452894a11ede1c519",
+          "artifact": "1.4.0-github-copilot.zip"
         },
         "claude-code": {
-          "integrity": "sha256-3d81835c4ccdecf4bc36e2243942c40a9ee0780452391d5e1e1fcb7f3ae9460a",
-          "artifact": "1.2.1-claude-code.zip"
+          "integrity": "sha256-1ae97c8020384f95afb1b240cec7d053bc0f8e51ac70f52c4d7d4e0857f232c9",
+          "artifact": "1.4.0-claude-code.zip"
         },
         "cursor": {
-          "integrity": "sha256-9425e625b138bce3c465bd2efde0d1b08b7eed905b6eeb4780d3cd1fded1ae44",
-          "artifact": "1.2.1-cursor.zip"
+          "integrity": "sha256-23a244301292c198b3599f34290b6dab4fe08329ed92927cba830afc1a101752",
+          "artifact": "1.4.0-cursor.zip"
         },
         "openai-codex": {
-          "integrity": "sha256-eacfc23108d1968b8b48cc61e18f42ad7e95730b83355f24adb047a25ae0ab3a",
-          "artifact": "1.2.1-openai-codex.zip"
+          "integrity": "sha256-19713365eb0f05b7b07df920299f0950e6f388d576ea201186c4a587c971ab83",
+          "artifact": "1.4.0-openai-codex.zip"
         }
       },
       "pathEncodingVersion": 1
     },
     "maiconfz/plan-refiner": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "byTarget": {
         "github-copilot": {
-          "integrity": "sha256-4d5adddac0832a90e518b5fa59e67776328ba3f6a44fba57f00da4e7d649f5d2",
-          "artifact": "1.0.0-github-copilot.zip"
+          "integrity": "sha256-e55d14e09c477bffa3ff36cdb5ea9f4fc37a9666e32699f2ae48ce9ac38bf3d8",
+          "artifact": "1.0.1-github-copilot.zip"
         },
         "claude-code": {
-          "integrity": "sha256-6d9fad526c4597187284340a7df08e7d1b44f0e9a6c93227780b69ba11134cd7",
-          "artifact": "1.0.0-claude-code.zip"
+          "integrity": "sha256-ef3966a9fa813b4916d21009a315548685e46b3d9422c7aa7148d86006f70ed1",
+          "artifact": "1.0.1-claude-code.zip"
         },
         "cursor": {
-          "integrity": "sha256-0e0b63b385d7f70a43fea6ba00dfba359fa5de3d52d9155b8b6b848818da326d",
-          "artifact": "1.0.0-cursor.zip"
+          "integrity": "sha256-5f956782aa133adfa13cc931a5ce2d2ee11d428d6a7a18fb5a8b819fbfffa9e1",
+          "artifact": "1.0.1-cursor.zip"
         },
         "openai-codex": {
-          "integrity": "sha256-ebd77f60f59efde273f2e5b240e17eb2346ff705cc8da73b6265fac0ab1d9fcd",
-          "artifact": "1.0.0-openai-codex.zip"
+          "integrity": "sha256-d838749779345a0f43a3b7688201da28fd74a7fba59b88608d623f6cfd55631c",
+          "artifact": "1.0.1-openai-codex.zip"
         }
       },
       "pathEncodingVersion": 1
